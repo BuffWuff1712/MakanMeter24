@@ -37,7 +37,7 @@ export default function App() {
           <CustomButton 
             title="Continue with Email"
             handlePress={() => router.push('/sign-in')}
-            containerStyles="w-full mt-7"
+            containerStyles="w-full mt-7 bg-secondary"
           />
         </View>
       </ScrollView>

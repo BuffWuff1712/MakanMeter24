@@ -41,7 +41,7 @@ const SignUp = () => {
 
           <CustomButton 
             title="Sign Up"
-            containerStyles="mt-7"
+            containerStyles="mt-7 bg-secondary"
           />
 
           <View className="justify-center pt-5 flex-row gap-2">

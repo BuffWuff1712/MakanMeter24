@@ -1,19 +1,25 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
 //import * as MediaLibrary from 'expo-media-library';
 import { useRef, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View, 
+    Image, ActivityIndicator, Modal } from 'react-native';
 import ShutterButton from '../../components/ShutterButton';
-import { icons, images } from '../../constants';
-import { router } from 'expo-router';
+import { router } from 'expo-router'
 import LeftArrow from '../../components/LeftArrow';
 import FlipButton from '../../components/FlipButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Results from './results';
+import { analyse } from '../../lib/openAI';
+import { encodeImage } from '../../components/ImageProcessor';
+
+
+
 
 const CameraScreen = () => {
     const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [isCameraReady, setIsCameraReady] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [errorMessage, setErrorMessage] = useState(''); // Error message state
     //const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
     const cameraRef = useRef(null);
 
@@ -43,53 +49,101 @@ const CameraScreen = () => {
       };
     
     const handleMountError = (error) => {
-    console.error('Camera mount error:', error);
+        console.error('Camera mount error:', error);
     };
     
+    // Takes a picture of the food
     const takePicture = async () => {
         if (cameraRef.current && isCameraReady) {
-            const photo = await cameraRef.current.takePictureAsync();
-            console.log("success!")
-            router.replace('/results')
+            try {
+                const photo = await cameraRef.current.takePictureAsync();
+    
+                // Process the photo
+                const base64Image = await encodeImage(photo.uri);
+                console.log("Picture processed!")
+    
+                // Now you can use the base64Image as needed
+                await analysePhoto(base64Image);
+    
+            } catch (error) {
+                console.error("Error taking picture:", error);
+            }
         }
-      };
+    };
 
+    // analyse image of the food
+    const analysePhoto = async (photo) => {
+        try {
+            setIsLoading(true); // Show loading screen
+            const jsonData = await analyse(photo);
+            console.log(jsonData);
+            // Navigate to results page with jsonData
+            router.push({
+                pathname: '/results',
+                params: { data: JSON.stringify(jsonData) }
+            });
+        } catch (error) {
+            console.log('Failed to analyze photo:', error);
+            setErrorMessage('Failed to analyze photo. Please try again.');
+        } finally {
+            setIsLoading(false); // Hide loading screen
+        }
+    };
+
+    // returns user to home page
     const returnHome = () => {
         router.back();
     };
 
     return (
         <SafeAreaView className="flex-1 justify-center">
-            <View>
-                <LeftArrow
-                    handlePress={returnHome}
-                />
-            </View>
-
-            <CameraView 
-                className="flex-1"
-                facing={facing}
-                ref={cameraRef}
-                onCameraReady={handleCameraReady}
-                onMountError={handleMountError}
-            />
-
-            <View className="justify-center items-center flex-row">
-                <Text className="text-lg font-bold">
+            {isLoading ? (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                    <Text style={styles.loadingText}>Analyzing photo...</Text>
+                </View>
+                ) : (
+                <>
+                    <View>
+                        <LeftArrow handlePress={returnHome} />
+                    </View>
+                    <CameraView
+                        className="flex-1"
+                        facing={facing}
+                        ref={cameraRef}
+                        onCameraReady={handleCameraReady}
+                        onMountError={handleMountError}
+                    />
+                    <View className="justify-center items-center flex-row">
+                        <Text className="text-lg font-bold">
                         Press the camera button to scan
-                </Text>
-            </View>
+                        </Text>
+                    </View>
+                    <View className="mt-8 backgroundColor-transparent justify-center items-center flex-row">
+                        <ShutterButton handlePress={takePicture} />
+                        <FlipButton handlePress={toggleCameraFacing} />
+                    </View>
+                </>
+            )}
 
-            <View className="mt-8 backgroundColor-transparent 
-            justify-center items-center flex-row">
-                <ShutterButton
-                    handlePress={takePicture}
-                />
-
-                <FlipButton
-                    handlePress={toggleCameraFacing}
-                />
-            </View>
+            <Modal
+                visible={!!errorMessage}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={() => setErrorMessage('')}
+            >
+                <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                    <Text style={styles.modalText}>{errorMessage}</Text>
+                    <TouchableOpacity
+                    style={styles.modalButton}
+                    onPress={() => setErrorMessage('')}
+                    >
+                    <Text style={styles.modalButtonText}>Try Again</Text>
+                    </TouchableOpacity>
+                </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 }
@@ -101,6 +155,49 @@ const CameraScreen = () => {
         backgroundColor: 'transparent',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    loadingText: {
+        marginTop: 10,
+        fontSize: 18,
+        color: '#000',
+    },
+
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+      
+    modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    },
+
+    modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+    },
+    
+    modalButton: {
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+    },
+    
+    modalButtonText: {
+    color: 'white',
+    fontSize: 16,
     },
 });
 

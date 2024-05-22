@@ -13,6 +13,8 @@ import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import flip from "../assets/icons/flip.png";
 import shutter from "../assets/icons/camera.png";
+import noSelect from "../assets/icons/circle-shape.png";
+import check from "../assets/icons/check.png";
 
 export default {
   play,
@@ -30,4 +32,6 @@ export default {
   eye,
   flip,
   shutter,
+  noSelect,
+  check,
 };
