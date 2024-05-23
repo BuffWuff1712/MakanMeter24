@@ -71,12 +71,39 @@ const CameraScreen = () => {
         }
     };
 
-    // analyse image of the food
-    const analysePhoto = async (photo) => {
+    // TO USE ONLY AFTER WE HAVE FINALISED APP - analyse image of the food
+    // const analysePhoto = async (photo) => {
+    //     try {
+    //         setIsLoading(true); // Show loading screen
+    //         const jsonData = await analyse(photo);
+    //         console.log(jsonData);
+    //         // Navigate to results page with jsonData
+    //         router.push({
+    //             pathname: '/results',
+    //             params: { data: JSON.stringify(jsonData) }
+    //         });
+    //     } catch (error) {
+    //         console.log('Failed to analyze photo:', error);
+    //         setErrorMessage('Failed to analyze photo. Please try again.');
+    //     } finally {
+    //         setIsLoading(false); // Hide loading screen
+    //     }
+    // };
+
+    // TO DUMMY REQUEST API APP - analyse image of the food
+    const analysePhoto = (photo) => {
         try {
             setIsLoading(true); // Show loading screen
-            const jsonData = await analyse(photo);
+            const jsonData = {"ingredients": 
+                ["noodles", "shrimp", 
+                "squid", "green onions", 
+                "bean sprouts", "lime", 
+                "chili paste", "garlic", 
+                "soy sauce", "oil"]
+            };
+
             console.log(jsonData);
+            
             // Navigate to results page with jsonData
             router.push({
                 pathname: '/results',
