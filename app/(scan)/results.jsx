@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Results = () => {
   const [foodItems, setFoodItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { data } = useLocalSearchParams();
@@ -30,7 +31,24 @@ const Results = () => {
 
     fetchData();
   }, [data]);
+  
+  const handleSelectItem = (item) => {
+    setSelectedItems((prevSelectedItems) => {
+      if (prevSelectedItems.includes(item)) {
+        return prevSelectedItems.filter((i) => i !== item);
+      } else {
+        return [...prevSelectedItems, item];
+      }
+    });
+  };
 
+  const handleAddButtonPress = () => {
+    // if (selectedItems.length > 0) {
+    //   navigation.navigate('SelectedFoodsPage', { selectedItems });
+    // } else {
+    //   Alert.alert("No items selected", "Please select at least one item to add.");
+    // }
+  };
 
   return (
     <View className="flex-1 justify-center">
@@ -46,7 +64,7 @@ const Results = () => {
           </View>
           <FlatList
             data={foodItems}
-            renderItem={({ item }) => <FoodListItem item={item} />}
+            renderItem={({ item }) => <FoodListItem item={item} onSelect={handleSelectItem}/>}
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ gap: 5 }}
           />
@@ -54,6 +72,7 @@ const Results = () => {
             <CustomButton 
               title="ADD"
               containerStyles="bg-blue"
+              handlePress={handleAddButtonPress}
             />
           </View>
         </View>

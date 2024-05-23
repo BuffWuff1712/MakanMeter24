@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useState } from 'react';
 import { icons } from "../constants"
 
-const FoodListItem = ({ item }) => {
+const FoodListItem = ({ item, onSelect }) => {
 
   const [borderColor, setBorderColor] = useState('transparent');
   const [selectIcon, setSelectIcon] = useState(icons.noSelect);
@@ -10,6 +10,7 @@ const FoodListItem = ({ item }) => {
   const handlePress = () => {
     setBorderColor(borderColor === 'transparent' ? 'blue' : 'transparent')
     setSelectIcon(selectIcon === icons.noSelect ? icons.check : icons.noSelect);
+    onSelect(item);
   };
 
   return (
