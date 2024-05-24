@@ -3,11 +3,41 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import { images } from '../../constants';
+import { createUser } from "../../lib/supabase";
+import { useGlobalContext } from "../../context/GlobalProvider";
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 
+
 const SignUp = () => {
-  
+  const { setUser, setIsLoggedIn } = useGlobalContext();
+
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const submit = async () => {
+    if (form.username === "" || form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+
+    setSubmitting(true);
+    try {
+      const result = await createUser(form.email, form.password, form.username);
+      setUser(result);
+      setIsLoggedIn(true);
+
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <SafeAreaView className="bg-gray h-full">
       <ScrollView>
@@ -25,23 +55,31 @@ const SignUp = () => {
 
           <FormField 
             title="Username"
+            value={form.username}
+            handleChangeText={(e) => setForm({ ...form, username: e })}
             otherStyles="mt-10"
           />
 
           <FormField 
             title="Email"
+            value={form.email}
+            handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-7"
             keyboardType="email-address"
           />
 
           <FormField 
             title="Password"
+            value={form.password}
+            handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
           />    
 
           <CustomButton 
             title="Sign Up"
             containerStyles="mt-7 bg-secondary"
+            handlePress={submit}
+            isLoading={isSubmitting}
           />
 
           <View className="justify-center pt-5 flex-row gap-2">

@@ -1,47 +1,68 @@
 import { createContext, useContext, useState,
-useEffect } from "react";
-import { getCurrentUser } from "../lib/appwrite";
+  useEffect } from "react";
+  import { getCurrentUser } from "../lib/supabase";
+  
+  const GlobalContext = createContext();
+  export const useGlobalContext = () => useContext(GlobalContext);
+  
+  const GlobalProvider = ({ children }) => {
+      const [isLoggedIn, setIsLoggedIn] = useState(false)
+      const [user, setUser] = useState(null)
+      const [isLoading, setIsLoading] = useState(true)
+  
+      // useEffect(() => {
+      //     getCurrentUser()
+      //       .then((res) => {
+      //         if (res) {
+      //           setIsLoggedIn(true);
+      //           setUser(res);
+      //         } else {
+      //           setIsLoggedIn(false);
+      //           setUser(null);
+      //         }
+      //       })
+      //       .catch((error) => {
+      //         console.log(error);
+      //       })
+      //       .finally(() => {
+      //         setIsLoading(false);
+      //       });
+      //   }, []);
 
-const GlobalContext = createContext();
-export const useGlobalContext = () => useContext(GlobalContext);
-
-const GlobalProvider = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [user, setUser] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
-
-    useEffect(() => {
-        getCurrentUser()
-          .then((res) => {
-            if (res) {
+      useEffect(() => {
+        const initializeUser = async () => {
+          try {
+            const currentUser = await getCurrentUser();
+            if (currentUser) {
               setIsLoggedIn(true);
-              setUser(res);
+              setUser(currentUser);
             } else {
               setIsLoggedIn(false);
               setUser(null);
             }
-          })
-          .catch((error) => {
+          } catch (error) {
             console.log(error);
-          })
-          .finally(() => {
+          } finally {
             setIsLoading(false);
-          });
+          }
+        };
+    
+        initializeUser();
       }, []);
-    
-      return (
-        <GlobalContext.Provider
-          value={{
-            isLoggedIn,
-            setIsLoggedIn,
-            user,
-            setUser,
-            isLoading,
-          }}
-        >
-          {children}
-        </GlobalContext.Provider>
-      );
-    };
-    
-export default GlobalProvider;
+      
+        return (
+          <GlobalContext.Provider
+            value={{
+              isLoggedIn,
+              setIsLoggedIn,
+              user,
+              setUser,
+              isLoading,
+            }}
+          >
+            {children}
+          </GlobalContext.Provider>
+        );
+      };
+      
+  export default GlobalProvider;

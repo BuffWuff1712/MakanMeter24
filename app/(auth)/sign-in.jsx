@@ -1,12 +1,44 @@
-import { View, Text, ScrollView, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, Image, Alert, AppState} from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import { images } from '../../constants';
+import { getCurrentUser, signIn } from "../../lib/supabase";
+import { useGlobalContext } from "../../context/GlobalProvider";
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 
+
 const SignIn = () => {
+  const { setUser, setIsLoggedIn } = useGlobalContext();
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const submit = async () => {
+    if (form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+
+    setSubmitting(true);
+
+    try {
+      await signIn(form.email, form.password);
+      const result = await getCurrentUser();
+      setUser(result);
+      setIsLoggedIn(true);
+
+      Alert.alert("Success", "User signed in successfully");
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
 
   return (
     <SafeAreaView className="bg-gray h-full">
@@ -26,18 +58,24 @@ const SignIn = () => {
 
           <FormField 
             title="Email"
+            value={form.email}
+            handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-7"
             keyboardType="email-address"
           />
 
           <FormField 
             title="Password"
+            value={form.password}
+            handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
           />    
 
           <CustomButton 
             title="Sign In"
             containerStyles="mt-7 bg-secondary"
+            handlePress={submit}
+            isLoading={isSubmitting}
           />
 
           <View className="justify-center pt-5 flex-row gap-2">
