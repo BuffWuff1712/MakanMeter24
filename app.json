@@ -2,7 +2,7 @@
   "expo": {
     "name": "MakanMeter24",
     "slug": "MakanMeter",
-    "scheme": "MakanMeter",
+    "scheme": "makanmeter",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,10 @@
       "infoPlist": {
         "NSCameraUsageDescription": "$(MakanMeter) needs access to your Camera to take photos."
       },
-      "bundleIdentifier": "com.bingchillingz1712.MakanMeter"
+      "bundleIdentifier": "com.bingchillingz1712.MakanMeter",
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,9 +28,11 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "android.permission.CAMERA"
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.bingchillingz1712.MakanMeter"
+      "package": "com.bingchillingz1712.MakanMeter",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -48,6 +53,9 @@
       "eas": {
         "projectId": "d5aacd91-8be8-4c92-b250-0ba31e53c9f4"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d5aacd91-8be8-4c92-b250-0ba31e53c9f4"
     }
   }
 }

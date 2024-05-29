@@ -15,6 +15,15 @@ import flip from "../assets/icons/flip.png";
 import shutter from "../assets/icons/camera.png";
 import noSelect from "../assets/icons/circle-shape.png";
 import check from "../assets/icons/check.png";
+import fire from "../assets/icons/streak_fire.png";
+import bell from "../assets/icons/bell.png";
+import logoSmall from "../assets/icons/mm_logo_small.png";
+import back from "../assets/icons/back.png";
+import forward from "../assets/icons/forward.png";
+
+import analyse from "../assets/icons/analyse_button.png";
+import plan from "../assets/icons/plan_button.png";
+import more from "../assets/icons/more_button.png";
 
 export default {
   play,
@@ -34,4 +43,12 @@ export default {
   shutter,
   noSelect,
   check,
+  fire,
+  bell,
+  logoSmall,
+  back,
+  forward,
+  analyse,
+  plan,
+  more,
 };

@@ -6,7 +6,7 @@ module.exports = {
       colors: {
         primary: "#161622",
         secondary: {
-          DEFAULT: "#FF9C01",
+          DEFAULT: "#36B37E",
           100: "#FF9001",
           200: "#FF8E01",
         },
@@ -20,7 +20,10 @@ module.exports = {
         },
         blue: {
           DEFAULT: "#60a5fa",
-        }
+        },
+        emerald: {
+          DEFAULT: "#10b981",
+        },
       },
       fontFamily: {
         pthin: ["Poppins-Thin", "sans-serif"],

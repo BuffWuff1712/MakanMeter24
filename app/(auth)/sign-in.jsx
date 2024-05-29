@@ -73,7 +73,7 @@ const SignIn = () => {
 
           <CustomButton 
             title="Sign In"
-            containerStyles="mt-7 bg-secondary"
+            containerStyles="mt-7 bg-emerald"
             handlePress={submit}
             isLoading={isSubmitting}
           />
@@ -83,7 +83,7 @@ const SignIn = () => {
               Don't have an account?
             </Text>
             <Link href="/sign-up" className="text-lg
-            font-psemibold text-secondary">
+            font-psemibold text-emerald">
               Sign Up
             </Link>
           </View>
@@ -93,7 +93,7 @@ const SignIn = () => {
               Jump to
             </Text>
             <Link href="../(tabs)/home" className="text-lg
-            font-psemibold text-secondary">
+            font-psemibold text-emerald">
               Home
             </Link>
           </View>
