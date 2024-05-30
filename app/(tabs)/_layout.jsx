@@ -3,6 +3,9 @@ import React, { useEffect, useRef } from 'react'
 import { Tabs, Redirect } from 'expo-router';
 import * as Animatable from 'react-native-animatable';
 import { useTheme } from '@react-navigation/native';
+import { useAddFoodButton, AddFoodButtonProvider } from '../../context/AddFoodButtonContext';
+import AddFoodButton from '../../components/AddFoodButton';
+
 
 
 //import the custom icons from the constants folder
@@ -25,7 +28,9 @@ const circle1 = { 0: { scale: 0 }, 0.3: { scale: .9 }, 0.5: { scale: .2 }, 0.8: 
 const circle2 = { 0: { scale: 1 }, 1: { scale: 0 } }
 
 
+
 const TabButton = (props) => {
+  const { handlePress2 } = useAddFoodButton();
   const { item, onPress, accessibilityState } = props;
   const focused = accessibilityState.selected;
   const viewRef = useRef(null);
@@ -36,6 +41,14 @@ const TabButton = (props) => {
   const { colors } = useTheme();
   const color = isDarkMode ? "white" : "black";
   const bgColor = colors.background;
+
+
+  const combinedPressHandler = () => {
+    handlePress2();
+    if (onPress) {
+      onPress();
+    }
+  };
 
   useEffect(() => {
     if (focused) {
@@ -51,12 +64,12 @@ const TabButton = (props) => {
 
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={combinedPressHandler}
       activeOpacity={1}
       style={styles.container}>
       <Animatable.View
         ref={viewRef}
-        duration={1000}
+        duration={700}
         style={styles.container}>
         <View style={[styles.btn, { borderColor: bgColor, backgroundColor: bgColor }]}>
           <Animatable.View
@@ -80,47 +93,12 @@ const TabButton = (props) => {
 }
 
 
-// // Tab Icon dictates how the tab icons would look
-// const TabIcon = ( { icon, color, name, focused }) => {
-//   return (
-//     <View className="items-center justify-center gap-2">
-//       <Image 
-//         source={icon} //Icon Image
-//         resizeMode="contain"
-//         tintColor={color}
-//         className="w-9 h-9" //uses nativewind
-//       />
-
-//       {/* <Text className={`${focused ? 'font-psemibold' : 
-//       'font-pregular'} text-xs`} style={{ color: color }}>
-//         {name} 
-//       </Text>  */}
-//     </View>
-//   )
-// }
-
-const CustomTabBarButton = ({ children, onPress }) => (
-  <TouchableOpacity
-    className="justify-center items-center"
-    style={{
-      top: -15, // This will make the button protrude out of the tab bar
-    }}
-    activeOpacity={0.9}
-    onPress={onPress}
-    
-  >
-    <View className="w-[70px] h-[70px] rounded-full bg-green-600 
-    shadow-lg justify-center items-center">
-      {children}
-    </View>
-  </TouchableOpacity>
-);
-
-
 // Tab Layout lays out the tabs
 const TabsLayout = () => {
   return (
-    <>
+    
+    <AddFoodButtonProvider>
+      <>
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
@@ -132,120 +110,17 @@ const TabsLayout = () => {
           }
         }}
       >
-        {/* <Tabs.Screen
-          name="home"
-          options = {{ 
-            title: 'Home',
-            headerShown: false,
-            tabBarIcon: ({ color, focused}) => (
-              <TabIcon
-                icon={icons.home}
-                color={color}
-                name="Home"
-                focused={focused} 
-              />
-            )
-          }}
-        />
-
-        <Tabs.Screen
-          name="analyse"
-          options = {{ 
-            title: 'Analyse',
-            headerShown: false,
-            tabBarIcon: ({ color, focused}) => (
-              <TabIcon
-                icon={icons.analyse}
-                color={color}
-                name="Analyse"
-                focused={focused} 
-              />
-            )
-          }}
-        />
-        
-        <Tabs.Screen
-          name="add_food"
-          options = {{ 
-            title: 'Add',
-            headerShown: false,
-            tabBarIcon: ({ color, focused}) => (
-              <TabIcon
-                icon={icons.plus}
-                color={color}
-                name="Add"
-                focused={focused} 
-              />
-            ),
-            tabBarButton: (props) => (
-              <CustomTabBarButton {...props}>
-                <Image
-                  source={icons.plus}
-                  resizeMode="contain"
-                  style={{ tintColor: '#ffffff' }}
-                  className="w-[60px] h-[60px]" // larger icon size with Tailwind
-                />
-              </CustomTabBarButton>
-            ),
-          }}
-        />
-        
-        <Tabs.Screen
-          name="plan"
-          options = {{ 
-            title: 'Plan',
-            headerShown: false,
-            tabBarIcon: ({ color, focused}) => (
-              <TabIcon
-                icon={icons.plan}
-                color={color}
-                name="Plan"
-                focused={focused} 
-              />
-            )
-          }}
-        />
-
-        <Tabs.Screen
-          name="more"
-          options = {{ 
-            title: 'More',
-            headerShown: false,
-            tabBarIcon: ({ color, focused}) => (
-              <TabIcon
-                icon={icons.more}
-                color={color}
-                name="More"
-                focused={focused} 
-              />
-            )
-          }}
-        /> */}
-
         {TabArr.map((item, index) => {
           return ( item.label === 'Add' ?
           <Tabs.Screen
-          name="add_food"
+          key={index} 
+          name={item.route} 
           options = {{ 
             title: 'Add',
             headerShown: false,
-            tabBarIcon: ({ color, focused}) => (
-              <TabIcon
-                icon={icons.plus}
-                color={color}
-                name="Add"
-                focused={focused} 
-              />
-            ),
             tabBarButton: (props) => (
-              <CustomTabBarButton {...props}>
-                <Image
-                  source={icons.plus}
-                  resizeMode="contain"
-                  style={{ tintColor: '#ffffff' }}
-                  className="w-[60px] h-[60px]" // larger icon size with Tailwind
-                />
-              </CustomTabBarButton>
+              <AddFoodButton {...props}>
+              </AddFoodButton>
             ),
           }}
         /> :
@@ -261,7 +136,9 @@ const TabsLayout = () => {
           )
         })}
       </Tabs>
-    </>
+      </>
+    </AddFoodButtonProvider>
+    
   )
 }
 
