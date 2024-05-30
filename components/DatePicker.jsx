@@ -35,7 +35,12 @@ const DatePicker = () => {
         />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-        <Text style={styles.dateText}>{formattedDate}</Text>
+        <DateTimePicker
+            value={date}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
       </TouchableOpacity>
       <TouchableOpacity onPress={handleNextDay}>
         <Image 
@@ -44,15 +49,6 @@ const DatePicker = () => {
             className="w-[30px] h-[30px]"
         />
       </TouchableOpacity>
-
-      {showDatePicker && (
-        <DateTimePicker
-          value={date}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-        />
-      )}
     </View>
   );
 };
