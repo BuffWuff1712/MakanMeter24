@@ -1,6 +1,6 @@
-import { View, Text, Image, TouchableOpacity, SafeAreaView, useColorScheme, StyleSheet} from 'react-native'
-import React, { useEffect, useRef } from 'react'
-import { Tabs, Redirect } from 'expo-router';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, useColorScheme, StyleSheet, Modal} from 'react-native'
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { Tabs, Redirect, useNavigation } from 'expo-router';
 import * as Animatable from 'react-native-animatable';
 import { useTheme } from '@react-navigation/native';
 import { useAddFoodButton, AddFoodButtonProvider } from '../../context/AddFoodButtonContext';
@@ -93,12 +93,13 @@ const TabButton = (props) => {
 }
 
 
+
 // Tab Layout lays out the tabs
 const TabsLayout = () => {
   return (
     
     <AddFoodButtonProvider>
-      <>
+      <>      
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
@@ -109,6 +110,7 @@ const TabsLayout = () => {
             height: 84,
           }
         }}
+        
       >
         {TabArr.map((item, index) => {
           return ( item.label === 'Add' ?
@@ -119,7 +121,8 @@ const TabsLayout = () => {
             title: 'Add',
             headerShown: false,
             tabBarButton: (props) => (
-              <AddFoodButton {...props}>
+              <AddFoodButton 
+                {...props}>
               </AddFoodButton>
             ),
           }}
@@ -130,15 +133,15 @@ const TabsLayout = () => {
               options={{
                 headerShown: false,
                 tabBarShowLabel: false,
-                tabBarButton: (props) => <TabButton {...props} item={item} />
-              }}
+                tabBarButton: 
+                  (props) => (<TabButton {...props} item={item}/>),
+                }}
             />
           )
         })}
       </Tabs>
       </>
     </AddFoodButtonProvider>
-    
   )
 }
 
@@ -177,7 +180,43 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#36B37E',
     fontWeight: '500'
-  }
+  },
+  modalView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  options: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  optionButton: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 15,
+    margin: 10,
+    elevation: 2,
+  },
+  optionText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
 })
 
 export default TabsLayout

@@ -11,16 +11,17 @@ export const AddFoodButtonProvider = ({ children }) => {
     Animated.sequence([
       Animated.timing(buttonSize, {
         toValue: 0.95,
-        duration: 200,
+        duration: 20,
         useNativeDriver: true
       }),
       Animated.timing(buttonSize, {
         toValue: 1,
+        duration: 20,
         useNativeDriver: true
       }),
       Animated.timing(rotation, {
         toValue: rotation._value === 0 ? 1 : 0,
-        duration: 80,
+        duration: 100,
         useNativeDriver: true
       })
     ]).start();
@@ -34,16 +35,17 @@ export const AddFoodButtonProvider = ({ children }) => {
       Animated.sequence([
         Animated.timing(buttonSize, {
           toValue: 0.95,
-          duration: 200,
+          duration: 20,
           useNativeDriver: true
         }),
         Animated.timing(buttonSize, {
           toValue: 1,
+          duration: 20,
           useNativeDriver: true
         }),
         Animated.timing(rotation, {
           toValue: 0,
-          duration: 80,
+          duration: 100,
           useNativeDriver: true
         })
       ]).start();

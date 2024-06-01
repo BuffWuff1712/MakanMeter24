@@ -6,6 +6,7 @@ import { images } from '../constants';
 import Loader from '../components/Loader';
 import CustomButton from '../components/CustomButton';
 import { useGlobalContext } from "../context/GlobalProvider";
+import { TrackedMealsProvider } from '../context/TrackedMealsContext';
 
 const Welcome = () => {
   const { isLoading, isLoggedIn } = useGlobalContext();

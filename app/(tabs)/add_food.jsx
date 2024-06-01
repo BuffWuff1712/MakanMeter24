@@ -1,15 +1,38 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  Dimensions,
+} from 'react-native';
+import React, { useState } from 'react';
+
+const { width, height } = Dimensions.get('window');
 
 const Add_Food = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const handlePress = () => {
+    setModalVisible(true);
+  };
+
+  const handleClose = () => {
+    setModalVisible(false);
+  };
+
   return (
-    <View className="w-full justify-center min-h-[83vh] 
-    px-4 my-6">
-      <Text>Add_Food</Text>
-    </View>
-  )
-}
+    <SafeAreaView style={styles.container}>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default Add_Food
-
-const styles = StyleSheet.create({})

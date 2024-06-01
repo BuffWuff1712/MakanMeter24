@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 10,
-    backgroundColor: 'gray',
+    backgroundColor: 'white',
     borderRadius: 10,
   },
   dateText: {

@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, 
     Image, ActivityIndicator, Modal } from 'react-native';
 import ShutterButton from '../../components/ShutterButton';
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import LeftArrow from '../../components/LeftArrow';
 import FlipButton from '../../components/FlipButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,6 +15,7 @@ import { encodeImage } from '../../components/ImageProcessor';
 
 
 const CameraScreen = () => {
+    const { meal_type } = useLocalSearchParams();
     const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [isCameraReady, setIsCameraReady] = useState(false);
@@ -107,7 +108,7 @@ const CameraScreen = () => {
             // Navigate to results page with jsonData
             router.push({
                 pathname: '/results',
-                params: { data: JSON.stringify(jsonData) }
+                params: { data: JSON.stringify(jsonData), meal_type: meal_type}
             });
         } catch (error) {
             console.log('Failed to analyze photo:', error);

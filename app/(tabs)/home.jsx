@@ -40,12 +40,7 @@ const Home = () => {
         <View className="w-full bg-white items-center">
           <Text>Calories and Macros chart goes here</Text>
         </View>
-
-        <View className="w-full justify-center min-h-[83vh] 
-        px-4 my-6">
-          <Link href="../(scan)/camera">Press here for camera</Link>
-        </View>
-
+        
         <View className="w-full bg-white items-center">
           <Text>List of items eaten goes here</Text>
         </View>
