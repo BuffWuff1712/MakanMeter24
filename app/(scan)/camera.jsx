@@ -64,7 +64,7 @@ const CameraScreen = () => {
                 console.log("Picture processed!")
     
                 // Now you can use the base64Image as needed
-                await analysePhoto(base64Image);
+                analysePhoto(base64Image);
     
             } catch (error) {
                 console.error("Error taking picture:", error);

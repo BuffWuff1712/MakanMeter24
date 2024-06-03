@@ -8,6 +8,7 @@ import FoodLogListItem from '../../components/FoodLogListItem';
 import FoodListItem from '../../components/FoodListItem';
 import { getCurrentUser, getMealID, getTodayDate, getTrackedMeals } from '../../lib/supabase';
 import { useTrackedMeals } from '../../context/TrackedMealsContext';
+import DailyIntake from '../../components/DailyIntake';
 
 const Log_Page = () => {
   const { meal_type } = useGlobalSearchParams();
@@ -60,12 +61,6 @@ const Log_Page = () => {
 
       <TextInput style={styles.searchInput} placeholder="Search for a food" />
       
-      <View style={styles.tabs}>
-        <Text style={styles.tab}>All</Text>
-        <Text style={styles.tab}>My Meals</Text>
-        <Text style={styles.tab}>My Recipes</Text>
-        <Text style={styles.tab}>My Foods</Text>
-      </View>
       
       <View style={styles.scanButtons}>
         <TouchableOpacity style={styles.scanButton} onPress={goToCamera}>
@@ -76,7 +71,15 @@ const Log_Page = () => {
           <FontAwesome5 name="barcode" size={30} color="#36B37E" />
           <Text style={styles.scanButtonText}>Scan a Barcode</Text>
         </TouchableOpacity>
+        
       </View>
+
+      <DailyIntake
+          calories={{ consumed: 580, total: 3046 }}
+          carbs={{ consumed: 71, total: 381 }}
+          protein={{ consumed: 20, total: 152 }}
+          fat={{ consumed: 32, total: 102 }}
+        />
       
       <View style={styles.tabBar}>
         <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('meals')}>
