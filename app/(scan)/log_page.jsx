@@ -1,18 +1,16 @@
-// pages/Log_Page.js
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useGlobalSearchParams } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
 import FoodListItem from '../../components/FoodListItem';
-import { getCurrentUser, getMealID, getTodayDate, getTrackedMeals } from '../../lib/supabase';
-import { useTrackedMeals } from '../../context/TrackedMealsContext';
+import { getCurrentUser, getMealID, getOrCreateMealID, getDate, getTrackedMeals } from '../../lib/supabase';
+import { useGlobalContext } from '../../context/GlobalProvider.js';
 import DailyIntake from '../../components/DailyIntake';
 
 const Log_Page = () => {
   const { meal_type } = useGlobalSearchParams();
-  const { trackedMeals, setTrackedMeals } = useTrackedMeals();
+  const { trackedMeals, setTrackedMeals, selectedDate, setSelectedDate } = useGlobalContext();
   const [selectedTab, setSelectedTab] = useState('meals');
   const router = useRouter();
 
@@ -20,9 +18,9 @@ const Log_Page = () => {
     async function fetchTrackedData() {
       try {
         const currentUser = await getCurrentUser();
-        const date = getTodayDate();
-        const mealId = await getMealID(currentUser, meal_type, date);
+        const mealId = await getOrCreateMealID(currentUser, meal_type, selectedDate);
         const data = await getTrackedMeals(mealId);
+        console.log('to USE: ', data)
         setTrackedMeals(data ? data : []);
       } catch (error) {
         console.error('Error fetching tracked data:', error);

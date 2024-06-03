@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, Modal, Pressable, Text } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useGlobalContext } from '../context/GlobalProvider';
 import { useAddFoodButton } from '../context/AddFoodButtonContext';
 import { useRouter } from 'expo-router';
+import { getDate }  from '../lib/supabase'
 
 const AddFoodButton = ({ onPress }) => {
+  const { selectedDate, setSelectedDate } = useGlobalContext();
   const { handlePress1, buttonSize, rotation, handlePress2 } = useAddFoodButton();
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
@@ -26,7 +29,7 @@ const AddFoodButton = ({ onPress }) => {
   const handleMealPress = (mealType) => {
     router.navigate({
       pathname: 'log_page',
-      params: { meal_type: mealType },
+      params: { meal_type: mealType , date: getDate(selectedDate)},
     });
     setModalVisible(false);
     handlePress2();

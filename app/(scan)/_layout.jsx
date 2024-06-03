@@ -1,12 +1,10 @@
 import { View, Text } from 'react-native'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { TrackedMealsProvider } from '../../context/TrackedMealsContext'
 
 const CamLayout = () => {
   return (
     <>
-    <TrackedMealsProvider>
       <Stack>
         <Stack.Screen 
             name="log_page"
@@ -29,7 +27,6 @@ const CamLayout = () => {
           }}
         />
       </Stack>
-    </TrackedMealsProvider>
     </>
   )
 }

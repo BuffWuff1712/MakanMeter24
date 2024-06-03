@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react';
 const { fetchNutritionInfoForIngredients } = require('../../lib/edamam.js');
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { addMeal, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
-import { useTrackedMeals } from '../../context/TrackedMealsContext';
+import { useGlobalContext } from '../../context/GlobalProvider.js';
 
 const Results = () => {
   const { meal_type } = useLocalSearchParams();
-  const { setTrackedMeals } = useTrackedMeals();
+  const { setTrackedMeals, selectedDate, setSelectedDate } = useGlobalContext();
   const [foodItems, setFoodItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,7 +71,7 @@ const Results = () => {
   const handleAddButtonPress = async () => {
     if (selectedItems.length > 0) {
       try {
-        const meal_id = await addMeal(selectedItems, meal_type);
+        const meal_id = await addMeal(selectedItems, meal_type, selectedDate);
         const updatedTrackedMeals = await getTrackedMeals(meal_id);
         setTrackedMeals(updatedTrackedMeals);
         router.navigate({
