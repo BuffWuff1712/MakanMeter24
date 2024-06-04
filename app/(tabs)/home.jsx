@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { icons } from '../../constants';
@@ -7,6 +7,7 @@ import HomeSummary from '../../components/HomeSummary';
 import MealListItem from '../../components/MealListItem';
 import { getCurrentUser, getMealsForDate, getDate } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
+import { router } from 'expo-router';
 
 
 const Home = () => {
@@ -25,11 +26,19 @@ const Home = () => {
   }, [selectedDate]);
 
   const trackedMeals = [
-    { data: mealsData?.Breakfast?.items || [], calories: mealsData?.Breakfast?.totalCalories || 0, mealType: 'Breakfast' },
-    { data: mealsData?.Lunch?.items || [], calories: mealsData?.Lunch?.totalCalories || 0, mealType: 'Lunch' },
-    { data: mealsData?.Dinner?.items || [], calories: mealsData?.Dinner?.totalCalories || 0, mealType: 'Dinner' },
-    { data: mealsData?.Snack?.items || [], calories: mealsData?.Snack?.totalCalories || 0, mealType: 'Snack' },
+    { data: mealsData?.Breakfast?.items || [], calories: mealsData?.Breakfast?.totalCalories || 0, 
+      mealType: 'Breakfast', icon: icons.breakfast},
+    { data: mealsData?.Lunch?.items || [], calories: mealsData?.Lunch?.totalCalories || 0, 
+      mealType: 'Lunch', icon: icons.lunch},
+    { data: mealsData?.Dinner?.items || [], calories: mealsData?.Dinner?.totalCalories || 0, 
+      mealType: 'Dinner', icon: icons.dinner },
+    { data: mealsData?.Snack?.items || [], calories: mealsData?.Snack?.totalCalories || 0, 
+      mealType: 'Snack', icon: icons.snack },
   ];
+
+  const toNotifs = () => {
+    router.navigate('notifications');
+  }
 
   return (
     <SafeAreaView className="bg-white h-full">
@@ -37,7 +46,10 @@ const Home = () => {
       <View className="flex flex-row justify-center items-center space-x-20 w-full bg-gray mb-5">
         <Image source={icons.fire} resizeMode="contain" className="w-[40px] h-[40px]" />
         <Image source={icons.logoSmall} resizeMode="contain" className="w-[55px] h-[55px]" />
-        <Image source={icons.bell} resizeMode="contain" className="w-[40px] h-[40px]" />
+        <TouchableOpacity onPress={toNotifs}>
+          <Image source={icons.bell} resizeMode="contain" className="w-[40px] h-[40px]" />
+        </TouchableOpacity>
+        
       </View>
 
       <ScrollView>

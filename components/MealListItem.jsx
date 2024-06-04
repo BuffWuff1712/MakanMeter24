@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import FilledBarSeparator from '../components/FilledBarSeparator';
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useGlobalContext } from '../context/GlobalProvider';
@@ -23,6 +24,7 @@ const MealListItem = ({ item }) => {
           onPress={() => handlePress(item.mealType)}
         >
           <View style={styles.row}>
+            <Image source={item.icon} className="h-[45px] w-[45px]" />
             <View style={styles.info}>
                 <Text style={styles.mealType}>{item.mealType}</Text>
                 <View style={styles.foodItemsContainer}>
@@ -47,7 +49,7 @@ const MealListItem = ({ item }) => {
           </View>
           {item.data.length > 0 ? (
             <View className='items-center'>
-              <Text>------------------------------------------------</Text>
+              <FilledBarSeparator/>
               <Text>{item.calories} cal</Text>
             </View>) : <></>}
           

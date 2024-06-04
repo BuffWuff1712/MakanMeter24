@@ -25,6 +25,11 @@ import analyse from "../assets/icons/analyse_button.png";
 import plan from "../assets/icons/plan_button.png";
 import more from "../assets/icons/more_button.png";
 
+import breakfast from "../assets/icons/sandwich.png";
+import lunch from "../assets/icons/fried-rice.png";
+import dinner from "../assets/icons/christmas-dinner.png";
+import snack from "../assets/icons/fruit-bowl.png";
+
 export default {
   play,
   bookmark,
@@ -51,4 +56,8 @@ export default {
   analyse,
   plan,
   more,
+  breakfast,
+  lunch,
+  dinner,
+  snack,
 };
