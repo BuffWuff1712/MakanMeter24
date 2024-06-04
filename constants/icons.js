@@ -29,6 +29,7 @@ import breakfast from "../assets/icons/sandwich.png";
 import lunch from "../assets/icons/fried-rice.png";
 import dinner from "../assets/icons/christmas-dinner.png";
 import snack from "../assets/icons/fruit-bowl.png";
+import loadingCircle from "../assets/icons/Loading.json";
 
 export default {
   play,
@@ -60,4 +61,5 @@ export default {
   lunch,
   dinner,
   snack,
+  loadingCircle,
 };

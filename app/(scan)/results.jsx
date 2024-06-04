@@ -7,6 +7,7 @@ const { fetchNutritionInfoForIngredients } = require('../../lib/edamam.js');
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { addMeal, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
+import LoadingScreen from '../../components/LoadingScreen.jsx';
 
 const Results = () => {
   const { meal_type } = useLocalSearchParams();
@@ -74,7 +75,7 @@ const Results = () => {
         console.error('Error adding meal:', error);
         Alert.alert('Error', 'Failed to add meal. Please try again.');
       } finally {
-        setIsLoading(false);
+        setIsLoading(true);
       }
     } else {
       Alert.alert('No items selected', 'Please select at least one item to add.');
@@ -84,11 +85,10 @@ const Results = () => {
   const renderLoadingScreen = () => {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
         {loadingContext === 'analyzing' ? (
-          <Text style={styles.loadingText}>Analyzing ingredients...</Text>
+          <LoadingScreen text={'Analysing Ingredients'}/>
         ) : (
-          <Text style={styles.loadingText}>Adding ingredients...</Text>
+          <LoadingScreen text={'Adding Ingredients'}/>
         )}
       </View>
     );
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#F5F5F5',
   },
   loadingText: {
     marginTop: 10,
