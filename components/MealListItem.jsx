@@ -6,7 +6,7 @@ import { useGlobalContext } from '../context/GlobalProvider';
 import { getDate } from '../lib/supabase';
 
 const MealListItem = ({ item }) => {
-    const { selectedDate, setSelectedDate } = useGlobalContext();
+    const { selectedDate } = useGlobalContext();
     const router = useRouter();
     const handlePress = (mealType) => {
       console.log(mealType);

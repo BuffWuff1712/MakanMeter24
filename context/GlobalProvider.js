@@ -1,6 +1,6 @@
 import { createContext, useContext, useState,
   useEffect } from "react";
-  import { getCurrentUser } from "../lib/supabase";
+  import { getCurrentUser, getMealsForDate } from "../lib/supabase";
   
   const GlobalContext = createContext();
   export const useGlobalContext = () => useContext(GlobalContext);
@@ -11,6 +11,7 @@ import { createContext, useContext, useState,
       const [isLoading, setIsLoading] = useState(true);
       const [selectedDate, setSelectedDate] = useState(new Date());
       const [trackedMeals, setTrackedMeals] = useState([]);
+      const [mealsData, setMealsData] = useState({});
 
       useEffect(() => {
         const initializeUser = async () => {
@@ -19,12 +20,15 @@ import { createContext, useContext, useState,
             if (currentUser) {
               setIsLoggedIn(true);
               setUser(currentUser);
+              const data = await getMealsForDate(currentUser, selectedDate);
+              setMealsData(data);
             } else {
               setIsLoggedIn(false);
               setUser(null);
             }
+
           } catch (error) {
-            console.log(error);
+            console.log("error: ", error);
           } finally {
             setIsLoading(false);
           }
@@ -45,6 +49,8 @@ import { createContext, useContext, useState,
               setSelectedDate,
               trackedMeals, 
               setTrackedMeals,
+              mealsData, 
+              setMealsData,
             }}
           >
             {children}

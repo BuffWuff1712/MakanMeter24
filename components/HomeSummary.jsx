@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { ProgressChart } from 'react-native-chart-kit';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 const screenWidth = Dimensions.get('window').width;
 
 const HomeSummary = ({ calories, carbs, protein, fat }) => {
   const data = {
-    labels: ["Carbs", "Protein", "Fat"], // optional
-    data: [carbs.consumed / carbs.total, protein.consumed / protein.total, fat.consumed / fat.total]
+    labels: ["Fat", "Protein", "Carbs"], // optional
+    data: [fat.consumed / fat.total, protein.consumed / protein.total, carbs.consumed / carbs.total],
+    colors: ['#1E90FF', '#8A2BE2', '#FF8C00'] 
   };
 
 
@@ -26,6 +28,7 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
         radius={32}
         chartConfig={chartConfig}
         hideLegend={false}
+        withCustomBarColorFromData
       />
     </View>
   );
@@ -35,7 +38,7 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
 const chartConfig = {
   backgroundGradientFrom: "#FFF",
   backgroundGradientTo: "#FFF",
-  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+  color: (opacity = 1) => `rgba(26, 150, 146, ${opacity})`,
   labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   strokeWidth: 2, // optional, default 3
   barPercentage: 0.5,

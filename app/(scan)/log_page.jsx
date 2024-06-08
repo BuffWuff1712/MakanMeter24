@@ -1,33 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
-import { useRouter, useGlobalSearchParams } from 'expo-router';
+import { useRouter, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
 import FoodListItem from '../../components/FoodListItem';
-import { getCurrentUser, getMealID, getOrCreateMealID, getDate, getTrackedMeals } from '../../lib/supabase';
+import { getOrCreateMealID, getDate, getTrackedMeals } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import DailyIntake from '../../components/DailyIntake';
 
 const Log_Page = () => {
-  const { meal_type } = useGlobalSearchParams();
-  const { trackedMeals, setTrackedMeals, selectedDate, setSelectedDate } = useGlobalContext();
+  const { meal_type } = useLocalSearchParams();
+  const { trackedMeals, setTrackedMeals, selectedDate, user } = useGlobalContext();
   const [selectedTab, setSelectedTab] = useState('meals');
   const router = useRouter();
 
   useEffect(() => {
     async function fetchTrackedData() {
-      try {
-        const currentUser = await getCurrentUser();
-        const mealId = await getOrCreateMealID(currentUser, meal_type, selectedDate);
-        const data = await getTrackedMeals(mealId);
-        console.log('to USE: ', data)
-        setTrackedMeals(data ? data : []);
-      } catch (error) {
-        console.error('Error fetching tracked data:', error);
+        try {
+          const mealId = await getOrCreateMealID(user, meal_type, selectedDate);
+          const data = await getTrackedMeals(mealId);
+          setTrackedMeals(data ? data : []);
+        } catch (error) {
+          console.error('Error fetching tracked data:', error);
+        }
       }
-    }
-
     fetchTrackedData();
+    
   }, [meal_type]);
 
   const goToCamera = () => {

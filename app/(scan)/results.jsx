@@ -5,13 +5,13 @@ import FoodListItem from '../../components/FoodListItem';
 import CustomButton from '../../components/CustomButton';
 const { fetchNutritionInfoForIngredients } = require('../../lib/edamam.js');
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { addMeal, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
+import { addMeal, getMealsForDate, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import LoadingScreen from '../../components/LoadingScreen.jsx';
 
 const Results = () => {
   const { meal_type } = useLocalSearchParams();
-  const { setTrackedMeals, selectedDate } = useGlobalContext();
+  const { user, setTrackedMeals, setMealsData, selectedDate } = useGlobalContext();
   const [foodItems, setFoodItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -66,10 +66,13 @@ const Results = () => {
       try {
         const meal_id = await addMeal(selectedItems, meal_type, selectedDate);
         const updatedTrackedMeals = await getTrackedMeals(meal_id);
+        const mealsData = await getMealsForDate(user, selectedDate);
         setTrackedMeals(updatedTrackedMeals);
+        setMealsData(mealsData);
+
         router.navigate({
           pathname: 'log_page',
-          params: { meal_type: meal_type },
+          params: { meal_type }, // Pass the tracked meals data
         });
       } catch (error) {
         console.error('Error adding meal:', error);

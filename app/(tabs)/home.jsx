@@ -1,29 +1,37 @@
 import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { icons } from '../../constants';
 import DatePicker from '../../components/DatePicker';
 import HomeSummary from '../../components/HomeSummary';
 import MealListItem from '../../components/MealListItem';
-import { getCurrentUser, getMealsForDate, getDate } from '../../lib/supabase';
+import { getMealsForDate } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
-
+import { debounce } from 'lodash';
 
 const Home = () => {
-  const { selectedDate, setSelectedDate } = useGlobalContext();
-  const [mealsData, setMealsData] = useState({});
+  const { selectedDate, user, mealsData, setMealsData } = useGlobalContext();
+
+  const fetchMeals = async (date) => {
+    const data = await getMealsForDate(user, date);
+    console.log(data);
+    setMealsData(data);
+  };
+
+  // Use useCallback to create a memoized version of the debounced function
+  const debouncedFetchMeals = useCallback(debounce((date) => {
+    fetchMeals(date);
+  }, 150), [user]);
 
   useEffect(() => {
-    const fetchMeals = async () => {
-      const userId = await getCurrentUser();
-      const data = await getMealsForDate(userId, selectedDate);
-      setMealsData(data);
-      // console.log('Data is: ', mealsData);
-    };
+    debouncedFetchMeals(selectedDate);
 
-    fetchMeals();
-  }, [selectedDate]);
+    // Cleanup function to cancel the debounce if the component unmounts or date changes
+    return () => {
+      debouncedFetchMeals.cancel();
+    };
+  }, [selectedDate, debouncedFetchMeals]);
 
   const trackedMeals = [
     { data: mealsData?.Breakfast?.items || [], calories: mealsData?.Breakfast?.totalCalories || 0, 
@@ -59,10 +67,10 @@ const Home = () => {
         
         <View className="w-full bg-white items-center mt-10 mb-10">
           <HomeSummary
-            calories={{ consumed: 580, total: 3046 }}
-            carbs={{ consumed: 71, total: 381 }}
-            protein={{ consumed: 20, total: 152 }}
-            fat={{ consumed: 32, total: 102 }}
+            calories={{ consumed: mealsData.Summary.totalCalories, total: 3046 }}
+            carbs={{ consumed: mealsData.Summary.totalCarbs, total: 381 }}
+            protein={{ consumed: mealsData.Summary.totalProtein, total: 152 }}
+            fat={{ consumed: mealsData.Summary.totalFats, total: 102 }}
           />
         </View>
 
