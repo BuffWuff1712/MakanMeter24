@@ -22,11 +22,6 @@ const MealListItem = ({ item }) => {
         pathname: 'meal_info',
         params: { 
           meal_type: item.mealType,
-          meal_info: JSON.stringify(item.data),
-          totalCalories: item.calories,
-          totalCarbs: item.carbs,
-          totalProtein: item.protein,
-          totalFats: item.fats,
         },
     })};
 

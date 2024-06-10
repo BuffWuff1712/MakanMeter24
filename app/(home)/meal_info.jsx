@@ -1,57 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Dimensions, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { PieChart } from 'react-native-chart-kit';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
-import { getDate } from '../../lib/supabase';
+import { calculateTotals, deleteMealItem, getDate, getOrCreateAndFetchMeals} from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
 
 const MealInfoPage = () => {
-    const { meal_type, meal_info, totalCalories, totalCarbs, totalProtein, totalFats } = useLocalSearchParams();
-    const { selectedDate } = useGlobalContext();
-    const data = JSON.parse(meal_info);
+    const { meal_type } = useLocalSearchParams();
+    const { user, selectedDate, refresh, setRefresh } = useGlobalContext();
+    const [data, setData] = useState([]);
+    const [macros, setMacros] = useState(null);
     const router = useRouter();
     const screenWidth = Dimensions.get('window').width;
     const parts = selectedDate.toDateString().split(' ');
     const formattedDate = `${parts[2]} ${parts[1]}`;
 
-    // Helper function to round off values to 1 decimal place
-    const roundToOneDecimal = (value) => {
-        return parseFloat(value).toFixed(1);
-    };
+    useEffect(() => {
+        const fetchMealInfo = async () => {
+            try {
+                const data = await getOrCreateAndFetchMeals(user, meal_type, selectedDate);
+                setData(data);
+                setMacros(calculateTotals(data));
+            } catch (error) {
+                console.error('Error fetching meal info:', error);
+            }
+        };
+
+        fetchMealInfo();
+    }, [refresh, selectedDate, meal_type, user]);
 
     const handlePress = (mealType) => {
         router.replace({
-          pathname: 'log_page',
-          params: { meal_type: mealType, date: getDate(selectedDate) },
-    })};
+            pathname: 'log_page',
+            params: { meal_type: mealType, date: getDate(selectedDate) },
+        });
+    };
 
-    const chartData = [
-        {
-            name: 'Carbs',
-            population: parseFloat(roundToOneDecimal(totalCarbs)),
-            color: '#f39c12',
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-        },
-        {
-            name: 'Protein',
-            population: parseFloat(roundToOneDecimal(totalProtein)),
-            color: '#27ae60',
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-        },
-        {
-            name: 'Fat',
-            population: parseFloat(roundToOneDecimal(totalFats)),
-            color: '#c0392b',
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-        },
-    ];
-
+    const handleDelete = async (mealItemId) => {
+        try {
+            await deleteMealItem(mealItemId);
+            // Trigger a refresh
+            setRefresh((prev) => !prev);
+        } catch (error) {
+            console.error('Error deleting meal item:', error);
+        }
+    };
 
     const renderHeader = () => (
         <View>
@@ -59,7 +54,29 @@ const MealInfoPage = () => {
             <View style={styles.nutritionSection}>
                 <Text style={styles.sectionTitle}>Nutritional Information</Text>
                 <PieChart
-                    data={chartData}
+                    data={[
+                        {
+                            name: 'Carbs',
+                            population: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)),
+                            color: '#f39c12',
+                            legendFontColor: '#7F7F7F',
+                            legendFontSize: 15,
+                        },
+                        {
+                            name: 'Protein',
+                            population: parseFloat(roundToOneDecimal(macros?.totalProtein || 0)),
+                            color: '#27ae60',
+                            legendFontColor: '#7F7F7F',
+                            legendFontSize: 15,
+                        },
+                        {
+                            name: 'Fat',
+                            population: parseFloat(roundToOneDecimal(macros?.totalFats || 0)),
+                            color: '#c0392b',
+                            legendFontColor: '#7F7F7F',
+                            legendFontSize: 15,
+                        },
+                    ]}
                     width={screenWidth - 40}
                     height={220}
                     chartConfig={{
@@ -77,19 +94,19 @@ const MealInfoPage = () => {
                 />
                 <View style={styles.nutritionItem}>
                     <Text style={styles.nutritionLabel}>Calories:</Text>
-                    <Text style={styles.nutritionValue}>{roundToOneDecimal(totalCalories)} kcal</Text>
+                    <Text style={styles.nutritionValue}>{roundToOneDecimal(macros?.totalCalories || 0)} kcal</Text>
                 </View>
                 <View style={styles.nutritionItem}>
                     <Text style={styles.nutritionLabel}>Carbs:</Text>
-                    <Text style={styles.nutritionValue}>{roundToOneDecimal(totalCarbs)} g</Text>
+                    <Text style={styles.nutritionValue}>{roundToOneDecimal(macros?.totalCarbohydrates || 0)} g</Text>
                 </View>
                 <View style={styles.nutritionItem}>
                     <Text style={styles.nutritionLabel}>Protein:</Text>
-                    <Text style={styles.nutritionValue}>{roundToOneDecimal(totalProtein)} g</Text>
+                    <Text style={styles.nutritionValue}>{roundToOneDecimal(macros?.totalProtein || 0)} g</Text>
                 </View>
                 <View style={styles.nutritionItem}>
                     <Text style={styles.nutritionLabel}>Fat:</Text>
-                    <Text style={styles.nutritionValue}>{roundToOneDecimal(totalFats)} g</Text>
+                    <Text style={styles.nutritionValue}>{roundToOneDecimal(macros?.totalFats || 0)} g</Text>
                 </View>
             </View>
         </View>
@@ -117,7 +134,7 @@ const MealInfoPage = () => {
                 <FlatList
                     data={data}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => <FoodLogListItem item={item} />}
+                    renderItem={({ item }) => <FoodLogListItem item={item} onDelete={handleDelete} />}
                     ListHeaderComponent={renderHeader}
                     contentContainerStyle={styles.listContainer}
                 />
@@ -225,3 +242,7 @@ const styles = StyleSheet.create({
 });
 
 export default MealInfoPage;
+
+const roundToOneDecimal = (value) => {
+    return parseFloat(value).toFixed(1);
+};

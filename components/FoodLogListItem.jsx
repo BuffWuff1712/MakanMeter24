@@ -4,12 +4,13 @@ import { AntDesign } from '@expo/vector-icons';
 // Ensure to have the correct path for icons
 import { icons } from "../constants"
 
-const FoodLogListItem = ({ item }) => {
+const FoodLogListItem = ({ item, onDelete }) => {
   const [borderColor, setBorderColor] = useState('transparent');
   const [selectIcon, setSelectIcon] = useState(icons.noSelect);
 
-  const handlePress = () => {
-    Alert.alert("Delete item")
+  const handlePress = async () => {
+    await onDelete(item.meal_item_id);
+    console.log("item deleted");
   };
 
   return (

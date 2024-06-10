@@ -4,21 +4,20 @@ import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
 import FoodListItem from '../../components/FoodListItem';
-import { getOrCreateMealID, getDate, getTrackedMeals } from '../../lib/supabase';
+import { getOrCreateMealID, getDate, getTrackedMeals, getOrCreateAndFetchMeals, deleteMealItem } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import DailyIntake from '../../components/DailyIntake';
 
 const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
-  const { trackedMeals, setTrackedMeals, selectedDate, user } = useGlobalContext();
+  const { trackedMeals, setTrackedMeals, selectedDate, user, refresh, setRefresh } = useGlobalContext();
   const [selectedTab, setSelectedTab] = useState('meals');
   const router = useRouter();
 
   useEffect(() => {
     async function fetchTrackedData() {
         try {
-          const mealId = await getOrCreateMealID(user, meal_type, selectedDate);
-          const data = await getTrackedMeals(mealId);
+          const data = await getOrCreateAndFetchMeals(user, meal_type, selectedDate);
           setTrackedMeals(data ? data : []);
         } catch (error) {
           console.error('Error fetching tracked data:', error);
@@ -26,7 +25,7 @@ const Log_Page = () => {
       }
     fetchTrackedData();
     
-  }, [meal_type]);
+  }, [meal_type, refresh]);
 
   const goToCamera = () => {
     router.push({
@@ -35,14 +34,25 @@ const Log_Page = () => {
     });
   };
 
-  const handleSelectItem = (item) => {
-    // Implement your item selection logic here
-  };
-
   const goBack = () => {
     router.back();
   };
 
+  const handleSelectItem = (item) => {
+    // Implement your item selection logic here
+  };
+
+  const handleDelete = async (mealItemId) => {
+    try {
+        await deleteMealItem(mealItemId);
+        // Trigger a refresh
+        setRefresh((prev) => !prev);
+    } catch (error) {
+        console.error('Error deleting meal item:', error);
+    }
+  };
+
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -94,7 +104,7 @@ const Log_Page = () => {
           <Text className="text-xl">Tracked</Text>
           <FlatList
             data={trackedMeals}
-            renderItem={({ item }) => <FoodLogListItem item={item} />}
+            renderItem={({ item }) => <FoodLogListItem item={item} onDelete={handleDelete}/>}
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ gap: 5 }}
           />

@@ -11,18 +11,17 @@ import { router } from 'expo-router';
 import { debounce } from 'lodash';
 
 const Home = () => {
-  const { selectedDate, user, mealsData, setMealsData } = useGlobalContext();
+  const { selectedDate, user, mealsData, setMealsData, refresh, setRefresh } = useGlobalContext();
 
   const fetchMeals = async (date) => {
     const data = await getMealsForDate(user, date);
-    console.log(data);
     setMealsData(data);
   };
 
   // Use useCallback to create a memoized version of the debounced function
   const debouncedFetchMeals = useCallback(debounce((date) => {
     fetchMeals(date);
-  }, 150), [user]);
+  }, 150), [user, refresh]);
 
   useEffect(() => {
     debouncedFetchMeals(selectedDate);
@@ -31,7 +30,7 @@ const Home = () => {
     return () => {
       debouncedFetchMeals.cancel();
     };
-  }, [selectedDate, debouncedFetchMeals]);
+  }, [selectedDate, refresh, debouncedFetchMeals]);
 
   const trackedMeals = [
     { 

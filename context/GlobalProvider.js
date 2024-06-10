@@ -9,6 +9,7 @@ import { createContext, useContext, useState,
       const [isLoggedIn, setIsLoggedIn] = useState(false);
       const [user, setUser] = useState(null);
       const [isLoading, setIsLoading] = useState(true);
+      const [refresh, setRefresh] = useState(false);
       const [selectedDate, setSelectedDate] = useState(new Date());
       const [trackedMeals, setTrackedMeals] = useState([]);
       const [mealsData, setMealsData] = useState({});
@@ -51,6 +52,8 @@ import { createContext, useContext, useState,
               setTrackedMeals,
               mealsData, 
               setMealsData,
+              refresh,
+              setRefresh,
             }}
           >
             {children}
