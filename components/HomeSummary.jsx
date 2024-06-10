@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { ProgressChart } from 'react-native-chart-kit';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+
 
 
 const screenWidth = Dimensions.get('window').width;
 
 const HomeSummary = ({ calories, carbs, protein, fat }) => {
   const data = {
-    labels: ["Fat", "Protein", "Carbs"], // optional
+    labels: ["Fat", "Protein", "Carbs"], 
     data: [fat.consumed / fat.total, protein.consumed / protein.total, carbs.consumed / carbs.total],
     colors: ['#1E90FF', '#8A2BE2', '#FF8C00'] 
   };

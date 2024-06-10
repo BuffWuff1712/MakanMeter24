@@ -10,6 +10,12 @@ const HomeLayout = () => {
               headerShown: false,
             }}
         />
+        <Stack.Screen 
+            name="meal_info"
+            options={{
+              headerShown: false,
+            }}
+        />
       </Stack>
     </>
   )

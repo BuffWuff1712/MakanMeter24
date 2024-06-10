@@ -6,13 +6,28 @@ import { useGlobalContext } from '../context/GlobalProvider';
 import { getDate } from '../lib/supabase';
 
 const MealListItem = ({ item }) => {
+  
     const { selectedDate } = useGlobalContext();
     const router = useRouter();
+
+
     const handlePress = (mealType) => {
-      console.log(mealType);
         router.navigate({
           pathname: 'log_page',
           params: { meal_type: mealType, date: getDate(selectedDate) },
+    })};
+
+    const displayMealInfo = () => {
+      router.navigate({
+        pathname: 'meal_info',
+        params: { 
+          meal_type: item.mealType,
+          meal_info: JSON.stringify(item.data),
+          totalCalories: item.calories,
+          totalCarbs: item.carbs,
+          totalProtein: item.protein,
+          totalFats: item.fats,
+        },
     })};
 
     const displayedItems = item.data.slice(0, 4);
@@ -21,7 +36,7 @@ const MealListItem = ({ item }) => {
         <TouchableOpacity
           style={styles.card}
           activeOpacity={0.7}
-          onPress={() => handlePress(item.mealType)}
+          onPress={() => displayMealInfo()}
         >
           <View style={styles.row}>
             <Image source={item.icon} className="h-[45px] w-[45px]" />

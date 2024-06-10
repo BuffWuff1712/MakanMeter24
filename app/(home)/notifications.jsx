@@ -60,15 +60,16 @@ const NotificationPage = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#006400', // Ensure the background color of the SafeAreaView matches the header color
+    backgroundColor: '#fff', // Ensure the background color of the SafeAreaView matches the header color
+    marginTop: -59,
+    marginBottom: -40,
   },
   headerContainer: {
     position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 40, // Adjust padding to handle the status bar height
-    paddingBottom: 10,
+    paddingVertical: 50, // Adjust the padding to control the header height
     backgroundColor: '#006400',
   },
   header: {
@@ -76,11 +77,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
+    top: 20,
   },
   backButton: {
     position: 'absolute',
     left: 15,
-    top: 40, // Align the back button with the header content
+    bottom: 28, // Align the back button with the lower header content
   },
   listContainer: {
     padding: 10,

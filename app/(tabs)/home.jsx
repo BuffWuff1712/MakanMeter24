@@ -34,14 +34,42 @@ const Home = () => {
   }, [selectedDate, debouncedFetchMeals]);
 
   const trackedMeals = [
-    { data: mealsData?.Breakfast?.items || [], calories: mealsData?.Breakfast?.totalCalories || 0, 
-      mealType: 'Breakfast', icon: icons.breakfast},
-    { data: mealsData?.Lunch?.items || [], calories: mealsData?.Lunch?.totalCalories || 0, 
-      mealType: 'Lunch', icon: icons.lunch},
-    { data: mealsData?.Dinner?.items || [], calories: mealsData?.Dinner?.totalCalories || 0, 
-      mealType: 'Dinner', icon: icons.dinner },
-    { data: mealsData?.Snack?.items || [], calories: mealsData?.Snack?.totalCalories || 0, 
-      mealType: 'Snack', icon: icons.snack },
+    { 
+      data: mealsData?.Breakfast?.items || [], 
+      calories: mealsData?.Breakfast?.totalCalories || 0, 
+      carbs: mealsData?.Breakfast?.totalCarbs || 0,
+      protein: mealsData?.Breakfast?.totalProtein || 0,
+      fats: mealsData?.Breakfast?.totalFats || 0,
+      mealType: 'Breakfast', 
+      icon: icons.breakfast
+    },
+    { 
+      data: mealsData?.Lunch?.items || [], 
+      calories: mealsData?.Lunch?.totalCalories || 0, 
+      carbs: mealsData?.Lunch?.totalCarbs || 0,
+      protein: mealsData?.Lunch?.totalProtein || 0,
+      fats: mealsData?.Lunch?.totalFats || 0,
+      mealType: 'Lunch', 
+      icon: icons.lunch
+    },
+    { 
+      data: mealsData?.Dinner?.items || [], 
+      calories: mealsData?.Dinner?.totalCalories || 0, 
+      carbs: mealsData?.Dinner?.totalCarbs || 0,
+      protein: mealsData?.Dinner?.totalProtein || 0,
+      fats: mealsData?.Dinner?.totalFats || 0,
+      mealType: 'Dinner', 
+      icon: icons.dinner 
+    },
+    { 
+      data: mealsData?.Snack?.items || [], 
+      calories: mealsData?.Snack?.totalCalories || 0, 
+      carbs: mealsData?.Snack?.totalCarbs || 0,
+      protein: mealsData?.Snack?.totalProtein || 0,
+      fats: mealsData?.Snack?.totalFats || 0,
+      mealType: 'Snack', 
+      icon: icons.snack 
+    },
   ];
 
   const toNotifs = () => {
@@ -57,28 +85,26 @@ const Home = () => {
         <TouchableOpacity onPress={toNotifs}>
           <Image source={icons.bell} resizeMode="contain" className="w-[40px] h-[40px]" />
         </TouchableOpacity>
-        
       </View>
 
       <ScrollView>
         <View className="w-full items-center">
-          <DatePicker/>
+          <DatePicker />
         </View>
         
         <View className="w-full bg-white items-center mt-10 mb-10">
           <HomeSummary
-            calories={{ consumed: mealsData.Summary.totalCalories, total: 3046 }}
-            carbs={{ consumed: mealsData.Summary.totalCarbs, total: 381 }}
-            protein={{ consumed: mealsData.Summary.totalProtein, total: 152 }}
-            fat={{ consumed: mealsData.Summary.totalFats, total: 102 }}
+            calories={{ consumed: mealsData?.Summary?.totalCalories || 0, total: 3046 }}
+            carbs={{ consumed: mealsData?.Summary?.totalCarbs || 0, total: 381 }}
+            protein={{ consumed: mealsData?.Summary?.totalProtein || 0, total: 152 }}
+            fat={{ consumed: mealsData?.Summary?.totalFats || 0, total: 102 }}
           />
         </View>
-
 
         <View style={styles.mealListContainer}>
           {trackedMeals.map((item, index) => (
             <View key={index} style={styles.mealItem}>
-              <MealListItem item={item}/>
+              <MealListItem item={item} />
             </View>
           ))}
         </View>
