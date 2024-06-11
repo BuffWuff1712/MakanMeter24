@@ -21,8 +21,8 @@ const MealInfoPage = () => {
         const fetchMealInfo = async () => {
             try {
                 const data = await getOrCreateAndFetchMeals(user, meal_type, selectedDate);
-                setData(data);
-                setMacros(calculateTotals(data));
+                setData(data ? data : []);
+                setMacros(calculateTotals(data ? data : []));
             } catch (error) {
                 console.error('Error fetching meal info:', error);
             }
@@ -46,6 +46,10 @@ const MealInfoPage = () => {
         } catch (error) {
             console.error('Error deleting meal item:', error);
         }
+    };
+
+    const roundToOneDecimal = (value) => {
+        return parseFloat(value).toFixed(1);
     };
 
     const renderHeader = () => (
@@ -243,6 +247,4 @@ const styles = StyleSheet.create({
 
 export default MealInfoPage;
 
-const roundToOneDecimal = (value) => {
-    return parseFloat(value).toFixed(1);
-};
+

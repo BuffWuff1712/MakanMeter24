@@ -4,7 +4,6 @@ import { router, useLocalSearchParams } from 'expo-router';
 import FoodListItem from '../../components/FoodListItem';
 import CustomButton from '../../components/CustomButton';
 const { fetchNutritionInfoForIngredients } = require('../../lib/edamam.js');
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { addMeal, getMealsForDate, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import LoadingScreen from '../../components/LoadingScreen.jsx';

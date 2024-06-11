@@ -4,7 +4,7 @@ import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
 import FoodListItem from '../../components/FoodListItem';
-import { getOrCreateMealID, getDate, getTrackedMeals, getOrCreateAndFetchMeals, deleteMealItem } from '../../lib/supabase';
+import { getOrCreateMealID, getDate, getTrackedMeals, getOrCreateAndFetchMeals, deleteMealItem, calculateTotals } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import DailyIntake from '../../components/DailyIntake';
 
@@ -12,6 +12,7 @@ const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
   const { trackedMeals, setTrackedMeals, selectedDate, user, refresh, setRefresh } = useGlobalContext();
   const [selectedTab, setSelectedTab] = useState('meals');
+  const [macros, setMacros] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const Log_Page = () => {
         try {
           const data = await getOrCreateAndFetchMeals(user, meal_type, selectedDate);
           setTrackedMeals(data ? data : []);
+          setMacros(calculateTotals(data));
         } catch (error) {
           console.error('Error fetching tracked data:', error);
         }
@@ -52,6 +54,9 @@ const Log_Page = () => {
     }
   };
 
+  const roundToOneDecimal = (value) => {
+    return parseFloat(value).toFixed(1);
+  };
   
   return (
     <View style={styles.container}>
@@ -81,10 +86,10 @@ const Log_Page = () => {
       </View>
 
       <DailyIntake
-          calories={{ consumed: 580, total: 3046 }}
-          carbs={{ consumed: 71, total: 381 }}
-          protein={{ consumed: 20, total: 152 }}
-          fat={{ consumed: 32, total: 102 }}
+          calories={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)), total: 3046 }}
+          carbs={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)), total: 381 }}
+          protein={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)), total: 152 }}
+          fat={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)), total: 102 }}
         />
       
       <View style={styles.tabBar}>
