@@ -12,7 +12,7 @@ const screenWidth = Dimensions.get('window').width;
 
 
 
-const DailyTrendsDashboard = ({ data }) => {
+const MacroTrendsDashboard = ({ data }) => {
 
   const font = useFont(poppins, 12);
   const toolTipFont = useFont(poppins, 14);
@@ -42,7 +42,7 @@ const DailyTrendsDashboard = ({ data }) => {
   return (
     <View style={styles.container}>
       <View className="my-2 mx-3">
-        <Text className="text-2xl font-semibold">Total Calories</Text>
+        <Text className="text-2xl font-semibold">Macros</Text>
       </View>
       <View className="items-end">
         <TrendsDateRange/>
@@ -51,31 +51,37 @@ const DailyTrendsDashboard = ({ data }) => {
         data={data}
         chartPressState={state}
         xKey="meal_date"
-        yKeys={["total_calories", "total_carbohydrates"]}
+        yKeys={["total_carbohydrates", "total_protein", "total_fats",]}
         padding={15}
-        domain={{y:[0, 3000]}}
+        domain={{y:[0, 400]}}
         domainPadding={{top: 30, left: 30, right: 30}}
         // 👇 pass the font, opting in to axes.
         axisOptions={{ font }}
       >
-        {({ points, chartBounds }) => {
+        {({ points }) => {
             return (
               <>
-                <Bar
-                  points={points.total_calories}
-                  chartBounds={chartBounds}
+
+                <Line
+                  points={points.total_carbohydrates}
+                  color="red"
+                  strokeWidth={3}
                   animate={{ type: "timing", duration: 1000 }}
-                  roundedCorners={{
-                    topLeft: 10,
-                    topRight: 10,
-                  }}
-                >
-                  <LinearGradient
-                    start={vec(0, 0)}
-                    end={vec(0, 400)}
-                    colors={["green", "#90ee9050"]}
-                  />
-                </Bar>
+                />
+
+                <Line
+                  points={points.total_protein}
+                  color="blue"
+                  strokeWidth={3}
+                  animate={{ type: "timing", duration: 1000 }}
+                />
+
+                <Line
+                  points={points.total_fats}
+                  color="dark green"
+                  strokeWidth={3}
+                  animate={{ type: "timing", duration: 1000 }}
+                />    
 
                 {isActive ? (
                   <>
@@ -118,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DailyTrendsDashboard;
+export default MacroTrendsDashboard;
