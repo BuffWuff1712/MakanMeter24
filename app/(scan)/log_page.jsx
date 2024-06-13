@@ -86,10 +86,10 @@ const Log_Page = () => {
       </View>
 
       <DailyIntake
-          calories={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)), total: 3046 }}
+          calories={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCalories || 0)), total: 3046 }}
           carbs={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)), total: 381 }}
-          protein={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)), total: 152 }}
-          fat={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)), total: 102 }}
+          protein={{ consumed: parseFloat(roundToOneDecimal(macros?.totalProtein || 0)), total: 152 }}
+          fat={{ consumed: parseFloat(roundToOneDecimal(macros?.totalFats || 0)), total: 102 }}
         />
       
       <View style={styles.tabBar}>

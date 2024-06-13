@@ -30,6 +30,12 @@ import lunch from "../assets/icons/fried-rice.png";
 import dinner from "../assets/icons/christmas-dinner.png";
 import snack from "../assets/icons/fruit-bowl.png";
 import loadingCircle from "../assets/icons/Loading.json";
+import seven from "../assets/icons/seven.png";
+import seven_grayscale from "../assets/icons/seven_grayscale.png";
+import fourteen from "../assets/icons/fourteen.png";
+import fourteen_grayscale from "../assets/icons/fourteen_grayscale.png";
+import thirty from "../assets/icons/thirty.png";
+import thirty_grayscale from "../assets/icons/thirty_grayscale.png";
 
 export default {
   play,
@@ -62,4 +68,10 @@ export default {
   dinner,
   snack,
   loadingCircle,
+  seven,
+  seven_grayscale,
+  fourteen,
+  fourteen_grayscale,
+  thirty,
+  thirty_grayscale,
 };

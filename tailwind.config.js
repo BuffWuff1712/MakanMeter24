@@ -36,6 +36,9 @@ module.exports = {
         pextrabold: ["Poppins-ExtraBold", "sans-serif"],
         pblack: ["Poppins-Black", "sans-serif"],
       },
+      grayscale: {
+        100: 'grayscale(100%)', // Custom grayscale utility
+      },
     },
   },
   plugins: [],
