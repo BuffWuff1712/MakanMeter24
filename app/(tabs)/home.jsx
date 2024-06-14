@@ -9,6 +9,7 @@ import { getMealsForDate } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
 import { debounce } from 'lodash';
+import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
 
 const Home = () => {
   const { selectedDate, user, mealsData, setMealsData, refresh, setRefresh } = useGlobalContext();
@@ -78,11 +79,13 @@ const Home = () => {
   return (
     <SafeAreaView className="bg-white h-full">
       {/* Top layer icons */}
-      <View className="flex flex-row justify-center items-center space-x-20 w-full bg-gray mb-5">
-        <Image source={icons.fire} resizeMode="contain" className="w-[40px] h-[40px]" />
+      <View className="flex-row justify-between items-center align-center mb-5 px-10">
+        {/* <Image source={icons.fire} resizeMode="contain" className="w-[40px] h-[40px]" /> */}
+        <FontAwesome6 name="fire" size={32} color="#FF4500" />
         <Image source={icons.logoSmall} resizeMode="contain" className="w-[55px] h-[55px]" />
         <TouchableOpacity onPress={toNotifs}>
-          <Image source={icons.bell} resizeMode="contain" className="w-[40px] h-[40px]" />
+          {/* <Image source={icons.bell} resizeMode="contain" className="w-[40px] h-[40px]" /> */}
+          <Ionicons name="notifications-outline" size={35} color="black" />
         </TouchableOpacity>
       </View>
 

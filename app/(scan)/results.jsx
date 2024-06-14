@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import FoodListItem from '../../components/FoodListItem';
 import CustomButton from '../../components/CustomButton';
 const { fetchNutritionInfoForIngredients } = require('../../lib/edamam.js');
-import { addMeal, getMealsForDate, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
+import { addMeal, calculateTotals, getMealsForDate, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import LoadingScreen from '../../components/LoadingScreen.jsx';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { Button } from 'react-native-paper';
 
 const Results = () => {
   const { meal_type } = useLocalSearchParams();
-  const { user, setTrackedMeals, setMealsData, selectedDate } = useGlobalContext();
+  const { user, setTrackedMeals, setMealsData, selectedDate,} = useGlobalContext();
   const [foodItems, setFoodItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +87,10 @@ const Results = () => {
     }
   };
 
+  const goBack = () => {
+    router.back();
+  };
+
   const renderLoadingScreen = () => {
     return (
       <View style={styles.loadingContainer}>
@@ -96,29 +103,57 @@ const Results = () => {
     );
   };
 
+  const searchForMoreButton = () => {
+    return (
+      <View className="mt-3 items-center">
+        <View className="w-[200px]">
+        <Button 
+          mode="outlined"
+          icon={() => <FontAwesome name="search" size={15} color="#1434A4" />}
+          compact={true} 
+          contentStyle={{flexDirection: 'row'}}
+          labelStyle={{color:"#1434A4"}}
+          onPress={() => console.log('Pressed')}
+        >
+          Search For More     
+        </Button>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.flexContainer}>
       {isLoading ? (
         renderLoadingScreen()
       ) : (
-        <View style={styles.container}>
-          <View>
-            <Text style={styles.headerText}>BORDER</Text>
-          </View>
+        <SafeAreaView className="bg-white h-full">
+          <View className="flex-1 p-4 bg-white">
+            <View className="my-5 mx-3 items-center justify-between flex-row">
+              <TouchableOpacity onPress={goBack}>
+                <FontAwesome5 name="arrow-left" size={24} color="black" />
+              </TouchableOpacity>
+              <Text className="text-xl font-semibold">Scan a Meal</Text>
+              <View></View>
+            </View>
           <FlatList
             data={foodItems}
             renderItem={({ item }) => <FoodListItem item={item} onSelect={handleSelectItem} />}
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ gap: 5 }}
+            className="my-5"
+            ListFooterComponent={searchForMoreButton}
           />
           <View style={styles.buttonContainer}>
             <CustomButton
-              title="ADD"
-              containerStyles="bg-emerald"
+              title={selectedItems.length > 0 ? `ADD (${selectedItems.length} items)`:"ADD"}
+              containerStyles={selectedItems.length > 0 ? "bg-emerald" : "bg-gray-100"}
               handlePress={handleAddButtonPress}
             />
           </View>
-        </View>
+          </View>
+        </SafeAreaView>
+        
       )}
     </View>
   );
@@ -128,11 +163,6 @@ const styles = StyleSheet.create({
   flexContainer: {
     flex: 1,
     justifyContent: 'center',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 10,
   },
   headerText: {
     fontSize: 24,

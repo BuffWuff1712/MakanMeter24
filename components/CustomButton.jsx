@@ -11,7 +11,7 @@ const CustomButton = ({title, handlePress, containerStyles,
     min-h-[62px] justify-center items-center ${containerStyles} 
     ${isLoading? 'opacity-50' : ''}`}
         disabled={isLoading}>
-        <Text className={`text-primary font-psemibold
+        <Text className={`text-white font-psemibold
         text-lg ${textStyles}`}>
             {title}
         </Text>

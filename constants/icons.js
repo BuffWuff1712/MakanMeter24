@@ -29,6 +29,7 @@ import breakfast from "../assets/icons/sandwich.png";
 import lunch from "../assets/icons/fried-rice.png";
 import dinner from "../assets/icons/christmas-dinner.png";
 import snack from "../assets/icons/fruit-bowl.png";
+import target from "../assets/icons/target.png";
 import loadingCircle from "../assets/icons/Loading.json";
 import seven from "../assets/icons/seven.png";
 import seven_grayscale from "../assets/icons/seven_grayscale.png";
@@ -74,4 +75,5 @@ export default {
   fourteen_grayscale,
   thirty,
   thirty_grayscale,
+  target,
 };

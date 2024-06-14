@@ -13,6 +13,7 @@ const ShutterButton = ({handlePress}) => {
             resizeMode='contain'
             className="left-7 w-[200px] h-[90px]"
         />
+
     </TouchableOpacity>
   )
 }

@@ -6,6 +6,7 @@ import {
   Pressable,
   Dimensions,
   Image,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import { useRouter } from 'expo-router';
@@ -20,10 +21,15 @@ const Add_Food = () => {
   const router = useRouter();
 
   const handleMealPress = (mealType) => {
-    router.navigate({
-      pathname: 'log_page',
-      params: { meal_type: mealType, date: getDate(selectedDate) },
-    });
+    if (mealType === 'Set Goal') {
+      // router.navigate('set_goal_page'); // Navigate to the Set Goal page
+      Alert.alert("Navigate to Set Goal page");
+    } else {
+      router.navigate({
+        pathname: 'log_page',
+        params: { meal_type: mealType, date: getDate(selectedDate) },
+      });
+    }
   };
 
   // Mapping of meal types to their corresponding icons
@@ -32,13 +38,14 @@ const Add_Food = () => {
     Lunch: icons.lunch,
     Dinner: icons.dinner,
     Snack: icons.snack,
+    'Set Goal': icons.target, // Ensure the correct key matches the mealType
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.options}>
-          {['Breakfast', 'Lunch', 'Dinner', 'Snack'].map((mealType) => (
+          {['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Set Goal'].map((mealType) => (
             <Pressable
               key={mealType}
               style={styles.optionButton}
@@ -59,7 +66,7 @@ const Add_Food = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#d1d5db',
   },
   container: {
     flex: 1,

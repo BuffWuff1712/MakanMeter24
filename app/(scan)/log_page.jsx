@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
-import { useRouter, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
 import FoodListItem from '../../components/FoodListItem';
-import { getOrCreateMealID, getDate, getTrackedMeals, getOrCreateAndFetchMeals, deleteMealItem, calculateTotals } from '../../lib/supabase';
+import { getOrCreateAndFetchMeals, deleteMealItem, calculateTotals } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import DailyIntake from '../../components/DailyIntake';
+import FoodHistory from '../../components/FoodHistory.jsx';
 
 const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
-  const { trackedMeals, setTrackedMeals, selectedDate, user, refresh, setRefresh } = useGlobalContext();
+  const { trackedMeals, setTrackedMeals, selectedDate, 
+          user, refresh, setRefresh,  mealsData } = useGlobalContext();
   const [selectedTab, setSelectedTab] = useState('meals');
-  const [macros, setMacros] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,7 +21,6 @@ const Log_Page = () => {
         try {
           const data = await getOrCreateAndFetchMeals(user, meal_type, selectedDate);
           setTrackedMeals(data ? data : []);
-          setMacros(calculateTotals(data));
         } catch (error) {
           console.error('Error fetching tracked data:', error);
         }
@@ -86,10 +86,10 @@ const Log_Page = () => {
       </View>
 
       <DailyIntake
-          calories={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCalories || 0)), total: 3046 }}
-          carbs={{ consumed: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)), total: 381 }}
-          protein={{ consumed: parseFloat(roundToOneDecimal(macros?.totalProtein || 0)), total: 152 }}
-          fat={{ consumed: parseFloat(roundToOneDecimal(macros?.totalFats || 0)), total: 102 }}
+          calories={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalCalories || 0)), total: 3046 }}
+          carbs={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalCarbs || 0)), total: 381 }}
+          protein={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalProtein || 0)), total: 152 }}
+          fat={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalFats || 0)), total: 102 }}
         />
       
       <View style={styles.tabBar}>
@@ -106,7 +106,7 @@ const Log_Page = () => {
 
       {selectedTab === 'meals' && (
         <View style={styles.content}>
-          <Text className="text-xl">Tracked</Text>
+          <Text className="text-xl my-3 mx-2 font-semibold color-gray-500">Tracking</Text>
           <FlatList
             data={trackedMeals}
             renderItem={({ item }) => <FoodLogListItem item={item} onDelete={handleDelete}/>}
@@ -127,13 +127,14 @@ const Log_Page = () => {
       {selectedTab === 'recent' && (
         <View style={styles.content}>
           <View style={styles.historyHeader}>
+            <Text className="text-xl my-3 mx-2 font-semibold color-gray-500">History</Text>
             <TouchableOpacity>
               <Text style={styles.historySort}>Most Recent</Text>
             </TouchableOpacity>
           </View>
           <FlatList
             data={trackedMeals}
-            renderItem={({ item }) => <FoodListItem item={item} onSelect={handleSelectItem} />}
+            renderItem={({ item }) => <FoodHistory item={item} />}
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ gap: 5 }}
           />
@@ -187,8 +188,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 40,
     borderRadius: 30,
-    borderColor: '#000000',
-    borderWidth: 1,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   scanButtonText: {
     color: '#36B37E',
@@ -198,8 +202,8 @@ const styles = StyleSheet.create({
   historyHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingVertical: 15,
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
   },
   historySort: {
     fontSize: 16,
