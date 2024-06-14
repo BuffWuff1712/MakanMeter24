@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
 import { Bar, CartesianChart, Line, Pie, PolarChart, useChartPressState } from 'victory-native';
 import { Dimensions } from 'react-native';
 import { Circle, useFont, vec, LinearGradient, Text as SKText } from '@shopify/react-native-skia';
@@ -7,13 +7,14 @@ import poppins from "../assets/fonts/Poppins-SemiBold.ttf"
 import { useDerivedValue } from 'react-native-reanimated';
 import { Dropdown } from 'react-native-element-dropdown';
 import TrendsDateRange from './TrendsDateRange';
+import { useGlobalContext } from '../context/GlobalProvider';
 
 const screenWidth = Dimensions.get('window').width;
 
 
 
-const MacroTrendsDashboard = ({ data }) => {
-
+const MacroTrendsDashboard = ({ data, onPress }) => {
+  const { period } = useGlobalContext();
   const font = useFont(poppins, 12);
   const toolTipFont = useFont(poppins, 14);
   const { state, isActive } = useChartPressState({
@@ -38,11 +39,17 @@ const MacroTrendsDashboard = ({ data }) => {
     );
   }, [value, toolTipFont]);
 
+  // Calculate the maximum value among all macros
+  const maxMacroValue = Math.max(
+    ...data.flatMap(item => [item.total_carbohydrates, item.total_fats, item.total_protein])
+  );
 
   return (
     <View style={styles.container}>
       <View className="my-2 mx-3">
-        <Text className="text-2xl font-semibold">Macros</Text>
+        <Pressable onPress={onPress}>
+          <Text className="text-2xl font-semibold">Macros</Text>
+        </Pressable>
       </View>
       <View className="items-end">
         <TrendsDateRange/>
@@ -50,10 +57,10 @@ const MacroTrendsDashboard = ({ data }) => {
       <CartesianChart
         data={data}
         chartPressState={state}
-        xKey="meal_date"
+        xKey={period === 1 ? "week_start_date" : "meal_date"}
         yKeys={["total_carbohydrates", "total_protein", "total_fats",]}
         padding={15}
-        domain={{y:[0, 400]}}
+        domain={{y:[0, maxMacroValue + 100]}}
         domainPadding={{top: 30, left: 30, right: 30}}
         // 👇 pass the font, opting in to axes.
         axisOptions={{ font }}

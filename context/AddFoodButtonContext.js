@@ -21,7 +21,7 @@ export const AddFoodButtonProvider = ({ children }) => {
       }),
       Animated.timing(rotation, {
         toValue: rotation._value === 0 ? 1 : 0,
-        duration: 100,
+        duration: 150,
         useNativeDriver: true
       })
     ]).start();

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Dimensions, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import StreakBar from '../../components/StreakBar';
 import AnalysisOverview from '../../components/AnalysisOverview';
 
@@ -35,7 +36,8 @@ const AnalyticsPage = () => {
           <View className="items-center">
             <View style={styles.tipsContainer}>
               <View style={styles.tipsHeader}>
-                <Text className="font-bold text-xl">Tips</Text>
+                <Text className="font-bold text-xl mr-3">Tips</Text>
+                <Icon name="lightbulb-o" size={30} color={"gold"}/>
               </View>
               <Text className="text-m">
                   Your meals have been high in sugars recently. Reduce sugar intake by avoiding sugary drinks.
@@ -104,7 +106,8 @@ const styles = StyleSheet.create({
   },
   tipsHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     marginBottom: 8,
   },
 });

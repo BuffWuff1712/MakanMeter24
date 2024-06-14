@@ -7,32 +7,13 @@ import { useRouter } from 'expo-router';
 import { getDate }  from '../lib/supabase'
 
 const AddFoodButton = ({ onPress }) => {
-  const { selectedDate, setSelectedDate } = useGlobalContext();
-  const { handlePress1, buttonSize, rotation, handlePress2 } = useAddFoodButton();
-  const [modalVisible, setModalVisible] = useState(false);
-  const router = useRouter();
+  const { handlePress1, buttonSize, rotation } = useAddFoodButton();
 
   const combinedPressHandler = () => {
-    setModalVisible(true);
     handlePress1();
     if (onPress) {
       onPress();
     }
-  };
-
-  const closedPressHandler = () => {
-    setModalVisible(false);
-    handlePress2();
-    router.back();
-  };
-
-  const handleMealPress = (mealType) => {
-    router.navigate({
-      pathname: 'log_page',
-      params: { meal_type: mealType , date: getDate(selectedDate)},
-    });
-    setModalVisible(false);
-    handlePress2();
   };
 
   const sizeStyle = {
@@ -63,33 +44,6 @@ const AddFoodButton = ({ onPress }) => {
           </Animated.View>
         </View>
       </TouchableOpacity>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => closedPressHandler()}
-      >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={() => closedPressHandler()}
-        >
-          <View style={styles.modalView}>
-            <View style={styles.options}>
-              {['Breakfast', 'Lunch', 'Dinner', 'Snack'].map((mealType) => (
-                <Pressable
-                  key={mealType}
-                  style={styles.optionButton}
-                  onPress={() => handleMealPress(mealType)}
-                >
-                  <Text style={styles.optionText}>{mealType}</Text>
-                </Pressable>
-              ))}
-            </View>
-          </View>
-        </TouchableOpacity>
-      </Modal>
     </>
   );
 };

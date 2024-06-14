@@ -3,17 +3,17 @@ import { StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { View } from 'react-native';
+import { useGlobalContext } from '../context/GlobalProvider';
 
   const data = [
-    { label: 'Last 7 days', value: '1' },
-    { label: 'Last 14 days', value: '2' },
-    { label: 'Last 30 days', value: '3' },
-    { label: 'Last 6 months', value: '4' },
-    { label: 'Last year', value: '5' },
+    { label: 'Last 7 days', value: 0 },
+    { label: 'Last 30 days', value: 1 },
+    { label: 'Last 6 months', value: 2 },
+    { label: 'Last year', value: 3 },
   ];
 
   const TrendsDateRange = () => {
-    const [value, setValue] = useState(null);
+    const { period, setPeriod } = useGlobalContext();
 
     return (
         <View className="flex-auto flex-row w-[230px] left-5">
@@ -28,9 +28,9 @@ import { View } from 'react-native';
                 labelField="label"
                 valueField="value"
                 placeholder="Select"
-                value={value}
+                value={period}
                 onChange={item => {
-                setValue(item.value);
+                setPeriod(item.value);
                 }}
                 renderLeftIcon={() => (
                 <AntDesign style={styles.icon} color="black" name="calendar" size={20} />

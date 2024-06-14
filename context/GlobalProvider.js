@@ -13,6 +13,7 @@ import { createContext, useContext, useState,
       const [selectedDate, setSelectedDate] = useState(new Date());
       const [trackedMeals, setTrackedMeals] = useState([]);
       const [mealsData, setMealsData] = useState({});
+      const [period, setPeriod] = useState(0);
 
       useEffect(() => {
         const initializeUser = async () => {
@@ -54,6 +55,8 @@ import { createContext, useContext, useState,
               setMealsData,
               refresh,
               setRefresh,
+              period,
+              setPeriod,
             }}
           >
             {children}

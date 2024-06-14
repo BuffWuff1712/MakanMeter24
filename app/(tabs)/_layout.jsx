@@ -7,7 +7,6 @@ import { useAddFoodButton, AddFoodButtonProvider } from '../../context/AddFoodBu
 import AddFoodButton from '../../components/AddFoodButton';
 
 
-
 //import the custom icons from the constants folder
 import { icons } from '../../constants';
 
