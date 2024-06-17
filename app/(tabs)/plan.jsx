@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   planTitle: {
-    fontSize: 16,
+    fontSize: 100,
     fontWeight: 'bold',
   },
   planDescription: {
