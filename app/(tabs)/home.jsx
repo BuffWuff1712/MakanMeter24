@@ -85,12 +85,12 @@ const Home = () => {
         <Image source={icons.logoSmall} resizeMode="contain" className="w-[55px] h-[55px]" />
         <TouchableOpacity onPress={toNotifs}>
           {/* <Image source={icons.bell} resizeMode="contain" className="w-[40px] h-[40px]" /> */}
-          <Ionicons name="notifications-outline" size={35} color="black" />
+          <Ionicons name="notifications-outline" size={34} color="black" />
         </TouchableOpacity>
       </View>
 
       <ScrollView>
-        <View className="w-full items-center">
+        <View className="w-full items-center my-5">
           <DatePicker />
         </View>
         

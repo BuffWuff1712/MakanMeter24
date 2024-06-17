@@ -20,6 +20,7 @@ const SignIn = () => {
   const submit = async () => {
     if (form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all fields");
+      return;
     }
 
     setSubmitting(true);
@@ -33,7 +34,7 @@ const SignIn = () => {
       Alert.alert("Success", "User signed in successfully");
       router.replace("/home");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      console.log("Error", error.message);
     } finally {
       setSubmitting(false);
     }
@@ -88,7 +89,7 @@ const SignIn = () => {
             </Link>
           </View>
 
-          <View className="justify-center pt-5 flex-row gap-2">
+          {/* <View className="justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-black-100 font-pregular">
               Jump to
             </Text>
@@ -96,7 +97,7 @@ const SignIn = () => {
             font-psemibold text-emerald">
               Home
             </Link>
-          </View>
+          </View> */}
         </View>
 
         

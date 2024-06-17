@@ -2,14 +2,15 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 //import * as MediaLibrary from 'expo-media-library';
 import { useRef, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, 
-    Image, ActivityIndicator, Modal } from 'react-native';
+    Image, ActivityIndicator, Modal, 
+    Alert} from 'react-native';
 import ShutterButton from '../../components/ShutterButton';
 import { router, useLocalSearchParams } from 'expo-router'
-import LeftArrow from '../../components/LeftArrow';
 import FlipButton from '../../components/FlipButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { analyse } from '../../lib/openAI';
 import { encodeImage } from '../../components/ImageProcessor';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 
 
 
@@ -119,7 +120,7 @@ const CameraScreen = () => {
     };
 
     // returns user to home page
-    const returnHome = () => {
+    const goBack = () => {
         router.back();
     };
 
@@ -132,9 +133,12 @@ const CameraScreen = () => {
                 </View>
                 ) : (
                 <>
-                    <View>
-                        <LeftArrow handlePress={returnHome} />
+                    <View className="flex-row p-5 mx-1">
+                        <TouchableOpacity onPress={goBack}>
+                            <FontAwesome5 name="arrow-left" size={24} color="black" />
+                        </TouchableOpacity>
                     </View>
+                    
                     <CameraView
                         className="flex-1"
                         facing={facing}
@@ -143,11 +147,14 @@ const CameraScreen = () => {
                         onMountError={handleMountError}
                     />
                     <View className="justify-center items-center flex-row">
-                        <Text className="text-lg font-bold">
+                        <Text className="text-lg font-bold p-4">
                         Press the camera button to scan
                         </Text>
                     </View>
-                    <View className="mt-8 backgroundColor-transparent justify-center items-center flex-row">
+                    <View className="justify-between items-center flex-row mx-10">
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => (Alert.alert("Open Photo Library"))}>
+                            <FontAwesome name="photo" size={45} color="black" />
+                        </TouchableOpacity>
                         <ShutterButton handlePress={takePicture} />
                         <FlipButton handlePress={toggleCameraFacing} />
                     </View>

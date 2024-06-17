@@ -25,6 +25,7 @@ module.exports = {
         },
         emerald: {
           DEFAULT: "#10b981",
+          300: "#6ee7b7"
         },
       },
       fontFamily: {

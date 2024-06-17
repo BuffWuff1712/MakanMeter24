@@ -40,13 +40,14 @@ const MealInfoPage = () => {
 
     const handleDelete = async (mealItemId) => {
         try {
-            await deleteMealItem(mealItemId);
-            // Trigger a refresh
-            setRefresh((prev) => !prev);
+          await deleteMealItem(mealItemId);
+          // Refresh page
+          setRefresh((prev) => !prev);
         } catch (error) {
-            console.error('Error deleting meal item:', error);
+          console.error('Error deleting meal item:', error);
         }
-    };
+      };
+      
 
     const roundToOneDecimal = (value) => {
         return parseFloat(value).toFixed(1);
@@ -54,7 +55,7 @@ const MealInfoPage = () => {
 
     const renderHeader = () => (
         <View>
-            <Text className="text-4xl mt-10">{meal_type} - {formattedDate}</Text>
+            <Text className="text-4xl font-medium mt-10">{meal_type} - {formattedDate}</Text>
             <View style={styles.nutritionSection}>
                 <Text style={styles.sectionTitle}>Nutritional Information</Text>
                 <PieChart
@@ -123,7 +124,7 @@ const MealInfoPage = () => {
                     <TouchableOpacity onPress={() => router.back()} style={styles.iconButton}>
                         <Icon name="arrow-back" size={24} color="#000" />
                     </TouchableOpacity>
-                    <Text style={styles.title}>{meal_type}</Text>
+                    <Text style={styles.title}></Text>
                     <View style={styles.headerIcons}>
                         <TouchableOpacity onPress={() => alert('Share')} style={styles.iconButton}>
                             <Icon name="share-social" size={24} color="#000" style={styles.icon} />
@@ -179,9 +180,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         position: 'relative',
+        marginHorizontal: 15,
         top: 25,
-        left: 0,
-        right: 0,
     },
     iconButton: {
         padding: 10,

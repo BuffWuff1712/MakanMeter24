@@ -11,7 +11,7 @@ const FlipButton = ({handlePress}) => {
         <Image 
             source={icons.flip}
             resizeMode='contain'
-            className="left-5 w-[70px] h-[50px]"
+            className="w-[50px] h-[50px]"
         />
     </TouchableOpacity>
   )

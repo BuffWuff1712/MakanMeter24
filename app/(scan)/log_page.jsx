@@ -61,7 +61,7 @@ const Log_Page = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={goBack}>
+        <TouchableOpacity activeOpacity={0.7} onPress={goBack}>
           <FontAwesome5 name="arrow-left" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{meal_type}</Text>

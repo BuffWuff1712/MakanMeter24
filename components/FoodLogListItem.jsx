@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
-// Ensure to have the correct path for icons
-import { icons } from "../constants"
 
 const FoodLogListItem = ({ item, onDelete }) => {
   const [borderColor, setBorderColor] = useState('transparent');
-  const [selectIcon, setSelectIcon] = useState(icons.noSelect);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePress = async () => {
-    await onDelete(item.meal_item_id);
-    console.log("item deleted");
+    setIsLoading(true);
+    // Set a delay before calling the deletion function
+    setTimeout(async () => {
+      await onDelete(item.meal_item_id);
+      console.log("item deleted");
+      setIsLoading(false);
+    }, 1000); // 1000 milliseconds (1 second) delay
   };
+  
 
   return (
     <Pressable
@@ -25,7 +30,11 @@ const FoodLogListItem = ({ item, onDelete }) => {
         </Text>
       </View>
       <Pressable onPress={handlePress}>
-        <AntDesign name="closecircleo" size={30} color="#000000" />
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#000000" />
+        ) : (
+          <AntDesign name="closecircleo" size={30} color="#000000" />
+        )}
       </Pressable>
     </Pressable>
   );
