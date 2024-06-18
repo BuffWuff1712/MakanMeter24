@@ -37,6 +37,11 @@ import fourteen from "../assets/icons/fourteen.png";
 import fourteen_grayscale from "../assets/icons/fourteen_grayscale.png";
 import thirty from "../assets/icons/thirty.png";
 import thirty_grayscale from "../assets/icons/thirty_grayscale.png";
+import settings from "../assets/icons/settings.png";
+import friends from "../assets/icons/friends.png";
+import photos from "../assets/icons/photos.png";
+import posts from "../assets/icons/posts.png";
+
 
 export default {
   play,
@@ -76,4 +81,8 @@ export default {
   thirty,
   thirty_grayscale,
   target,
+  settings, 
+  friends,
+  photos,
+  posts,
 };

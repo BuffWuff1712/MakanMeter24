@@ -1,8 +1,6 @@
-
 //new draft here 
-/*
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+/*import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, FlatList, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,6 +13,8 @@ const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const [profileImage, setProfileImage] = useState(null);
   const [emailHandle, setEmailHandle] = useState('');
+  const [friendsModalVisible, setFriendsModalVisible] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
 
   useEffect(() => {
     const fetchEmail = async () => {
@@ -24,9 +24,23 @@ const Profile = () => {
         setEmailHandle(fetchedEmail);
       }
     };
-    
+
+    const fetchUsername = async () => {
+      try {
+        const storedUsername = await AsyncStorage.getItem('username');
+        if (storedUsername) {
+          setNewUsername(storedUsername);
+        } else {
+          setNewUsername(user?.username || 'Username');
+        }
+      } catch (error) {
+        console.error('Error fetching username:', error);
+      }
+    };
+
     fetchEmail();
     fetchProfileImage(); // Fetch profile image URI on component mount
+    fetchUsername(); // Fetch username on component mount
   }, [user]);
 
   const fetchProfileImage = async () => {
@@ -47,6 +61,19 @@ const Profile = () => {
     } catch (error) {
       console.error('Error saving profile image:', error);
     }
+  };
+
+  const saveUsername = async (username) => {
+    try {
+      await AsyncStorage.setItem('username', username); // Save username to AsyncStorage
+      setNewUsername(username); // Update state with the new username
+    } catch (error) {
+      console.error('Error saving username:', error);
+    }
+  };
+
+  const handleUsernameChange = (text) => {
+    setNewUsername(text);
   };
 
   const logout = async () => {
@@ -79,6 +106,8 @@ const Profile = () => {
     }
   };
 
+  const placeholderFriends = ['Friend 1', 'Friend 2', 'Friend 3', 'Friend 4', 'Friend 5'];
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -89,26 +118,58 @@ const Profile = () => {
           />
         </TouchableOpacity>
         <View style={styles.userInfo}>
-          <Text style={styles.username}>{user?.username || 'Username'}</Text>
+          <TextInput
+            style={styles.usernameInput}
+            value={newUsername}
+            onChangeText={handleUsernameChange}
+            onBlur={() => saveUsername(newUsername)}
+          />
           <Text style={styles.email}>{emailHandle}</Text>
         </View>
       </View>
 
       //Middle Section with Placeholder Tabs
       <View style={styles.tabsContainer}>
-        <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Friends</Text>
+        <TouchableOpacity style={styles.tab} onPress={() => setFriendsModalVisible(true)}>
+          <Image source={icons.friends} style={styles.tabIcon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Photos</Text>
+          <Image source={icons.photos} style={styles.tabIcon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Posts</Text>
+          <Image source={icons.posts} style={styles.tabIcon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Settings</Text>
+          <Image source={icons.settings} style={styles.tabIcon} />
         </TouchableOpacity>
       </View>
+
+      //Friends Modal
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={friendsModalVisible}
+        onRequestClose={() => {
+          setFriendsModalVisible(!friendsModalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Friends List</Text>
+            <FlatList
+              data={placeholderFriends}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => <Text style={styles.friendItem}>{item}</Text>}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setFriendsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       //Logout Button
       <TouchableOpacity onPress={logout} style={styles.logoutButton}>
@@ -139,7 +200,7 @@ const styles = StyleSheet.create({
   userInfo: {
     flex: 1,
   },
-  username: {
+  usernameInput: {
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -148,20 +209,20 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   tabsContainer: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    paddingHorizontal: 10,
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    padding: 10,
   },
   tab: {
-    flex: 1,
+    width: '48%',
+    height: '40%',
     alignItems: 'center',
-    paddingVertical: 20,
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
-    marginHorizontal: 5,
     marginBottom: 10,
     backgroundColor: '#f9f9f9',
     shadowColor: '#000',
@@ -170,10 +231,9 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  tabText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+  tabIcon: {
+    width: 50,
+    height: 50,
   },
   logoutButton: {
     position: 'absolute',
@@ -184,12 +244,45 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  friendItem: {
+    fontSize: 16,
+    paddingVertical: 10,
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#007BFF',
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
 });
 
 export default Profile;*/
 
+//new draft here 
 /*import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, FlatList, TextInput, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -202,6 +295,9 @@ const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const [profileImage, setProfileImage] = useState(null);
   const [emailHandle, setEmailHandle] = useState('');
+  const [friendsModalVisible, setFriendsModalVisible] = useState(false);
+  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
 
   useEffect(() => {
     const fetchEmail = async () => {
@@ -211,9 +307,23 @@ const Profile = () => {
         setEmailHandle(fetchedEmail);
       }
     };
-    
+
+    const fetchUsername = async () => {
+      try {
+        const storedUsername = await AsyncStorage.getItem('username');
+        if (storedUsername) {
+          setNewUsername(storedUsername);
+        } else {
+          setNewUsername(user?.username || 'Username');
+        }
+      } catch (error) {
+        console.error('Error fetching username:', error);
+      }
+    };
+
     fetchEmail();
     fetchProfileImage(); // Fetch profile image URI on component mount
+    fetchUsername(); // Fetch username on component mount
   }, [user]);
 
   const fetchProfileImage = async () => {
@@ -233,6 +343,15 @@ const Profile = () => {
       setProfileImage(imageURI); // Update state with the new URI
     } catch (error) {
       console.error('Error saving profile image:', error);
+    }
+  };
+
+  const saveUsername = async (username) => {
+    try {
+      await AsyncStorage.setItem('username', username); // Save username to AsyncStorage
+      setNewUsername(username); // Update state with the new username
+    } catch (error) {
+      console.error('Error saving username:', error);
     }
   };
 
@@ -266,6 +385,8 @@ const Profile = () => {
     }
   };
 
+  const placeholderFriends = ['Friend 1', 'Friend 2', 'Friend 3', 'Friend 4', 'Friend 5'];
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -276,28 +397,88 @@ const Profile = () => {
           />
         </TouchableOpacity>
         <View style={styles.userInfo}>
-          <Text style={styles.username}>{user?.username || 'Username'}</Text>
+          <Text style={styles.username}>{newUsername}</Text>
           <Text style={styles.email}>{emailHandle}</Text>
         </View>
       </View>
 
-      //Middle Section with Placeholder Tabs
       <View style={styles.tabsContainer}>
-        <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Friends</Text>
+        <TouchableOpacity style={styles.tab} onPress={() => setFriendsModalVisible(true)}>
+          <Image source={icons.friends} style={styles.tabIcon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Photos</Text>
+          <Image source={icons.photos} style={styles.tabIcon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Posts</Text>
+          <Image source={icons.posts} style={styles.tabIcon} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Settings</Text>
+        <TouchableOpacity style={styles.tab} onPress={() => setSettingsModalVisible(true)}>
+          <Image source={icons.settings} style={styles.tabIcon} />
         </TouchableOpacity>
       </View>
 
-      //Logout Button
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={friendsModalVisible}
+        onRequestClose={() => {
+          setFriendsModalVisible(!friendsModalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Friends List</Text>
+            <FlatList
+              data={placeholderFriends}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => <Text style={styles.friendItem}>{item}</Text>}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setFriendsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={settingsModalVisible}
+        onRequestClose={() => {
+          setSettingsModalVisible(!settingsModalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Settings</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter new username"
+              value={newUsername}
+              onChangeText={setNewUsername}
+            />
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={() => {
+                saveUsername(newUsername);
+                setSettingsModalVisible(false);
+              }}
+            >
+              <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setSettingsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <TouchableOpacity onPress={logout} style={styles.logoutButton}>
         <Image source={icons.logout} resizeMode="contain" style={styles.logoutIcon} />
       </TouchableOpacity>
@@ -357,10 +538,9 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  tabText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+  tabIcon: {
+    width: 50,
+    height: 50,
   },
   logoutButton: {
     position: 'absolute',
@@ -371,13 +551,63 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+  },
+  saveButton: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  saveButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  closeButton: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  friendItem: {
+    fontSize: 16,
+    paddingVertical: 10,
+  },
 });
 
 export default Profile;*/
 
 //new draft here 
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, FlatList, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -390,6 +620,10 @@ const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const [profileImage, setProfileImage] = useState(null);
   const [emailHandle, setEmailHandle] = useState('');
+  const [friendsModalVisible, setFriendsModalVisible] = useState(false);
+  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [tempUsername, setTempUsername] = useState('');
 
   useEffect(() => {
     const fetchEmail = async () => {
@@ -399,9 +633,25 @@ const Profile = () => {
         setEmailHandle(fetchedEmail);
       }
     };
-    
+
+    const fetchUsername = async () => {
+      try {
+        const storedUsername = await AsyncStorage.getItem('username');
+        if (storedUsername) {
+          setNewUsername(storedUsername);
+          setTempUsername(storedUsername); // Initialize tempUsername with stored username
+        } else {
+          setNewUsername(user?.username || 'Username');
+          setTempUsername(user?.username || 'Username');
+        }
+      } catch (error) {
+        console.error('Error fetching username:', error);
+      }
+    };
+
     fetchEmail();
     fetchProfileImage(); // Fetch profile image URI on component mount
+    fetchUsername(); // Fetch username on component mount
   }, [user]);
 
   const fetchProfileImage = async () => {
@@ -423,6 +673,22 @@ const Profile = () => {
       console.error('Error saving profile image:', error);
     }
   };
+
+  const saveUsername = async (username) => {
+    try {
+      if (username.trim() === '') {
+        Alert.alert('Error', 'Username cannot be blank.');
+        return;
+      }
+  
+      await AsyncStorage.setItem('username', username); // Save username to AsyncStorage
+      setNewUsername(username); // Update state with the new username
+      setTempUsername(username); // Update tempUsername with the new username
+    } catch (error) {
+      console.error('Error saving username:', error);
+    }
+  };
+  
 
   const logout = async () => {
     try {
@@ -454,6 +720,8 @@ const Profile = () => {
     }
   };
 
+  const placeholderFriends = ['Friend 1', 'Friend 2', 'Friend 3', 'Friend 4', 'Friend 5'];
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -464,14 +732,13 @@ const Profile = () => {
           />
         </TouchableOpacity>
         <View style={styles.userInfo}>
-          <Text style={styles.username}>{user?.username || 'Username'}</Text>
+          <Text style={styles.username}>{newUsername}</Text>
           <Text style={styles.email}>{emailHandle}</Text>
         </View>
       </View>
 
-      {/* Middle Section with Placeholder Tabs */}
       <View style={styles.tabsContainer}>
-        <TouchableOpacity style={styles.tab}>
+        <TouchableOpacity style={styles.tab} onPress={() => setFriendsModalVisible(true)}>
           <Image source={icons.friends} style={styles.tabIcon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tab}>
@@ -480,12 +747,80 @@ const Profile = () => {
         <TouchableOpacity style={styles.tab}>
           <Image source={icons.posts} style={styles.tabIcon} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tab}>
+        <TouchableOpacity style={styles.tab} onPress={() => setSettingsModalVisible(true)}>
           <Image source={icons.settings} style={styles.tabIcon} />
         </TouchableOpacity>
       </View>
 
-      {/* Logout Button */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={friendsModalVisible}
+        onRequestClose={() => {
+          setFriendsModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Friends List</Text>
+            <FlatList
+              data={placeholderFriends}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => <Text style={styles.friendItem}>{item}</Text>}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setFriendsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={settingsModalVisible}
+        onRequestClose={() => {
+          setSettingsModalVisible(false);
+          setNewUsername(tempUsername); // Reset newUsername to tempUsername on modal close
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Settings</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter new username"
+              value={newUsername}
+              onChangeText={setNewUsername}
+            />
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={() => {
+                  saveUsername(newUsername);
+                  setSettingsModalVisible(false);
+                }}
+              >
+                <Text style={styles.saveButtonText}>Save</Text>
+              </TouchableOpacity>
+              
+            </View>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => {
+                setSettingsModalVisible(false);
+                setNewUsername(tempUsername); // Reset newUsername to tempUsername on close button press
+              }}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <TouchableOpacity onPress={logout} style={styles.logoutButton}>
         <Image source={icons.logout} resizeMode="contain" style={styles.logoutIcon} />
       </TouchableOpacity>
@@ -531,7 +866,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     width: '48%',
-    height: '48%',
+    height: '40%',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
@@ -557,6 +892,77 @@ const styles = StyleSheet.create({
   logoutIcon: {
     width: 24,
     height: 24,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+  },
+  saveButton: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  saveButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  cancelButton: {
+    backgroundColor: '#DC3545',
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  cancelButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  closeButton: {
+    backgroundColor: '#6C757D',
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 10,
+  },
+  friendItem: {
+    fontSize: 16,
+    paddingVertical: 10,
   },
 });
 
