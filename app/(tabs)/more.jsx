@@ -5,17 +5,28 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { icons } from '../../constants';
-import { signOut } from '../../lib/supabase';
+import { getEmail, signOut } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
 
 const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const [profileImage, setProfileImage] = useState(null);
+  const [emailHandle, setEmailHandle] = useState('');
 
   useEffect(() => {
+    const fetchEmail = async () => {
+      if (user) {
+        const fetchedEmail = await getEmail(user);
+        console.log(fetchedEmail);
+        setEmailHandle(fetchedEmail);
+      }
+      
+    };
+    
+    fetchEmail();
     fetchProfileImage(); // Fetch profile image URI on component mount
-  }, []);
+  }, [user]);
 
   const fetchProfileImage = async () => {
     try {
@@ -78,7 +89,7 @@ const Profile = () => {
         </TouchableOpacity>
         <View style={styles.userInfo}>
           <Text style={styles.username}>{user?.username || 'Username'}</Text>
-          <Text style={styles.email}>{user?.email || 'Email'}</Text>
+          <Text style={styles.email}>{emailHandle}</Text>
         </View>
       </View>
 

@@ -17,6 +17,7 @@ const FoodLogListItem = ({ item, onDelete }) => {
     }, 1000); // 1000 milliseconds (1 second) delay
   };
   
+  console.log(item);
 
   return (
     <Pressable
@@ -26,7 +27,7 @@ const FoodLogListItem = ({ item, onDelete }) => {
       <View style={{ flex: 1, gap: 5 }}>
         <Text style={styles.foodName}>{item.food_name}</Text>
         <Text style={styles.foodDetails}>
-          {item.calories} kcal per serving
+          {item.calories} kcal per serving {item.serving_size}
         </Text>
       </View>
       <Pressable onPress={handlePress}>

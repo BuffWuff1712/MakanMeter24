@@ -4,7 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import FoodListItem from '../../components/FoodListItem';
 import CustomButton from '../../components/CustomButton';
 const { fetchNutritionInfoForIngredients } = require('../../lib/edamam.js');
-import { addMeal, calculateTotals, getMealsForDate, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
+import { addMeal, addMealNEW, calculateTotals, getMealsForDate, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import LoadingScreen from '../../components/LoadingScreen.jsx';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -28,17 +28,17 @@ const Results = () => {
         const jsonData = JSON.parse(data);
         const ingredients = jsonData.ingredients;
         const foodItemsArray = [
-          { "cal": 384, "label": "Noodle", "nutrients": { "CHOCDF": 71.3, "ENERC_KCAL": 384, "FAT": 4.44, "FIBTG": 3.3, "PROCNT": 14.2 } },
-          { "cal": 71, "label": "Shrimp", "nutrients": { "CHOCDF": 0.91, "ENERC_KCAL": 71, "FAT": 1.01, "FIBTG": 0, "PROCNT": 13.6 } },
-          { "cal": 92, "label": "Squid", "nutrients": { "CHOCDF": 3.08, "ENERC_KCAL": 92, "FAT": 1.38, "FIBTG": 0, "PROCNT": 15.6 } },
-          { "cal": 32, "label": "Green Onion", "nutrients": { "CHOCDF": 7.34, "ENERC_KCAL": 32, "FAT": 0.19, "FIBTG": 2.6, "PROCNT": 1.83 } },
-          { "cal": 30, "label": "Bean Sprout", "nutrients": { "CHOCDF": 5.94, "ENERC_KCAL": 30, "FAT": 0.18, "FIBTG": 1.8, "PROCNT": 3.04 } },
-          { "cal": 30, "label": "Lime", "nutrients": { "CHOCDF": 10.5, "ENERC_KCAL": 30, "FAT": 0.2, "FIBTG": 2.8, "PROCNT": 0.7 } },
-          { "cal": 40, "label": "Chili", "nutrients": { "CHOCDF": 8.81, "ENERC_KCAL": 40, "FAT": 0.44, "FIBTG": 1.5, "PROCNT": 1.87 } },
-          { "cal": 149, "label": "Garlic", "nutrients": { "CHOCDF": 33.1, "ENERC_KCAL": 149, "FAT": 0.5, "FIBTG": 2.1, "PROCNT": 6.36 } },
-          { "cal": 53, "label": "Soy Sauce", "nutrients": { "CHOCDF": 4.93, "ENERC_KCAL": 53, "FAT": 0.57, "FIBTG": 0.8, "PROCNT": 8.14 } },
-          { "cal": 884, "label": "Oil", "nutrients": { "CHOCDF": 0, "ENERC_KCAL": 884, "FAT": 100, "FIBTG": 0, "PROCNT": 0 } }
-        ];
+          { "nf_calories": 384, "food_name": "Noodle", "nf_total_carbohydrate": 71.3, "nf_total_fat": 4.44, "nf_dietary_fiber": 3.3, "nf_protein": 14.2 },
+          { "nf_calories": 71, "food_name": "Shrimp", "nf_total_carbohydrate": 0.91, "nf_total_fat": 1.01, "nf_dietary_fiber": 0, "nf_protein": 13.6 },
+          { "nf_calories": 92, "food_name": "Squid", "nf_total_carbohydrate": 3.08, "nf_total_fat": 1.38, "nf_dietary_fiber": 0, "nf_protein": 15.6 },
+          { "nf_calories": 32, "food_name": "Green Onion", "nf_total_carbohydrate": 7.34, "nf_total_fat": 0.19, "nf_dietary_fiber": 2.6, "nf_protein": 1.83 },
+          { "nf_calories": 30, "food_name": "Bean Sprout", "nf_total_carbohydrate": 5.94, "nf_total_fat": 0.18, "nf_dietary_fiber": 1.8, "nf_protein": 3.04 },
+          { "nf_calories": 30, "food_name": "Lime", "nf_total_carbohydrate": 10.5, "nf_total_fat": 0.2, "nf_dietary_fiber": 2.8, "nf_protein": 0.7 },
+          { "nf_calories": 40, "food_name": "Chili", "nf_total_carbohydrate": 8.81, "nf_total_fat": 0.44, "nf_dietary_fiber": 1.5, "nf_protein": 1.87 },
+          { "nf_calories": 149, "food_name": "Garlic", "nf_total_carbohydrate": 33.1, "nf_total_fat": 0.5, "nf_dietary_fiber": 2.1, "nf_protein": 6.36 },
+          { "nf_calories": 53, "food_name": "Soy Sauce", "nf_total_carbohydrate": 4.93, "nf_total_fat": 0.57, "nf_dietary_fiber": 0.8, "nf_protein": 8.14 },
+          { "nf_calories": 884, "food_name": "Oil", "nf_total_carbohydrate": 0, "nf_total_fat": 100, "nf_dietary_fiber": 0, "nf_protein": 0 }
+        ];        
         setFoodItems(foodItemsArray);
       } catch (error) {
         console.error('Error fetching nutrition info:', error.message);
@@ -66,7 +66,8 @@ const Results = () => {
       setIsLoading(true);
       setLoadingContext('adding');
       try {
-        const meal_id = await addMeal(selectedItems, meal_type, selectedDate);
+        console.log('Required JSON data: ',selectedItems);
+        const meal_id = await addMealNEW(selectedItems, meal_type, selectedDate);
         const updatedTrackedMeals = await getTrackedMeals(meal_id);
         const mealsData = await getMealsForDate(user, selectedDate);
         setTrackedMeals(updatedTrackedMeals);

@@ -20,9 +20,9 @@ const FoodListItem = ({ item, onSelect }) => {
         activeOpacity={0.7}
       >
         <View style={{ flex: 1, gap: 5 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.label}</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.food_name}</Text>
           <Text style={{ color: 'dimgray' }}>
-            {item.cal} kcal per serving
+            {item.nf_calories} kcal per serving
           </Text>
         </View>
         <Image source={selectIcon} className="h-[25px] w-[25px]"/>

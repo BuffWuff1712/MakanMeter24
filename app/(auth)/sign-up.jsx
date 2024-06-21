@@ -31,7 +31,7 @@ const SignUp = () => {
       setUser(result);
       setIsLoggedIn(true);
 
-      router.replace("/home");
+      router.replace("/gender");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {

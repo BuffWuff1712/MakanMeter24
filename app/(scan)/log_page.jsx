@@ -1,33 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
-import FoodListItem from '../../components/FoodListItem';
-import { getOrCreateAndFetchMeals, deleteMealItem, calculateTotals } from '../../lib/supabase';
+import { getOrCreateAndFetchMeals, deleteMealItem, addMeal, addMealNEW } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import DailyIntake from '../../components/DailyIntake';
 import FoodHistory from '../../components/FoodHistory.jsx';
+import { fetchSuggestions, fetchNutritionInfo } from '../../lib/nutritionix.js';
+import SearchListItem from '../../components/SearchListItem.jsx';
+import AutoCompleteSearchBar from '../../components/AutoCompleteSearchBar.jsx';
+
 
 const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
-  const { trackedMeals, setTrackedMeals, selectedDate, 
-          user, refresh, setRefresh,  mealsData } = useGlobalContext();
+  const { trackedMeals, setTrackedMeals, selectedDate, user, refresh, setRefresh, mealsData } = useGlobalContext();
   const [selectedTab, setSelectedTab] = useState('meals');
   const router = useRouter();
 
+
   useEffect(() => {
-    async function fetchTrackedData() {
-        try {
-          const data = await getOrCreateAndFetchMeals(user, meal_type, selectedDate);
-          setTrackedMeals(data ? data : []);
-        } catch (error) {
-          console.error('Error fetching tracked data:', error);
-        }
+    const fetchTrackedData = async () => {
+      try {
+        const data = await getOrCreateAndFetchMeals(user, meal_type, selectedDate);
+        setTrackedMeals(data ? data : []);
+      } catch (error) {
+        console.error('Error fetching tracked data:', error);
       }
+    };
     fetchTrackedData();
-    
-  }, [meal_type, refresh]);
+  }, [meal_type, refresh, user, selectedDate]);
 
   const goToCamera = () => {
     router.push({
@@ -40,107 +42,136 @@ const Log_Page = () => {
     router.back();
   };
 
-  const handleSelectItem = (item) => {
-    // Implement your item selection logic here
-  };
-
   const handleDelete = async (mealItemId) => {
     try {
-        await deleteMealItem(mealItemId);
-        // Trigger a refresh
-        setRefresh((prev) => !prev);
+      await deleteMealItem(mealItemId);
+      // Trigger a refresh
+      setRefresh((prev) => !prev);
     } catch (error) {
-        console.error('Error deleting meal item:', error);
+      console.error('Error deleting meal item:', error);
     }
   };
 
   const roundToOneDecimal = (value) => {
     return parseFloat(value).toFixed(1);
   };
-  
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity activeOpacity={0.7} onPress={goBack}>
-          <FontAwesome5 name="arrow-left" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>{meal_type}</Text>
-        <TouchableOpacity>
-          <FontAwesome5 name="chevron-down" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-
-      <TextInput style={styles.searchInput} placeholder="Search for a food" />
-      
-      
-      <View style={styles.scanButtons}>
-        <TouchableOpacity style={styles.scanButton} onPress={goToCamera}>
-          <FontAwesome5 name="camera" size={30} color="#36B37E" />
-          <Text style={styles.scanButtonText}>Scan a Meal</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.scanButton} onPress={goToCamera}>
-          <FontAwesome5 name="barcode" size={30} color="#36B37E" />
-          <Text style={styles.scanButtonText}>Scan a Barcode</Text>
-        </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity activeOpacity={0.7} onPress={goBack}>
+            <FontAwesome5 name="arrow-left" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>{meal_type}</Text>
+          <TouchableOpacity>
+            <FontAwesome5 name="chevron-down" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
         
-      </View>
+        {/* MY AUTOCOMPLETE SEARCH BAR */}
+        {/* <View style={styles.searchContainer}>
+          <TextInput 
+            style={styles.searchInput} 
+            placeholder="Search for a food"
+            value={query}
+            onChangeText={handleSearchChange}
+            onFocus={() => setIsFocused(true)} />
+            {isFocused && (
+              <TouchableOpacity onPress={handleCancelSearch} style={styles.cancelButton}>
+                <MaterialIcons name="cancel" size={24} color="gray" />
+              </TouchableOpacity>
+            )}
+        </View>
+        {isFocused && query.length >= 3 && (
+              <View style={styles.suggestionsContainer}>
+                <FlatList
+                  data={suggestions}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => 
+                    <SearchListItem 
+                      item={item} 
+                      onSelect={handleSelectSuggestion}
+                      onAdd={handleAdd} 
+                    />}
+                  className="my-3"
+                  contentContainerStyle={{ gap: 5 }}
+                />
+              </View>)
+        } */}
+        <AutoCompleteSearchBar
+          trackedMeals={trackedMeals}
+          meal_type={meal_type}
+        />
 
-      <DailyIntake
+        <View style={styles.scanButtons}>
+          <TouchableOpacity style={styles.scanButton} onPress={goToCamera}>
+            <FontAwesome5 name="camera" size={30} color="#36B37E" />
+            <Text style={styles.scanButtonText}>Scan a Meal</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.scanButton} onPress={goToCamera}>
+            <FontAwesome5 name="barcode" size={30} color="#36B37E" />
+            <Text style={styles.scanButtonText}>Scan a Barcode</Text>
+          </TouchableOpacity>
+        </View>
+
+        <DailyIntake
           calories={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalCalories || 0)), total: 3046 }}
           carbs={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalCarbs || 0)), total: 381 }}
           protein={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalProtein || 0)), total: 152 }}
           fat={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalFats || 0)), total: 102 }}
         />
-      
-      <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('meals')}>
-          <MaterialIcons name="restaurant-menu" size={24} color={selectedTab === 'meals' ? '#36B37E' : 'gray'} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('favorites')}>
-          <MaterialIcons name="favorite" size={24} color={selectedTab === 'favorites' ? '#36B37E' : 'gray'} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('recent')}>
-          <MaterialIcons name="update" size={24} color={selectedTab === 'recent' ? '#36B37E' : 'gray'} />
-        </TouchableOpacity>
-      </View>
 
-      {selectedTab === 'meals' && (
-        <View style={styles.content}>
-          <Text className="text-xl my-3 mx-2 font-semibold color-gray-500">Tracking</Text>
-          <FlatList
-            data={trackedMeals}
-            renderItem={({ item }) => <FoodLogListItem item={item} onDelete={handleDelete}/>}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ gap: 5 }}
-          />
+        <View style={styles.tabBar}>
+          <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('meals')}>
+            <MaterialIcons name="restaurant-menu" size={24} color={selectedTab === 'meals' ? '#36B37E' : 'gray'} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('favorites')}>
+            <MaterialIcons name="favorite" size={24} color={selectedTab === 'favorites' ? '#36B37E' : 'gray'} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('recent')}>
+            <MaterialIcons name="update" size={24} color={selectedTab === 'recent' ? '#36B37E' : 'gray'} />
+          </TouchableOpacity>
         </View>
-      )}
-      {selectedTab === 'favorites' && (
-        <ScrollView style={styles.content}>
-          <View style={styles.emptyState}>
-            <MaterialIcons name="favorite-border" size={48} color="gray" />
-            <Text style={styles.emptyText}>No favorite foods yet</Text>
-            <Text style={styles.emptySubText}>As you track, save your favorite items like tomato, egg or banana</Text>
+
+        {selectedTab === 'meals' && (
+          <View style={styles.content}>
+            <Text className="text-xl my-3 mx-2 font-semibold color-gray-500">Tracking</Text>
+            <FlatList
+              data={trackedMeals}
+              renderItem={({ item }) => <FoodLogListItem item={item} onDelete={handleDelete} />}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{ gap: 5 }}
+            />
           </View>
-        </ScrollView>
-      )}
-      {selectedTab === 'recent' && (
-        <View style={styles.content}>
-          <View style={styles.historyHeader}>
-            <Text className="text-xl my-3 mx-2 font-semibold color-gray-500">History</Text>
-            <TouchableOpacity>
-              <Text style={styles.historySort}>Most Recent</Text>
-            </TouchableOpacity>
+        )}
+        {selectedTab === 'favorites' && (
+          <ScrollView style={styles.content}>
+            <View style={styles.emptyState}>
+              <MaterialIcons name="favorite-border" size={48} color="gray" />
+              <Text style={styles.emptyText}>No favorite foods yet</Text>
+              <Text style={styles.emptySubText}>As you track, save your favorite items like tomato, egg or banana</Text>
+            </View>
+          </ScrollView>
+        )}
+        {selectedTab === 'recent' && (
+          <View style={styles.content}>
+            <View style={styles.historyHeader}>
+              <Text className="text-xl my-3 mx-2 font-semibold color-gray-500">History</Text>
+              <TouchableOpacity>
+                <Text style={styles.historySort}>Most Recent</Text>
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={trackedMeals}
+              renderItem={({ item }) => <FoodHistory item={item} />}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{ gap: 5 }}
+            />
           </View>
-          <FlatList
-            data={trackedMeals}
-            renderItem={({ item }) => <FoodHistory item={item} />}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ gap: 5 }}
-          />
-        </View>
-      )}
-    </View>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -162,6 +193,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   searchInput: {
+    flex: 1,
     height: 40,
     backgroundColor: '#E0E0E0',
     borderRadius: 10,
@@ -238,6 +270,33 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 30,
     marginTop: 10,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    position: 'relative',
+    zIndex: 2, // Ensure the search container is above other components
+    alignItems: 'center',
+  },
+  
+  suggestionsContainer: {
+    position: 'absolute',
+    top: 160,
+    left: 0,
+    right: 0,
+    backgroundColor: '#FFF',
+    borderColor: '#E0E0E0',
+    borderWidth: 1,
+    zIndex: 3, // Ensure the suggestions container is above other components
+    maxHeight: 330, // Limit the height of the suggestions list
+  },
+  suggestion: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  cancelButton: {
+    position: 'absolute',
+    right: 10,
   },
 });
 

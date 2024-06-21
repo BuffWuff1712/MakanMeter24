@@ -4,13 +4,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
 import { Link, router } from 'expo-router';
 import NutrientsProgressBar from '../../components/NutrientsProgressBar';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 const GenderScreen = () => {
+  const { userInitData, setUserInitData } = useGlobalContext();
   const [gender, setGender] = useState('');
-  const [age, setAge] = useState(22); // Default age value for illustration
 
   const handleNext = () => {
-    router.navigate('/Age'); // Navigate to the AgeScreen
+    setUserInitData({...userInitData, gender})
+    router.navigate('/age'); // Navigate to the AgeScreen
   };
 
   return (
