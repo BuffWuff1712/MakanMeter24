@@ -42,7 +42,6 @@ import friends from "../assets/icons/friends.png";
 import photos from "../assets/icons/photos.png";
 import posts from "../assets/icons/posts.png";
 
-
 export default {
   play,
   bookmark,
