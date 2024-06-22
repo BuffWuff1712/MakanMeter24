@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import FoodItemModal from './FoodItemModal';
 
 const FoodLogListItem = ({ item, onDelete }) => {
   const [borderColor, setBorderColor] = useState('transparent');
   const [isLoading, setIsLoading] = useState(false);
+  const bottomSheetModalRef = useRef(null);
+  const snapPoints = ['85%'];
 
   const handlePress = async () => {
     setIsLoading(true);
@@ -20,24 +24,28 @@ const FoodLogListItem = ({ item, onDelete }) => {
   console.log(item);
 
   return (
-    <Pressable
-      style={[styles.button, { borderColor }]}
-      activeOpacity={0.7}
-    >
-      <View style={{ flex: 1, gap: 5 }}>
-        <Text style={styles.foodName}>{item.food_name}</Text>
-        <Text style={styles.foodDetails}>
-          {item.calories} kcal per serving {item.serving_size}
-        </Text>
-      </View>
-      <Pressable onPress={handlePress}>
-        {isLoading ? (
-          <ActivityIndicator size="small" color="#000000" />
-        ) : (
-          <AntDesign name="closecircleo" size={30} color="#000000" />
-        )}
-      </Pressable>
-    </Pressable>
+    <>
+      <TouchableOpacity
+        style={[styles.button, { borderColor }]}
+        activeOpacity={0.7}
+        onPress={() => {bottomSheetModalRef.current?.present();}}
+      >
+        <View style={{ flex: 1, gap: 5 }}>
+          <Text style={styles.foodName}>{item.food_name}</Text>
+          <Text style={styles.foodDetails}>
+            {item.calories} kcal per serving {item.serving_size}
+          </Text>
+        </View>
+        <Pressable onPress={handlePress}>
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#000000" />
+          ) : (
+            <AntDesign name="closecircleo" size={30} color="#000000" />
+          )}
+        </Pressable>
+      </TouchableOpacity>
+    <FoodItemModal bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} />
+    </>
   );
 };
 

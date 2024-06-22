@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
-import { getOrCreateAndFetchMeals, deleteMealItem, addMeal, addMealNEW } from '../../lib/supabase';
+import { getOrCreateAndFetchMeals, deleteMealItem } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import DailyIntake from '../../components/DailyIntake';
 import FoodHistory from '../../components/FoodHistory.jsx';
-import { fetchSuggestions, fetchNutritionInfo } from '../../lib/nutritionix.js';
-import SearchListItem from '../../components/SearchListItem.jsx';
 import AutoCompleteSearchBar from '../../components/AutoCompleteSearchBar.jsx';
-
 
 const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
   const { trackedMeals, setTrackedMeals, selectedDate, user, refresh, setRefresh, mealsData } = useGlobalContext();
   const [selectedTab, setSelectedTab] = useState('meals');
   const router = useRouter();
-
 
   useEffect(() => {
     const fetchTrackedData = async () => {
@@ -45,7 +41,6 @@ const Log_Page = () => {
   const handleDelete = async (mealItemId) => {
     try {
       await deleteMealItem(mealItemId);
-      // Trigger a refresh
       setRefresh((prev) => !prev);
     } catch (error) {
       console.error('Error deleting meal item:', error);
@@ -57,7 +52,7 @@ const Log_Page = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
+    <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); }}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity activeOpacity={0.7} onPress={goBack}>
@@ -69,36 +64,6 @@ const Log_Page = () => {
           </TouchableOpacity>
         </View>
         
-        {/* MY AUTOCOMPLETE SEARCH BAR */}
-        {/* <View style={styles.searchContainer}>
-          <TextInput 
-            style={styles.searchInput} 
-            placeholder="Search for a food"
-            value={query}
-            onChangeText={handleSearchChange}
-            onFocus={() => setIsFocused(true)} />
-            {isFocused && (
-              <TouchableOpacity onPress={handleCancelSearch} style={styles.cancelButton}>
-                <MaterialIcons name="cancel" size={24} color="gray" />
-              </TouchableOpacity>
-            )}
-        </View>
-        {isFocused && query.length >= 3 && (
-              <View style={styles.suggestionsContainer}>
-                <FlatList
-                  data={suggestions}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => 
-                    <SearchListItem 
-                      item={item} 
-                      onSelect={handleSelectSuggestion}
-                      onAdd={handleAdd} 
-                    />}
-                  className="my-3"
-                  contentContainerStyle={{ gap: 5 }}
-                />
-              </View>)
-        } */}
         <AutoCompleteSearchBar
           trackedMeals={trackedMeals}
           meal_type={meal_type}
@@ -192,14 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  searchInput: {
-    flex: 1,
-    height: 40,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginVertical: 10,
-  },
   tabs: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -270,33 +227,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 30,
     marginTop: 10,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    position: 'relative',
-    zIndex: 2, // Ensure the search container is above other components
-    alignItems: 'center',
-  },
-  
-  suggestionsContainer: {
-    position: 'absolute',
-    top: 160,
-    left: 0,
-    right: 0,
-    backgroundColor: '#FFF',
-    borderColor: '#E0E0E0',
-    borderWidth: 1,
-    zIndex: 3, // Ensure the suggestions container is above other components
-    maxHeight: 330, // Limit the height of the suggestions list
-  },
-  suggestion: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  cancelButton: {
-    position: 'absolute',
-    right: 10,
   },
 });
 

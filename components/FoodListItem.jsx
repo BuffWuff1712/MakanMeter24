@@ -6,6 +6,7 @@ const FoodListItem = ({ item, onSelect }) => {
 
   const [borderColor, setBorderColor] = useState('transparent');
   const [selectIcon, setSelectIcon] = useState(icons.noSelect);
+  
 
   const handlePress = () => {
     setBorderColor(borderColor === 'transparent' ? 'blue' : 'transparent')

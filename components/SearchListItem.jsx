@@ -4,7 +4,7 @@ import { icons } from "../constants"
 import { AntDesign } from '@expo/vector-icons';
 import { ActivityIndicator } from 'react-native-paper';
 
-const SearchListItem = ({ item, onSelect, onAdd }) => {
+const SearchListItem = ({ item, onAdd }) => {
 
   const [borderColor, setBorderColor] = useState('transparent');
   const [isLoading, setIsLoading] = useState(false);

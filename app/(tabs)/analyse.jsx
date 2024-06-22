@@ -4,6 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import StreakBar from '../../components/StreakBar';
 import AnalysisOverview from '../../components/AnalysisOverview';
+import DailyTrendsDashboard from '../../components/DailyTrends';
+import WeightTrendsDashboard from '../../components/WeightTrend';
+import ProgressOverview from '../../components/ProgressOverview';
 
 const screenWidth = Dimensions.get('window').width;
 const scrollableHeight = 300; // Adjust the height of the scrollable area
@@ -23,15 +26,8 @@ const AnalyticsPage = () => {
           <View className="px-5 pt-10">
             <Text style={styles.title}>Progress</Text>
           </View>
-          <View className="items-center">
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Current Progress Towards Goals</Text>
-              <Text>Calories Consumed: 1500 / 2000</Text>
-              <Text>Protein Intake: 60g / 100g</Text>
-              <Text>Carbohydrates Intake: 150g / 250g</Text>
-              <Text>Fat Intake: 50g / 70g</Text>
-            </View>
-          </View>
+
+          <ProgressOverview/>
 
           <View className="items-center">
             <View style={styles.tipsContainer}>

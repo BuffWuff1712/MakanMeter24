@@ -16,6 +16,7 @@ module.exports = {
           200: "#232533",
         },
         gray: {
+          50: "#f9fafb",
           100: "#CDCDE0",
           300: "#d1d5db",
           500: "#6b7280",
@@ -26,6 +27,12 @@ module.exports = {
         emerald: {
           DEFAULT: "#10b981",
           300: "#6ee7b7"
+        },
+        stone: {
+          DEFAULT: "#f5f5f4",
+        },
+        zinc: {
+          600: "#52525b",
         },
       },
       fontFamily: {

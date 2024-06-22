@@ -47,7 +47,7 @@ const AutoCompleteSearchBar = ({ trackedMeals, meal_type }) => {
         try {
         const nutriData = await fetchNutritionInfo(food_item);
         await addMealNEW(nutriData, meal_type, selectedDate);
-        // ADD FUNCTION
+
         // Trigger a refresh
         setRefresh((prev) => !prev);
         const updatedSuggestions = suggestions.filter(item => item.food_name !== food_item);
