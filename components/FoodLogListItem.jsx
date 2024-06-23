@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import FoodItemModal from './FoodItemModal';
 
 const FoodLogListItem = ({ item, onDelete }) => {
@@ -21,30 +20,29 @@ const FoodLogListItem = ({ item, onDelete }) => {
     }, 1000); // 1000 milliseconds (1 second) delay
   };
   
-  console.log(item);
 
   return (
     <>
-      <TouchableOpacity
-        style={[styles.button, { borderColor }]}
-        activeOpacity={0.7}
-        onPress={() => {bottomSheetModalRef.current?.present();}}
-      >
-        <View style={{ flex: 1, gap: 5 }}>
-          <Text style={styles.foodName}>{item.food_name}</Text>
-          <Text style={styles.foodDetails}>
-            {item.calories} kcal per serving {item.serving_size}
-          </Text>
-        </View>
-        <Pressable onPress={handlePress}>
-          {isLoading ? (
-            <ActivityIndicator size="small" color="#000000" />
-          ) : (
-            <AntDesign name="closecircleo" size={30} color="#000000" />
-          )}
-        </Pressable>
-      </TouchableOpacity>
-    <FoodItemModal bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} />
+    <TouchableOpacity
+      style={[styles.button, { borderColor }]}
+      activeOpacity={0.7}
+      onPress={() => {bottomSheetModalRef.current?.present();}}
+    >
+      <View style={{ flex: 1, gap: 5 }}>
+        <Text style={styles.foodName}>{item.food_name}</Text>
+        <Text style={styles.foodDetails}>
+          {item.calories} cal per serving
+        </Text>
+      </View>
+      <Pressable onPress={handlePress}>
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#000000" />
+        ) : (
+          <AntDesign name="closecircleo" size={30} color="#000000" />
+        )}
+      </Pressable>
+    </TouchableOpacity>
+    <FoodItemModal bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} item={item} />
     </>
   );
 };

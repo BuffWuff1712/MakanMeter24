@@ -1,127 +1,172 @@
 import 'react-native-gesture-handler';
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button } from 'react-native-paper';
-import { BottomSheetModalProvider, BottomSheetModal } from '@gorhom/bottom-sheet';
-import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
-import { AntDesign } from '@expo/vector-icons';
+import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import GradeBar from './GradeBar';
+import ServingTypes from './ServingTypes';
+import { updateMealItemQuantity } from '../lib/supabase';
+import { useGlobalContext } from '../context/GlobalProvider';
 
-// Sample Data
-const headerData = [
-  { name: 'Calories', value: 1000, unit: '' },
-  { name: 'Carbs', value: 50, unit: 'g' },
-  { name: 'Proteins', value: 30, unit: 'g' },
-  { name: 'Fats', value: 10, unit: 'g' },
-];
+const formatTo2DPOr2SF = (num) => {
+  if (num >= 1000 || num <= 0.01) {
+    return num.toPrecision(2);
+  } else {
+    return num.toFixed(2);
+  }
+};
 
-const nutritionFacts = [
-  { name: 'Total fat', value: '4.0 g' },
-  { name: 'Saturated fat', value: '0.5 g', bullet: true },
-  { name: 'Polyunsaturated fat', value: '0.0 g', bullet: true },
-  { name: 'Monounsaturated fat', value: '0.0 g', bullet: true },
-  { name: 'Cholesterol', value: '25.0 mg' },
-  { name: 'Sodium', value: '790.0 mg' },
-  { name: 'Potassium', value: '590.0 mg' },
-  { name: 'Total Carbohydrates', value: '41.0 g' },
-  { name: 'Dietary Fiber', value: '2.0 g', bullet: true },
-  { name: 'Sugars', value: '2.0 g', bullet: true },
-  { name: 'Vitamin A', value: '25.0 mg' },
-  { name: 'Vitamin C', value: '25.0 mg' },
-  { name: 'Calcium', value: '25.0 mg' },
-  { name: 'Iron', value: '25.0 mg' },
-  { name: 'Vitamin D', value: '25.0 mg' },
-  { name: 'Zinc', value: '25.0 mg' },
-  { name: 'Vitamin B12', value: '25.0 mg' },
-  { name: 'Magnesium', value: '25.0 mg' },
-];
+const nutrientUnits = {
+  fats: 'g',
+  saturated_fat: 'g',
+  polyunsaturated_fat: 'g',
+  monounsaturated_fat: 'g',
+  cholesterol: 'mg',
+  sodium: 'mg',
+  potassium: 'mg',
+  carbohydrates: 'g',
+  dietary_fiber: 'g',
+  sugars: 'g',
+  vitamin_a: 'IU',
+  vitamin_c: 'mg',
+  calcium: 'mg',
+  iron: 'mg',
+  vitamin_d: 'IU',
+  zinc: 'mg',
+  vitamin_b12: 'µg',
+  magnesium: 'mg'
+};
 
-const FoodItemModal = ({ bottomSheetModalRef, snapPoints }) => {
+const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item }) => {
+  const { setRefresh } = useGlobalContext();
+  const [quantity, setQuantity] = useState(item.quantity);
+
+  const headerData = [
+    { name: 'Calories', value: formatTo2DPOr2SF(item.calories * quantity) },
+    { name: 'Carbs', value: formatTo2DPOr2SF(item.carbohydrates * quantity), unit: 'g' },
+    { name: 'Proteins', value: formatTo2DPOr2SF(item.protein * quantity), unit: 'g' },
+    { name: 'Fats', value: formatTo2DPOr2SF(item.fats * quantity), unit: 'g' },
+  ];
+
+  const nutritionFacts = [
+    { name: 'Total fat', value: formatTo2DPOr2SF(item.fats * quantity), unit: nutrientUnits.fats },
+    { name: 'Saturated fat', value: formatTo2DPOr2SF(item.saturated_fat * quantity), bullet: true, unit: nutrientUnits.saturated_fat },
+    { name: 'Polyunsaturated fat', value: formatTo2DPOr2SF(item.polyunsaturated_fat * quantity), bullet: true, unit: nutrientUnits.polyunsaturated_fat },
+    { name: 'Monounsaturated fat', value: formatTo2DPOr2SF(item.monounsaturated_fat * quantity), bullet: true, unit: nutrientUnits.monounsaturated_fat },
+    { name: 'Cholesterol', value: formatTo2DPOr2SF(item.cholesterol * quantity), unit: nutrientUnits.cholesterol },
+    { name: 'Sodium', value: formatTo2DPOr2SF(item.sodium * quantity), unit: nutrientUnits.sodium },
+    { name: 'Potassium', value: formatTo2DPOr2SF(item.potassium * quantity), unit: nutrientUnits.potassium },
+    { name: 'Total Carbohydrates', value: formatTo2DPOr2SF(item.carbohydrates * quantity), unit: nutrientUnits.carbohydrates },
+    { name: 'Dietary Fiber', value: formatTo2DPOr2SF(item.dietary_fiber * quantity), bullet: true, unit: nutrientUnits.dietary_fiber },
+    { name: 'Sugars', value: formatTo2DPOr2SF(item.sugars * quantity), bullet: true, unit: nutrientUnits.sugars },
+    { name: 'Vitamin A', value: formatTo2DPOr2SF(item.vitamin_a * quantity), unit: nutrientUnits.vitamin_a },
+    { name: 'Vitamin C', value: formatTo2DPOr2SF(item.vitamin_c * quantity), unit: nutrientUnits.vitamin_c },
+    { name: 'Calcium', value: formatTo2DPOr2SF(item.calcium * quantity), unit: nutrientUnits.calcium },
+    { name: 'Iron', value: formatTo2DPOr2SF(item.iron * quantity), unit: nutrientUnits.iron },
+    { name: 'Vitamin D', value: formatTo2DPOr2SF(item.vitamin_d * quantity), unit: nutrientUnits.vitamin_d },
+    { name: 'Zinc', value: formatTo2DPOr2SF(item.zinc * quantity), unit: nutrientUnits.zinc },
+    { name: 'Vitamin B12', value: formatTo2DPOr2SF(item.vitamin_b12 * quantity), unit: nutrientUnits.vitamin_b12 },
+    { name: 'Magnesium', value: formatTo2DPOr2SF(item.magnesium * quantity), unit: nutrientUnits.magnesium }
+  ];
+
+  const changeQuantity = async (newQuantity) => {
+    // Skip if input is empty
+    if (newQuantity === '') {
+      return;
+    }
+
+    const parsedQuantity = parseFloat(newQuantity);
+    if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+      console.error(`Invalid quantity value: "${newQuantity}". Please enter a positive number.`);
+      return;
+    }
+
+    try {
+      await updateMealItemQuantity(item.meal_item_id, parsedQuantity);
+      setQuantity(parsedQuantity);
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      console.error('Error updating meal item quantity:', error);
+    }
+  };
+
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
       index={0}
       snapPoints={snapPoints}
-      backgroundStyle={{ borderRadius: 50, backgroundColor: '#fff' }}
+      backgroundStyle={{ borderRadius: 20, backgroundColor: '#fff' }}
       onDismiss={() => console.log('modal dismissed')}
     >
-      <SafeAreaView className="h-full">
-        <ScrollView>
-          <View className="flex-col bg-gray-100 h-[300px] justify-center px-5">
-            <Text className="text-3xl font-bold py-3">Chicken Rice</Text>
-            <Text className="text-xl">Rice Gourmet</Text>
-            <View className="flex-row justify-evenly mt-20">
-              {headerData.map((item, index) => (
-                <View className="items-center" key={index}>
-                  <Text className="text-2xl font-bold">
-                    {item.value} {item.unit}
-                  </Text>
-                  <Text className="text-xl font-semibold">{item.name}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-          <View className="p-7">
-            <Text className="text-2xl font-bold mb-5">Serving size</Text>
-            <View className="flex-row justify-between items-center">
-              <TextInput
-                className="text-xl border py-5 px-10 rounded-lg"
-                defaultValue="1.0"
-                keyboardType="numeric"
-              />
-              <View className="flex-row items-center border py-5 px-10 rounded-lg">
-                <TextInput
-                  className="text-xl"
-                  defaultValue="cup(151.0g)"
-                  keyboardType="numeric"
-                />
-                <AntDesign name="down" size={20} color="black" />
+      <BottomSheetScrollView>
+        <View className="flex-col bg-emerald py-5 w-full justify-center px-3">
+          <Text className="text-4xl font-bold color-white mt-5 px-3">{item.food_name}</Text>
+          <View className="flex-row justify-evenly mt-10">
+            {headerData.map((item, index) => (
+              <View className="items-center" key={index}>
+                <Text className="text-2xl font-bold color-white">
+                  {item.value}{item.unit}
+                </Text>
+                <Text className="text-xl font-semibold color-white">{item.name}</Text>
               </View>
-            </View>
+            ))}
           </View>
-          <View className="p-7">
-            <Text className="text-2xl font-bold mb-5">Nutrition Quality</Text>
-            <Text className="text-xl">Healthy if taken in moderation.</Text>
-            <Text className="text-xl">
-              Nutrient-packed but also contains trans fats, saturated fats, sugar, cholesterol, salt, etc.
-            </Text>
-            <View className="w-full items-center justify-center my-10">
-              <Text className="text-lg font-semibold">Food Rating goes here</Text>
-            </View>
+        </View>
+        <View className="p-7">
+          <Text className="text-2xl font-bold mb-5">Serving size</Text>
+          <View className="flex-row justify-between items-center">
+            <TextInput
+              className="text-xl border py-5 px-10 rounded-lg w-[120px] justify-center"
+              value={quantity.toString()}
+              keyboardType="numeric"
+              textAlign="center"
+              onChangeText={(text) => setQuantity(text)}
+              onBlur={() => changeQuantity(quantity)}
+            />
+            <ServingTypes />
           </View>
-          <View className="p-7">
-            <Text className="text-2xl font-bold mb-5">Food Features</Text>
-            <Text className="text-xl">Features go here</Text>
+        </View>
+        <View className="p-7">
+          <Text className="text-2xl font-bold mb-5">Nutrition Quality</Text>
+          <Text className="text-xl">Healthy if taken in moderation.</Text>
+          <Text className="text-xl">
+            Nutrient-packed but also contains trans fats, saturated fats, sugar, cholesterol, salt, etc.
+          </Text>
+          <View className="w-full items-center justify-center my-10">
+            <GradeBar grade={'B'} />
           </View>
-          <View className="p-0">
-            <View className="px-7">
-              <Text className="text-2xl font-bold mb-5">Nutrition Facts</Text>
-            </View>
-            {nutritionFacts.map((item, index) => {
-              if (item.bullet) {
-                return (
-                  <View key={index} className="px-7 mb-2">
-                    <View className="flex-row justify-between">
-                      <Text className="text-xl text-green-500">•</Text>
-                      <Text className="text-xl ml-2 color-zinc-600">{item.name}</Text>
-                      <Text className="text-xl ml-auto color-zinc-600">{item.value}</Text>
-                    </View>
+        </View>
+        <View className="p-7">
+          <Text className="text-2xl font-bold mb-5">Food Features</Text>
+          <Text className="text-xl">Features go here</Text>
+        </View>
+        <View className="p-0">
+          <View className="px-7">
+            <Text className="text-2xl font-bold mb-5">Nutrition Facts</Text>
+          </View>
+          {nutritionFacts.map((item, index) => {
+            if (item.bullet) {
+              return (
+                <View key={index} className="px-7 mb-2">
+                  <View className="flex-row justify-between">
+                    <Text className="text-xl text-green-500">•</Text>
+                    <Text className="text-xl ml-2 color-zinc-600">{item.name}</Text>
+                    <Text className="text-xl ml-auto color-zinc-600">{item.value} {item.unit}</Text>
                   </View>
-                );
-              } else {
-                return (
-                  <View key={index} className="border border-l-0 border-r-0 border-b-0 border-stone w-full px-7 py-5">
-                    <View className="flex-row justify-between">
-                      <Text className="text-xl font-bold color-zinc-600">{item.name}</Text>
-                      <Text className="text-xl font-semibold color-zinc-600">{item.value}</Text>
-                    </View>
+                </View>
+              );
+            } else {
+              return (
+                <View key={index} className="border border-l-0 border-r-0 border-b-0 border-stone w-full px-7 py-5">
+                  <View className="flex-row justify-between">
+                    <Text className="text-xl font-bold color-zinc-600">{item.name}</Text>
+                    <Text className="text-xl font-semibold color-zinc-600">{item.value} {item.unit}</Text>
                   </View>
-                );
-              }
-            })}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+                </View>
+              );
+            }
+          })}
+        </View>
+      </BottomSheetScrollView>
     </BottomSheetModal>
   );
 };

@@ -613,7 +613,7 @@
   "nix_item_id": null,
   "nix_item_name": null,
   "photo": {
-    "highres": "https://nix-tag-images.s3.amazonaws.com/3788_highres.jpg",
+    "highres": "https://nix-tag-images.s3.a mazonaws.com/3788_highres.jpg",
     "is_user_uploaded": false,
     "thumb": "https://nix-tag-images.s3.amazonaws.com/3788_thumb.jpg"
   },
