@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
 import { Bar, CartesianChart, Line, Pie, PolarChart, useChartPressState } from 'victory-native';
-import { Dimensions } from 'react-native';
 import { Circle, useFont, vec, LinearGradient, Text as SKText } from '@shopify/react-native-skia';
 import poppins from "../assets/fonts/Poppins-SemiBold.ttf"
 import { useDerivedValue } from 'react-native-reanimated';
-import { Dropdown } from 'react-native-element-dropdown';
 import TrendsDateRange from './TrendsDateRange';
 import { useGlobalContext } from '../context/GlobalProvider';
 
@@ -20,7 +18,7 @@ const WaterTrendsDashboard = ({data, onPress }) => {
   });
 
   const value = useDerivedValue(() => {
-    return state.y.water_intake.value.value + " kg";
+    return state.y.water_intake.value.value + " L";
   }, [state]);
 
   const textYPosition = useDerivedValue(() => {
@@ -36,7 +34,10 @@ const WaterTrendsDashboard = ({data, onPress }) => {
     );
   }, [value, toolTipFont]);
 
-  const maxWeight = Math.max(...data.map(item => item.water_intake));
+  const maxWaterIntake = Math.max(...data.map(item => item.water_intake));
+  const totalWaterIntake = data.reduce((sum, item) => sum + item.water_intake, 0);
+  const averageWaterIntake = totalWaterIntake / data.length;
+
 
   return (
     <View style={styles.container}>
@@ -44,8 +45,12 @@ const WaterTrendsDashboard = ({data, onPress }) => {
         <Text className="text-2xl font-semibold">Water Intake</Text>
       </View>
       <View className="my-2 mx-3">
-        <Text className="text-base color-gray-500">Average per day: {data.at(-1).water_intake} L</Text>
-        <Text className="text-base color-gray-500">Goal: 2.25 L</Text>
+        <Text className="text-xl color-gray-500">
+            Average per day: <Text className="text-xl color-black font-semibold">{averageWaterIntake.toFixed(2)} L</Text>
+        </Text>
+        <Text className="text-xl color-gray-500">
+            Goal: <Text className="text-xl color-sky font-semibold">2.25 L</Text>
+        </Text>
       </View>
       <View className="items-end">
         <TrendsDateRange/>
@@ -56,7 +61,7 @@ const WaterTrendsDashboard = ({data, onPress }) => {
         xKey={"record_date"}
         yKeys={["water_intake"]}
         padding={15}
-        domain={{y:[0, maxWeight + 30]}}
+        domain={{y:[0, maxWaterIntake + 0.5]}}
         domainPadding={{top: 30, left: 30, right: 30}}
         // 👇 pass the font, opting in to axes.
         axisOptions={{ font }}
@@ -85,7 +90,7 @@ const WaterTrendsDashboard = ({data, onPress }) => {
                       cx={state.x.position}
                       cy={state.y.water_intake.position}
                       r={8}
-                      color={"grey"}
+                      color={"sky blue"}
                       opacity={0.8}
                     />
                   </>
