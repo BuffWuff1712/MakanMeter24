@@ -5,28 +5,28 @@ import { Dimensions } from 'react-native';
 import { Circle, useFont, vec, LinearGradient, Text as SKText } from '@shopify/react-native-skia';
 import poppins from "../assets/fonts/Poppins-SemiBold.ttf"
 import { useDerivedValue } from 'react-native-reanimated';
+import { Dropdown } from 'react-native-element-dropdown';
 import TrendsDateRange from './TrendsDateRange';
 import { useGlobalContext } from '../context/GlobalProvider';
 
-const screenWidth = Dimensions.get('window').width;
 
+const data = [];
 
-
-const MacroTrendsDashboard = ({ data, onPress }) => {
+const WeightTrendsDashboard = ({data, onPress }) => {
   const { period } = useGlobalContext();
   const font = useFont(poppins, 12);
   const toolTipFont = useFont(poppins, 14);
   const { state, isActive } = useChartPressState({
     x: 0,
-    y: { total_calories: 0 },
+    y: { weight: 0 },
   });
 
   const value = useDerivedValue(() => {
-    return state.y.total_calories.value.value + " kcal";
+    return state.y.weight.value.value + " kg";
   }, [state]);
 
   const textYPosition = useDerivedValue(() => {
-    return state.y.total_calories.position.value - 15;
+    return state.y.weight.position.value - 15;
   }, [value]);
 
   const textXPosition = useDerivedValue(() => {
@@ -38,17 +38,16 @@ const MacroTrendsDashboard = ({ data, onPress }) => {
     );
   }, [value, toolTipFont]);
 
-  // Calculate the maximum value among all macros
-  const maxMacroValue = Math.max(
-    ...data.flatMap(item => [item.total_carbohydrates, item.total_fats, item.total_protein])
-  );
+  const maxWeight = Math.max(...data.map(item => item.weight));
 
   return (
     <View style={styles.container}>
       <View className="my-2 mx-3">
-        <Pressable onPress={onPress}>
-          <Text className="text-2xl font-semibold">Macros Intake</Text>
-        </Pressable>
+        <Text className="text-2xl font-semibold">Weight Progress</Text>
+      </View>
+      <View className="my-2 mx-3">
+        <Text className="text-base color-gray-500">Initial Weight: 50.0 kg</Text>
+        <Text className="text-base color-gray-500">Goal Weight: 50.0 kg</Text>
       </View>
       <View className="items-end">
         <TrendsDateRange/>
@@ -56,10 +55,10 @@ const MacroTrendsDashboard = ({ data, onPress }) => {
       <CartesianChart
         data={data}
         chartPressState={state}
-        xKey={period === 1 ? "week_start_date" : "meal_date"}
-        yKeys={["total_carbohydrates", "total_protein", "total_fats",]}
+        xKey={"record_date"}
+        yKeys={["weight"]}
         padding={15}
-        domain={{y:[0, maxMacroValue + 100]}}
+        domain={{y:[0, maxWeight + 30]}}
         domainPadding={{top: 30, left: 30, right: 30}}
         // 👇 pass the font, opting in to axes.
         axisOptions={{ font }}
@@ -69,25 +68,11 @@ const MacroTrendsDashboard = ({ data, onPress }) => {
               <>
 
                 <Line
-                  points={points.total_carbohydrates}
+                  points={points.weight}
                   color="red"
                   strokeWidth={3}
                   animate={{ type: "timing", duration: 1000 }}
                 />
-
-                <Line
-                  points={points.total_protein}
-                  color="blue"
-                  strokeWidth={3}
-                  animate={{ type: "timing", duration: 1000 }}
-                />
-
-                <Line
-                  points={points.total_fats}
-                  color="dark green"
-                  strokeWidth={3}
-                  animate={{ type: "timing", duration: 1000 }}
-                />    
 
                 {isActive ? (
                   <>
@@ -100,7 +85,7 @@ const MacroTrendsDashboard = ({ data, onPress }) => {
                     />
                     <Circle
                       cx={state.x.position}
-                      cy={state.y.total_calories.position}
+                      cy={state.y.weight.position}
                       r={8}
                       color={"grey"}
                       opacity={0.8}
@@ -130,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MacroTrendsDashboard;
+export default WeightTrendsDashboard;

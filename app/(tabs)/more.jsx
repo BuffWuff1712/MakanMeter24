@@ -6,12 +6,14 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { icons } from '../../constants';
 import { getEmail, signOut } from '../../lib/supabase';
+import { getEmail, signOut } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
 
 const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const [profileImage, setProfileImage] = useState(null);
+  const [emailHandle, setEmailHandle] = useState('');
   const [emailHandle, setEmailHandle] = useState('');
   const [friendsModalVisible, setFriendsModalVisible] = useState(false);
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
@@ -24,6 +26,16 @@ const Profile = () => {
   const [gender, setGender] = useState('');
 
   useEffect(() => {
+    const fetchEmail = async () => {
+      if (user) {
+        const fetchedEmail = await getEmail(user);
+        console.log(fetchedEmail);
+        setEmailHandle(fetchedEmail);
+      }
+      
+    };
+    
+    fetchEmail();
     const fetchEmail = async () => {
       if (user) {
         const fetchedEmail = await getEmail(user);
@@ -63,6 +75,7 @@ const Profile = () => {
 
     fetchEmail();
     fetchProfileImage(); // Fetch profile image URI on component mount
+  }, [user]);
     fetchUsername(); // Fetch username on component mount
     fetchUserDetails(); // Fetch height, weight, and gender on component mount
   }, [user]);
@@ -154,6 +167,8 @@ const Profile = () => {
           />
         </TouchableOpacity>
         <View style={styles.userInfo}>
+          <Text style={styles.username}>{user?.username || 'Username'}</Text>
+          <Text style={styles.email}>{emailHandle}</Text>
           <Text style={styles.username}>{newUsername}</Text>
           <Text style={styles.email}>{emailHandle}</Text>
           <Text style={styles.detailText}>Height: {height}</Text>

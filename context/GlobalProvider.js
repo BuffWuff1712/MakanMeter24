@@ -15,6 +15,12 @@ import { createContext, useContext, useState,
       const [mealsData, setMealsData] = useState({});
       const [period, setPeriod] = useState(0);
       const [macros, setMacros] = useState(null);
+      const [userInitData, setUserInitData] = useState({
+        gender: '',
+        age: '',
+        height: '',
+        weight: '',
+      });
 
       useEffect(() => {
         const initializeUser = async () => {
@@ -60,6 +66,8 @@ import { createContext, useContext, useState,
               setPeriod,
               macros,
               setMacros,
+              userInitData,
+              setUserInitData,
             }}
           >
             {children}

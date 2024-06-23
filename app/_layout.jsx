@@ -3,6 +3,8 @@ import {Slot, SplashScreen, Stack} from 'expo-router';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import  GlobalProvider from '../context/GlobalProvider';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,28 +31,32 @@ const RootLayout = () => {
 
   return (
     <GlobalProvider>
-      <Stack> 
-        <Stack.Screen name="index" options={{ headerShown:
-          false }} />
+      <GestureHandlerRootView>
+        <BottomSheetModalProvider>
+          <Stack> 
+            <Stack.Screen name="index" options={{ headerShown:
+              false }} />
 
-        <Stack.Screen name="(auth)" options={{ headerShown:
-          false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown:
+              false }} />
 
-        <Stack.Screen name="(init)" options={{ headerShown:
-          false }} />
+            <Stack.Screen name="(init)" options={{ headerShown:
+              false }} />
 
-        <Stack.Screen name="(tabs)" options={{ headerShown:
-          false }} />
-        
-        <Stack.Screen name="(scan)" options={{ headerShown:
-          false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown:
+              false }} />
+            
+            <Stack.Screen name="(scan)" options={{ headerShown:
+              false }} />
 
-        <Stack.Screen name="(home)" options={{ headerShown:
-          false }} />
+            <Stack.Screen name="(home)" options={{ headerShown:
+              false }} />
 
-        {/* <Stack.Screen name="/search/[query]" options={{ headerShown:
-          false }} /> */}
-      </Stack>
+            {/* <Stack.Screen name="/search/[query]" options={{ headerShown:
+              false }} /> */}
+          </Stack>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
     </GlobalProvider>
   )
 }

@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import { Picker } from 'react-native-wheel-pick';
 import CustomButton from '../../components/CustomButton';
+import { getCurrentUser, updateUser } from '../../lib/supabase';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 const generateList = (min, max, step = 1) => {
   const list = [];
@@ -14,14 +16,23 @@ const generateList = (min, max, step = 1) => {
 };
 
 const WeightScreen = () => {
+  const { userInitData, setUserInitData } = useGlobalContext();
   const [weight, setWeight] = useState('');
   const [unit, setUnit] = useState('kg');
   const weightKG = generateList(20, 300, 1);
   const weightLBS = generateList(50, 200, 1);
 
-  const handleFinish = () => {
-    // Add your logic to handle the data here
-    router.navigate('/home'); // Replace with your next screen
+  const handleFinish = async () => {
+    setUserInitData({...userInitData, weight})
+    try {
+      console.log('init data: ', userInitData);
+      const user = await getCurrentUser();
+      console.log('user: ', user);
+      await updateUser(user, userInitData);
+      router.navigate('/home'); // Replace with your next screen
+    } catch (error) {
+      console.log("Error: ", error.message);
+    }
   };
 
   

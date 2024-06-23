@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import { Picker } from 'react-native-wheel-pick';
 import CustomButton from '../../components/CustomButton';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 const generateList = (min, max, step = 1) => {
   const list = [];
@@ -14,14 +15,15 @@ const generateList = (min, max, step = 1) => {
 };
 
 const HeightScreen = () => {
+  const { userInitData, setUserInitData } = useGlobalContext();
   const [height, setHeight] = useState('');
   const [unit, setUnit] = useState('cm');
   const heightCM = generateList(40, 300, 1);
   const heightFT = generateList(1, 10, 1);
 
   const handleFinish = () => {
-    // Add your logic to handle the data here
-    router.navigate('/Weight'); // Replace with your next screen
+    setUserInitData({...userInitData, height})
+    router.navigate('/weight'); // Replace with your next screen
   };
 
   

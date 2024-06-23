@@ -50,7 +50,7 @@ const DailyTrendsDashboard = ({ data, onPress }) => {
     <View style={styles.container}>
       <View className="my-2 mx-3">
         <Pressable onPress={onPress}>
-          <Text className="text-2xl font-semibold">Total Calories</Text>
+          <Text className="text-2xl font-semibold">Calorie Intake</Text>
         </Pressable>
       </View>
       <View className="items-end">
