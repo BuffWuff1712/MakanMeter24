@@ -6,6 +6,7 @@ import { useGlobalContext } from '../context/GlobalProvider';
 import DailyTrendsDashboard from './DailyTrends';
 import MacroTrendsDashboard from './MacroTrends';
 import WeightTrendsDashboard from './WeightTrend';
+import WaterTrendsDashboard from './WaterTrend';
 
 const screenWidth = Dimensions.get('window').width;
 const scrollableHeight = 550; // Adjust the height of the scrollable area
@@ -27,7 +28,7 @@ const ProgressOverview = () => {
         console.log(result);
         console.log(period);
       }
-      setTestData([result]); // Assuming you want to display the same data for both dashboards
+      setTestData([result, result]); // Assuming you want to display the same data for both dashboards
     };
     fetchData();
   }, [period, user]);
@@ -38,7 +39,7 @@ const ProgressOverview = () => {
     if (index === 0) {
       DashboardComponent = WeightTrendsDashboard;
     } else {
-      DashboardComponent = WeightTrendsDashboard;
+      DashboardComponent = WaterTrendsDashboard;
     }
 
     return (

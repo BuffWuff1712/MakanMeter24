@@ -57,22 +57,27 @@ const CameraScreen = () => {
     
     // Pick Image from photo library
     const pickImage = async () => {
-        let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (result.granted === false) {
-          Alert.alert('Permission to access camera roll is required!');
-          return;
-        }
-    
-        let pickerResult = await ImagePicker.launchImageLibraryAsync({
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-    
-        if (!pickerResult.cancelled) {
-          const base64Image = await encodeImage(pickerResult.assets[0].uri);
-          console.log("Picture processed!");
-          analysePhoto(base64Image);
+        try {
+          let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (!result.granted) {
+            Alert.alert('Permission to access camera roll is required!');
+            return;
+          }
+      
+          let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+          });
+      
+          if (!pickerResult.canceled) {
+            const base64Image = await encodeImage(pickerResult.assets[0].uri);
+            console.log("Picture processed!");
+            analysePhoto(base64Image);
+          }
+        } catch (error) {
+          console.error("Error picking image: ", error);
+          Alert.alert('Something went wrong while picking the image. Please try again.');
         }
       };
 

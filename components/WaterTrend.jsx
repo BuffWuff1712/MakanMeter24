@@ -10,23 +10,21 @@ import TrendsDateRange from './TrendsDateRange';
 import { useGlobalContext } from '../context/GlobalProvider';
 
 
-const data = [];
-
-const WeightTrendsDashboard = ({data, onPress }) => {
+const WaterTrendsDashboard = ({data, onPress }) => {
   const { period } = useGlobalContext();
   const font = useFont(poppins, 12);
   const toolTipFont = useFont(poppins, 14);
   const { state, isActive } = useChartPressState({
     x: 0,
-    y: { weight: 0 },
+    y: { water_intake: 0 },
   });
 
   const value = useDerivedValue(() => {
-    return state.y.weight.value.value + " kg";
+    return state.y.water_intake.value.value + " kg";
   }, [state]);
 
   const textYPosition = useDerivedValue(() => {
-    return state.y.weight.position.value - 15;
+    return state.y.water_intake.position.value - 15;
   }, [value]);
 
   const textXPosition = useDerivedValue(() => {
@@ -38,16 +36,16 @@ const WeightTrendsDashboard = ({data, onPress }) => {
     );
   }, [value, toolTipFont]);
 
-  const maxWeight = Math.max(...data.map(item => item.weight));
+  const maxWeight = Math.max(...data.map(item => item.water_intake));
 
   return (
     <View style={styles.container}>
       <View className="my-2 mx-3">
-        <Text className="text-2xl font-semibold">Weight Progress</Text>
+        <Text className="text-2xl font-semibold">Water Intake</Text>
       </View>
       <View className="my-2 mx-3">
-        <Text className="text-base color-gray-500">Current Weight: {data.at(-1).weight} kg</Text>
-        <Text className="text-base color-gray-500">Goal Weight: 50.0 kg</Text>
+        <Text className="text-base color-gray-500">Average per day: {data.at(-1).water_intake} L</Text>
+        <Text className="text-base color-gray-500">Goal: 2.25 L</Text>
       </View>
       <View className="items-end">
         <TrendsDateRange/>
@@ -56,7 +54,7 @@ const WeightTrendsDashboard = ({data, onPress }) => {
         data={data}
         chartPressState={state}
         xKey={"record_date"}
-        yKeys={["weight"]}
+        yKeys={["water_intake"]}
         padding={15}
         domain={{y:[0, maxWeight + 30]}}
         domainPadding={{top: 30, left: 30, right: 30}}
@@ -68,8 +66,8 @@ const WeightTrendsDashboard = ({data, onPress }) => {
               <>
 
                 <Line
-                  points={points.weight}
-                  color="red"
+                  points={points.water_intake}
+                  color="sky blue"
                   strokeWidth={3}
                   animate={{ type: "timing", duration: 1000 }}
                 />
@@ -85,7 +83,7 @@ const WeightTrendsDashboard = ({data, onPress }) => {
                     />
                     <Circle
                       cx={state.x.position}
-                      cy={state.y.weight.position}
+                      cy={state.y.water_intake.position}
                       r={8}
                       color={"grey"}
                       opacity={0.8}
@@ -115,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WeightTrendsDashboard;
+export default WaterTrendsDashboard;

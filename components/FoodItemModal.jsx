@@ -8,7 +8,7 @@ import { updateMealItemQuantity } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
 
 const formatTo2DPOr2SF = (num) => {
-  if (num >= 1000 || num <= 0.01) {
+  if (num >= 10000 || num <= 0.01) {
     return num.toPrecision(2);
   } else {
     return num.toFixed(2);
@@ -98,15 +98,15 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item }) => {
       onDismiss={() => console.log('modal dismissed')}
     >
       <BottomSheetScrollView>
-        <View className="flex-col bg-emerald py-5 w-full justify-center px-3">
-          <Text className="text-4xl font-bold color-white mt-5 px-3">{item.food_name}</Text>
+        <View className="flex-col bg-emerald py-10 w-full justify-center px-3">
+          <Text className="text-4xl font-bold color-white mt-5 px-3 py-5">{item.food_name}</Text>
           <View className="flex-row justify-evenly mt-10">
             {headerData.map((item, index) => (
               <View className="items-center" key={index}>
-                <Text className="text-2xl font-bold color-white">
+                <Text className="text-xl font-bold color-white">
                   {item.value}{item.unit}
                 </Text>
-                <Text className="text-xl font-semibold color-white">{item.name}</Text>
+                <Text className="text-xl color-white">{item.name}</Text>
               </View>
             ))}
           </View>
