@@ -4,7 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import FoodListItem from '../../components/FoodListItem';
 import CustomButton from '../../components/CustomButton';
 const { fetchNutritionInfoForIngredients } = require('../../lib/edamam.js');
-import { addMeal, addMealNEW, calculateTotals, getMealsForDate, getTrackedMeals, insertFoodItems } from '../../lib/supabase.js';
+import { addMeal, getMealsForDate, getTrackedMeals, } from '../../lib/supabase.js';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import LoadingScreen from '../../components/LoadingScreen.jsx';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -67,7 +67,7 @@ const Results = () => {
       setLoadingContext('adding');
       try {
         console.log('Required JSON data: ',selectedItems);
-        const meal_id = await addMealNEW(selectedItems, meal_type, selectedDate);
+        const meal_id = await addMeal(selectedItems, meal_type, selectedDate);
         const updatedTrackedMeals = await getTrackedMeals(meal_id);
         const mealsData = await getMealsForDate(user, selectedDate);
         setTrackedMeals(updatedTrackedMeals);

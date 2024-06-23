@@ -3,7 +3,7 @@ import { View, TextInput, FlatList, TouchableOpacity, StyleSheet, Keyboard, Text
 import { MaterialIcons } from '@expo/vector-icons';
 import { fetchNutritionInfo, fetchSuggestions } from '../lib/nutritionix'; // Adjust the import path if needed
 import SearchListItem from './SearchListItem';
-import { addMealNEW } from '../lib/supabase';
+import { addMeal } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
 
 const AutoCompleteSearchBar = ({ trackedMeals, meal_type }) => {
@@ -46,7 +46,7 @@ const AutoCompleteSearchBar = ({ trackedMeals, meal_type }) => {
     const handleAdd = async (food_item) => {
         try {
         const nutriData = await fetchNutritionInfo(food_item);
-        await addMealNEW(nutriData, meal_type, selectedDate);
+        await addMeal(nutriData, meal_type, selectedDate);
 
         // Trigger a refresh
         setRefresh((prev) => !prev);
