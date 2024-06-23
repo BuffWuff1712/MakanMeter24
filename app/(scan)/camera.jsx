@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { analyse } from '../../lib/openAI';
 import { encodeImage } from '../../components/ImageProcessor';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 
 
 
@@ -54,6 +55,27 @@ const CameraScreen = () => {
         console.error('Camera mount error:', error);
     };
     
+    // Pick Image from photo library
+    const pickImage = async () => {
+        let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (result.granted === false) {
+          Alert.alert('Permission to access camera roll is required!');
+          return;
+        }
+    
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+    
+        if (!pickerResult.cancelled) {
+          const base64Image = await encodeImage(pickerResult.assets[0].uri);
+          console.log("Picture processed!");
+          analysePhoto(base64Image);
+        }
+      };
+
     // Takes a picture of the food
     const takePicture = async () => {
         if (cameraRef.current && isCameraReady) {
@@ -152,7 +174,7 @@ const CameraScreen = () => {
                         </Text>
                     </View>
                     <View className="justify-between items-center flex-row mx-10">
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => (Alert.alert("Open Photo Library"))}>
+                        <TouchableOpacity activeOpacity={0.7} onPress={pickImage}>
                             <FontAwesome name="photo" size={45} color="black" />
                         </TouchableOpacity>
                         <ShutterButton handlePress={takePicture} />
