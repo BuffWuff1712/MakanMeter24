@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { icons } from '../../constants';
@@ -110,6 +110,8 @@ const Home = () => {
             </View>
           ))}
         </View>
+
+        <Button title={'Go to setGoals'} onPress={() => router.navigate('setGoals')} />
       </ScrollView>
     </SafeAreaView>
   );

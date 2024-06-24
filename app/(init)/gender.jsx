@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Picker } from '@react-native-picker/picker';
 import { Link, router } from 'expo-router';
 import NutrientsProgressBar from '../../components/NutrientsProgressBar';
 import { useGlobalContext } from '../../context/GlobalProvider';

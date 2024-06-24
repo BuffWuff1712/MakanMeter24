@@ -4,18 +4,17 @@ import { ActivityIndicator } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import FoodItemModal from './FoodItemModal';
 
-const FoodLogListItem = ({ item, onDelete }) => {
+const FavouriteListItem = ({ item, onAdd }) => {
   const [borderColor, setBorderColor] = useState('transparent');
   const [isLoading, setIsLoading] = useState(false);
   const bottomSheetModalRef = useRef(null);
   const snapPoints = ['85%'];
 
-  const handlePress = async () => {
+  const handleAddPress = async () => {
     setIsLoading(true);
     // Set a delay before calling the deletion function
     setTimeout(async () => {
-      await onDelete(item.meal_item_id);
-      console.log("item deleted");
+      await onAdd(item);
       setIsLoading(false);
     }, 1000); // 1000 milliseconds (1 second) delay
   };
@@ -28,21 +27,17 @@ const FoodLogListItem = ({ item, onDelete }) => {
       activeOpacity={0.7}
       onPress={() => {bottomSheetModalRef.current?.present();}}
     >
-      <View style={{ flex: 1, gap: 1.5 }}>
+      <View style={{ flex: 1, gap: 5 }}>
         <Text style={styles.foodName}>{item.food_name}</Text>
         <Text style={styles.foodDetails}>
-          {item.calories * item.quantity} cal
-         
-        </Text>
-        <Text style={styles.foodDetails}>
-          🖊 {item.quantity} servings 
+          {item.calories} cal per serving
         </Text>
       </View>
-      <Pressable onPress={handlePress}>
+      <Pressable onPress={handleAddPress}>
         {isLoading ? (
           <ActivityIndicator size="small" color="#000000" />
         ) : (
-          <AntDesign name="closecircleo" size={30} color="#000000" />
+          <AntDesign name="pluscircleo" size={30} color="#000000" />
         )}
       </Pressable>
     </TouchableOpacity>
@@ -50,7 +45,8 @@ const FoodLogListItem = ({ item, onDelete }) => {
       bottomSheetModalRef={bottomSheetModalRef} 
       snapPoints={snapPoints} 
       item={item}
-      modeAdd={false} />
+      modeAdd={true}
+      addPress={handleAddPress} />
     </>
   );
 };
@@ -81,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FoodLogListItem;
+export default FavouriteListItem;
