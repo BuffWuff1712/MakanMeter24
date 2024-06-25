@@ -1,11 +1,13 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import GradeBar from './GradeBar';
 import ServingTypes from './ServingTypes';
-import { updateMealItemQuantity } from '../lib/supabase';
+import CustomButton from './CustomButton';
+import { addFavouriteFood, checkIsFavouriteFood, removeFavouriteFood, updateMealItemQuantity } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
+import { AntDesign } from '@expo/vector-icons';
 
 const formatTo2DPOr2SF = (num) => {
   if (num >= 10000 || num <= 0.01) {
@@ -36,9 +38,11 @@ const nutrientUnits = {
   magnesium: 'mg'
 };
 
-const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item }) => {
-  const { setRefresh } = useGlobalContext();
+const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item, modeAdd, addPress }) => {
+  const { user, setRefresh, isAsyncOperationsComplete,  } = useGlobalContext();
   const [quantity, setQuantity] = useState(item.quantity);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const headerData = [
     { name: 'Calories', value: formatTo2DPOr2SF(item.calories * quantity) },
@@ -68,6 +72,25 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item }) => {
     { name: 'Magnesium', value: formatTo2DPOr2SF(item.magnesium * quantity), unit: nutrientUnits.magnesium }
   ];
 
+  // Check favorite status on component mount
+  useEffect(() => {
+    if (isAsyncOperationsComplete) {
+      const checkIfFavorite = async () => {
+        try {
+          if (!item.food_item_id) {
+            throw new Error('food_item_id is undefined');
+          }
+          const data = await checkIsFavouriteFood(user, item.food_item_id);
+          setIsFavorite(!!data[0]);
+        } catch (error) {
+          // console.error('Error checking favorite food in modal:', error);
+        } 
+      };
+
+      checkIfFavorite();
+    }
+  }, [isAsyncOperationsComplete]);
+
   const changeQuantity = async (newQuantity) => {
     // Skip if input is empty
     if (newQuantity === '') {
@@ -81,7 +104,9 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item }) => {
     }
 
     try {
-      await updateMealItemQuantity(item.meal_item_id, parsedQuantity);
+      if (!modeAdd){
+        await updateMealItemQuantity(item.meal_item_id, parsedQuantity);
+      }
       setQuantity(parsedQuantity);
       setRefresh((prev) => !prev);
     } catch (error) {
@@ -89,6 +114,38 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item }) => {
     }
   };
 
+  const toggleFavorite = async () => {
+    try {
+      if (isFavorite) {
+        await removeFavouriteFood(user, item.food_item_id);
+        Alert.alert('Removed from favourites');
+      } else {
+        await addFavouriteFood(user, item.food_item_id);
+        Alert.alert('Added to favourites');
+      }
+      setIsFavorite((prev) => !prev);
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      console.error('Error toggling favorite status:', error);
+      Alert.alert('Error toggling favorite status');
+    }
+  };
+
+  const handleAddButton = async () => {
+
+    setSubmitting(true);
+
+    try {
+      await addPress();
+    } catch (error) {
+      console.error('Error adding favourite food: ', error)
+    } finally {
+      setTimeout(() => {
+        setSubmitting(false);
+      }, 1900);
+    }
+  }
+  
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
@@ -99,7 +156,13 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item }) => {
     >
       <BottomSheetScrollView>
         <View className="flex-col bg-emerald py-10 w-full justify-center px-3">
-          <Text className="text-4xl font-bold color-white mt-5 px-3 py-5">{item.food_name}</Text>
+          <View className='flex-row items-center justify-between px-5'>
+            <Text className="text-4xl font-bold color-white">{item.food_name}</Text>
+            <TouchableOpacity onPress={toggleFavorite}>
+              <AntDesign name={isFavorite ? "heart" : "hearto"} size={30} color="white"/>
+            </TouchableOpacity>
+          </View>
+          
           <View className="flex-row justify-evenly mt-10">
             {headerData.map((item, index) => (
               <View className="items-center" key={index}>
@@ -167,6 +230,15 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item }) => {
           })}
         </View>
       </BottomSheetScrollView>
+      {modeAdd && (
+        <View className='bg-zinc-100 pt-5 pb-6 px-6'>
+            <CustomButton 
+              title='ADD' 
+              containerStyles={'bg-emerald'}
+              handlePress={handleAddButton}
+              isLoading={isSubmitting}
+            />
+        </View>)}
     </BottomSheetModal>
   );
 };

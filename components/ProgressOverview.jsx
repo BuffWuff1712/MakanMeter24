@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Dimensions, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { MonthWeightHistory, getDailyTrends, getWeeklyTrends, weekWeightHistory } from '../lib/supabase';
+import { userMonthHistory, userWeekHistory } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
-import DailyTrendsDashboard from './DailyTrends';
-import MacroTrendsDashboard from './MacroTrends';
 import WeightTrendsDashboard from './WeightTrend';
 import WaterTrendsDashboard from './WaterTrend';
 
@@ -20,13 +18,10 @@ const ProgressOverview = () => {
   useEffect(() => {
     const fetchData = async () => {
       let result;
-      if (period === 1) {
-        result = await MonthWeightHistory(user);
-        console.log(result);
+      if (period === 0) {
+        result = await userWeekHistory(user);
       } else {
-        result = await weekWeightHistory(user);
-        console.log(result);
-        console.log(period);
+        result = await userMonthHistory(user);
       }
       setTestData([result, result]); // Assuming you want to display the same data for both dashboards
     };

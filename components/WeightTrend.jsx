@@ -46,8 +46,12 @@ const WeightTrendsDashboard = ({data, onPress }) => {
         <Text className="text-2xl font-semibold">Weight Progress</Text>
       </View>
       <View className="my-2 mx-3">
-        <Text className="text-base color-gray-500">Current Weight: {data.at(-1).weight} kg</Text>
-        <Text className="text-base color-gray-500">Goal Weight: 50.0 kg</Text>
+        <Text className="text-xl color-gray-500">
+            Current Weight: <Text className="text-xl color-black font-semibold">{data.at(-1).weight.toFixed(1)} kg</Text>
+        </Text>
+        <Text className="text-xl color-gray-500">
+            Goal: <Text className="text-xl color-emerald font-semibold">50.0 kg</Text>
+        </Text>
       </View>
       <View className="items-end">
         <TrendsDateRange/>
@@ -87,7 +91,7 @@ const WeightTrendsDashboard = ({data, onPress }) => {
                       cx={state.x.position}
                       cy={state.y.weight.position}
                       r={8}
-                      color={"grey"}
+                      color={"red"}
                       opacity={0.8}
                     />
                   </>

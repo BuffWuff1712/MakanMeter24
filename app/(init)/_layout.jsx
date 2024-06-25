@@ -33,6 +33,13 @@ const InitLayout = () => {
             headerShown: false
           }}
         /> 
+
+        <Stack.Screen 
+          name="setGoals"
+          options={{
+            headerShown: false
+          }}
+        /> 
       </Stack>
 
       <StatusBar backgroundColor="#161622" style="dark" />

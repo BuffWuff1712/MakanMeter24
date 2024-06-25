@@ -13,7 +13,7 @@ import { Button } from 'react-native-paper';
 
 const Results = () => {
   const { meal_type } = useLocalSearchParams();
-  const { user, setTrackedMeals, setMealsData, selectedDate,} = useGlobalContext();
+  const { user, setTrackedMeals, setMealsData, selectedDate, setRefresh} = useGlobalContext();
   const [foodItems, setFoodItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -66,10 +66,11 @@ const Results = () => {
       setIsLoading(true);
       setLoadingContext('adding');
       try {
-        console.log('Required JSON data: ',selectedItems);
         const meal_id = await addMeal(selectedItems, meal_type, selectedDate);
         const updatedTrackedMeals = await getTrackedMeals(meal_id);
         const mealsData = await getMealsForDate(user, selectedDate);
+  
+        setRefresh((prev) => !prev);
         setTrackedMeals(updatedTrackedMeals);
         setMealsData(mealsData);
 
@@ -81,13 +82,13 @@ const Results = () => {
         console.error('Error adding meal:', error);
         Alert.alert('Error', 'Failed to add meal. Please try again.');
       } finally {
-        setIsLoading(true);
+        setIsLoading(false); // Set loading state to false
       }
     } else {
       Alert.alert('No items selected', 'Please select at least one item to add.');
     }
   };
-
+  
   const goBack = () => {
     router.back();
   };

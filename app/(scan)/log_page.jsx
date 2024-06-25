@@ -1,29 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
-import { getOrCreateAndFetchMeals, deleteMealItem } from '../../lib/supabase';
+import { getOrCreateAndFetchMeals, deleteMealItem, getFavoriteFoods, addMeal } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import DailyIntake from '../../components/DailyIntake';
 import FoodHistory from '../../components/FoodHistory.jsx';
 import AutoCompleteSearchBar from '../../components/AutoCompleteSearchBar.jsx';
+import FavouriteListItem from '../../components/FavouriteListItem.jsx';
 
 const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
-  const { trackedMeals, setTrackedMeals, selectedDate, user, refresh, setRefresh, mealsData } = useGlobalContext();
+  const { trackedMeals, setTrackedMeals, isAsyncOperationsComplete, setIsAsyncOperationsComplete,
+    selectedDate, user, refresh, setRefresh, mealsData } = useGlobalContext();
+  const [favourites, setFavourites] = useState([]);
   const [selectedTab, setSelectedTab] = useState('meals');
   const router = useRouter();
 
   useEffect(() => {
     const fetchTrackedData = async () => {
       try {
+        setIsAsyncOperationsComplete(false); 
         const data = await getOrCreateAndFetchMeals(user, meal_type, selectedDate);
+        const favouriteFoods = await getFavoriteFoods(user);
         setTrackedMeals(data ? data : []);
+        setFavourites(favouriteFoods ? favouriteFoods : []);
       } catch (error) {
         console.error('Error fetching tracked data:', error);
+      } finally {
+        setIsAsyncOperationsComplete(true); // Signal that the async operations have completed
       }
     };
+
     fetchTrackedData();
   }, [meal_type, refresh, user, selectedDate]);
 
@@ -36,6 +45,12 @@ const Log_Page = () => {
 
   const goBack = () => {
     router.back();
+  };
+
+  const handleAdd = async (foodItem) => {
+    await addMeal([foodItem], meal_type, selectedDate);
+    setRefresh((prev) => !prev);
+    Alert.alert('item added to tracked');
   };
 
   const handleDelete = async (mealItemId) => {
@@ -102,22 +117,43 @@ const Log_Page = () => {
         {selectedTab === 'meals' && (
           <View style={styles.content}>
             <Text className="text-xl my-3 mx-2 font-semibold color-gray-500">Tracking</Text>
+            {trackedMeals.length > 0 ? (
             <FlatList
               data={trackedMeals}
               renderItem={({ item }) => <FoodLogListItem item={item} onDelete={handleDelete} />}
               keyExtractor={(item, index) => index.toString()}
               contentContainerStyle={{ gap: 5 }}
             />
+            ) : (
+              <ScrollView style={styles.content}>
+                <View style={styles.emptyState}>
+                  <Text style={styles.emptyText}>Start Logging your Food!</Text>
+                  <Text style={styles.emptySubText}>
+                    To begin, scan your meal or search it up
+                  </Text>
+                </View>
+              </ScrollView>
+            )}
           </View>
         )}
         {selectedTab === 'favorites' && (
-          <ScrollView style={styles.content}>
-            <View style={styles.emptyState}>
-              <MaterialIcons name="favorite-border" size={48} color="gray" />
-              <Text style={styles.emptyText}>No favorite foods yet</Text>
-              <Text style={styles.emptySubText}>As you track, save your favorite items like tomato, egg or banana</Text>
+          <View style={styles.content}>
+            {favourites.length > 0 ? (
+            <FlatList
+              data={favourites}
+              renderItem={({ item }) => <FavouriteListItem item={item} onAdd={handleAdd} />}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{ gap: 5 }}
+            />
+            ) : (
+              <View style={styles.emptyState}>
+                <MaterialIcons name="favorite-border" size={48} color="gray" />
+                <Text style={styles.emptyText}>No favorite foods yet</Text>
+                <Text style={styles.emptySubText}>As you track, save your favorite items like tomato, egg or banana</Text>
             </View>
-          </ScrollView>
+            )}
+            
+          </View>
         )}
         {selectedTab === 'recent' && (
           <View style={styles.content}>

@@ -20,11 +20,8 @@ const AnalysisOverview = () => {
       let result;
       if (period === 1) {
         result = await getWeeklyTrends(user);
-        console.log(result);
       } else {
         result = await getDailyTrends(user);
-        console.log(result);
-        console.log(period);
       }
       setTestData([result, result]); // Assuming you want to display the same data for both dashboards
     };

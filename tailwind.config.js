@@ -24,6 +24,9 @@ module.exports = {
         blue: {
           DEFAULT: "#60a5fa",
         },
+        sky: {
+          DEFAULT: "#0ea5e9",
+        },
         emerald: {
           DEFAULT: "#10b981",
           300: "#6ee7b7"
@@ -34,6 +37,7 @@ module.exports = {
         zinc: {
           600: "#52525b",
         },
+      
       },
       fontFamily: {
         pthin: ["Poppins-Thin", "sans-serif"],

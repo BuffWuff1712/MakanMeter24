@@ -15,6 +15,7 @@ import { createContext, useContext, useState,
       const [mealsData, setMealsData] = useState({});
       const [period, setPeriod] = useState(0);
       const [macros, setMacros] = useState(null);
+      const [isAsyncOperationsComplete, setIsAsyncOperationsComplete] = useState(true);
       const [userInitData, setUserInitData] = useState({
         gender: '',
         age: '',
@@ -68,6 +69,8 @@ import { createContext, useContext, useState,
               setMacros,
               userInitData,
               setUserInitData,
+              isAsyncOperationsComplete, 
+              setIsAsyncOperationsComplete,
             }}
           >
             {children}
