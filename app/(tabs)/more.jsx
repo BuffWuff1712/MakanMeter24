@@ -512,12 +512,12 @@ const styles = StyleSheet.create({
 export default Profile;*/
 
 //new draft here 
-import React, { useState, useEffect } from 'react';
+/*import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, FlatList, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Picker } from '@react-native-picker/picker'; // Corrected import statement
+import { Picker } from '@react-native-picker/picker';
 import { icons } from '../../constants';
 import { getEmail, signOut, changePassword } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
@@ -554,7 +554,7 @@ const Profile = () => {
         const storedUsername = await AsyncStorage.getItem('username');
         if (storedUsername) {
           setNewUsername(storedUsername);
-          setTempUsername(storedUsername); // Initialize tempUsername with stored username
+          setTempUsername(storedUsername); 
         } else {
           setNewUsername(user?.username || 'Username');
           setTempUsername(user?.username || 'Username');
@@ -579,9 +579,9 @@ const Profile = () => {
     };
 
     fetchEmail();
-    fetchProfileImage(); // Fetch profile image URI on component mount
-    fetchUsername(); // Fetch username on component mount
-    fetchUserDetails(); // Fetch height, weight, and gender on component mount
+    fetchProfileImage(); 
+    fetchUsername(); 
+    fetchUserDetails(); 
   }, [user]);
 
   const fetchProfileImage = async () => {
@@ -597,8 +597,8 @@ const Profile = () => {
 
   const saveProfileImage = async (imageURI) => {
     try {
-      await AsyncStorage.setItem('profileImageURI', imageURI); // Save profile image URI to AsyncStorage
-      setProfileImage(imageURI); // Update state with the new URI
+      await AsyncStorage.setItem('profileImageURI', imageURI); 
+      setProfileImage(imageURI); 
     } catch (error) {
       console.error('Error saving profile image:', error);
     }
@@ -611,9 +611,9 @@ const Profile = () => {
         return;
       }
   
-      await AsyncStorage.setItem('username', username); // Save username to AsyncStorage
-      setNewUsername(username); // Update state with the new username
-      setTempUsername(username); // Update tempUsername with the new username
+      await AsyncStorage.setItem('username', username); 
+      setNewUsername(username); 
+      setTempUsername(username); 
     } catch (error) {
       console.error('Error saving username:', error);
     }
@@ -671,7 +671,7 @@ const Profile = () => {
 
     if (!pickerResult.cancelled) {
       console.log('Selected image URI:', pickerResult.assets[0].uri);
-      saveProfileImage(pickerResult.assets[0].uri); // Save URI to AsyncStorage and update state
+      saveProfileImage(pickerResult.assets[0].uri); 
     }
   };
 
@@ -1057,6 +1057,566 @@ const styles = StyleSheet.create({
   logoutButtonText: {
     fontSize: 18,
     color: 'white',
+  },
+});
+
+export default Profile;*/
+
+//new draft here 
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, FlatList, TextInput } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker';
+import { icons } from '../../constants';
+import { getEmail, signOut, changePassword } from '../../lib/supabase';
+import { useGlobalContext } from '../../context/GlobalProvider';
+import { router } from 'expo-router';
+
+const Profile = () => {
+  const { user, setUser, setIsLoggedIn } = useGlobalContext();
+  const [profileImage, setProfileImage] = useState(null);
+  const [emailHandle, setEmailHandle] = useState('');
+  const [friendsModalVisible, setFriendsModalVisible] = useState(false);
+  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [editUsernameModalVisible, setEditUsernameModalVisible] = useState(false);
+  const [editDetailsModalVisible, setEditDetailsModalVisible] = useState(false);
+  const [changePasswordModalVisible, setChangePasswordModalVisible] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [tempUsername, setTempUsername] = useState('');
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+  const [gender, setGender] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
+  useEffect(() => {
+    const fetchEmail = async () => {
+      if (user) {
+        const fetchedEmail = await getEmail(user);
+        console.log(fetchedEmail);
+        setEmailHandle(fetchedEmail);
+      }
+    };
+
+    const fetchUsername = async () => {
+      try {
+        const storedUsername = await AsyncStorage.getItem('username');
+        if (storedUsername) {
+          setNewUsername(storedUsername);
+          setTempUsername(storedUsername); 
+        } else {
+          setNewUsername(user?.username || 'Username');
+          setTempUsername(user?.username || 'Username');
+        }
+      } catch (error) {
+        console.error('Error fetching username:', error);
+      }
+    };
+
+    const fetchUserDetails = async () => {
+      try {
+        const storedHeight = await AsyncStorage.getItem('height');
+        const storedWeight = await AsyncStorage.getItem('weight');
+        const storedGender = await AsyncStorage.getItem('gender');
+        
+        if (storedHeight) setHeight(storedHeight);
+        if (storedWeight) setWeight(storedWeight);
+        if (storedGender) setGender(storedGender);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+
+    fetchEmail();
+    fetchProfileImage(); 
+    fetchUsername(); 
+    fetchUserDetails(); 
+  }, [user]);
+
+  const fetchProfileImage = async () => {
+    try {
+      const storedProfileImage = await AsyncStorage.getItem('profileImageURI');
+      if (storedProfileImage !== null) {
+        setProfileImage(storedProfileImage);
+      }
+    } catch (error) {
+      console.error('Error fetching profile image:', error);
+    }
+  };
+
+  const saveProfileImage = async (imageURI) => {
+    try {
+      await AsyncStorage.setItem('profileImageURI', imageURI); 
+      setProfileImage(imageURI); 
+    } catch (error) {
+      console.error('Error saving profile image:', error);
+    }
+  };
+
+  const saveUsername = async (username) => {
+    try {
+      if (username.trim() === '') {
+        Alert.alert('Error', 'Username cannot be blank.');
+        return;
+      }
+  
+      await AsyncStorage.setItem('username', username); 
+      setNewUsername(username); 
+      setTempUsername(username); 
+    } catch (error) {
+      console.error('Error saving username:', error);
+    }
+  };
+
+  const saveUserDetails = async (height, weight, gender) => {
+    try {
+      await AsyncStorage.setItem('height', height);
+      await AsyncStorage.setItem('weight', weight);
+      await AsyncStorage.setItem('gender', gender);
+    } catch (error) {
+      console.error('Error saving user details:', error);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    const { success, error } = await changePassword(emailHandle, currentPassword, newPassword);
+
+    if (success) {
+      Alert.alert('Success', 'Password changed successfully.');
+      setChangePasswordModalVisible(false);
+      setCurrentPassword('');
+      setNewPassword('');
+    } else {
+      Alert.alert('Error', error);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await signOut();
+      
+      setIsLoggedIn(false);
+      router.replace('/sign-in');
+      setUser('');
+    } catch (error) {
+      console.error('Error on logout:', error);
+    }
+  };
+
+
+
+  const pickImage = async () => {
+    let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (result.granted === false) {
+      Alert.alert('Permission to access camera roll is required!');
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!pickerResult.cancelled) {
+      console.log('Selected image URI:', pickerResult.assets[0].uri);
+      saveProfileImage(pickerResult.assets[0].uri); 
+    }
+  };
+
+  const placeholderFriends = ['Friend 1', 'Friend 2', 'Friend 3', 'Friend 4', 'Friend 5'];
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={pickImage} style={styles.avatarContainer}>
+          <Image
+            source={profileImage ? { uri: profileImage } : icons.eye}
+            style={styles.avatar}
+          />
+        </TouchableOpacity>
+        <View style={styles.userInfo}>
+          <Text style={styles.username}>{newUsername}</Text>
+          <Text style={styles.email}>{emailHandle}</Text>
+          <View style={styles.detailsContainer}>
+            <Text style={styles.detailText}>Height: {height}</Text>
+            <Text style={styles.detailText}>Weight: {weight}</Text>
+            <Text style={styles.detailText}>Gender: {gender}</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.tabsContainer}>
+        <View style={styles.tabRow}>
+          <TouchableOpacity style={styles.tab} onPress={() => setFriendsModalVisible(true)}>
+            <Image source={icons.friends} style={styles.tabIcon} />
+            <Text style={styles.tabText}>Friends</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tab}>
+            <Image source={icons.photos} style={styles.tabIcon} />
+            <Text style={styles.tabText}>Photos</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.tabRow}>
+          <TouchableOpacity style={styles.tab}>
+            <Image source={icons.posts} style={styles.tabIcon} />
+            <Text style={styles.tabText}>Posts</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tab} onPress={() => setSettingsModalVisible(true)}>
+            <Image source={icons.settings} style={styles.tabIcon} />
+            <Text style={styles.tabText}>Settings</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={friendsModalVisible}
+        onRequestClose={() => {
+          setFriendsModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Friends</Text>
+            <FlatList
+              data={placeholderFriends}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => <Text style={styles.friendItem}>{item}</Text>}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setFriendsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={settingsModalVisible}
+        onRequestClose={() => {
+          setSettingsModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setEditUsernameModalVisible(true);
+                setSettingsModalVisible(false);
+              }}
+            >
+              <Text style={styles.modalButtonText}>Edit Username</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setEditDetailsModalVisible(true);
+                setSettingsModalVisible(false);
+              }}
+            >
+              <Text style={styles.modalButtonText}>Edit Details</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setChangePasswordModalVisible(true);
+                setSettingsModalVisible(false);
+              }}
+            >
+              <Text style={styles.modalButtonText}>Change Password</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={logout}
+            >
+              <Text style={styles.modalButtonText}>Logout</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setSettingsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={editUsernameModalVisible}
+        onRequestClose={() => {
+          setEditUsernameModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Edit Username</Text>
+            <TextInput
+              style={styles.input}
+              value={tempUsername}
+              onChangeText={setTempUsername}
+            />
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={() => {
+                saveUsername(tempUsername);
+                setEditUsernameModalVisible(false);
+              }}
+            >
+              <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setEditUsernameModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={editDetailsModalVisible}
+        onRequestClose={() => {
+          setEditDetailsModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Edit Details</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Height"
+              value={height}
+              onChangeText={setHeight}
+              keyboardType="numeric"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Weight"
+              value={weight}
+              onChangeText={setWeight}
+              keyboardType="numeric"
+            />
+            <Picker
+              selectedValue={gender}
+              style={styles.input}
+              onValueChange={(itemValue) => setGender(itemValue)}
+            >
+              <Picker.Item label="Select Gender" value="" />
+              <Picker.Item label="Male" value="Male" />
+              <Picker.Item label="Female" value="Female" />
+              <Picker.Item label="Other" value="Other" />
+            </Picker>
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={() => {
+                saveUserDetails(height, weight, gender);
+                setEditDetailsModalVisible(false);
+              }}
+            >
+              <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setEditDetailsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={changePasswordModalVisible}
+        onRequestClose={() => {
+          setChangePasswordModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Change Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Current Password"
+              secureTextEntry
+              value={currentPassword}
+              onChangeText={setCurrentPassword}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="New Password"
+              secureTextEntry
+              value={newPassword}
+              onChangeText={setNewPassword}
+            />
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={handleChangePassword}
+            >
+              <Text style={styles.saveButtonText}>Change Password</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setChangePasswordModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 20,
+    borderWidth: 1,
+    borderColor: '#DDD',
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: 'beige',
+  },
+  avatarContainer: {
+    marginRight: 20,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  userInfo: {
+    flex: 1,
+  },
+  username: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  email: {
+    fontSize: 16,
+    color: 'gray',
+  },
+  detailsContainer: {
+    marginTop: 10,
+  },
+  detailText: {
+    fontSize: 14,
+  },
+  tabsContainer: {
+    marginTop: 20,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingHorizontal: '10%', 
+  },
+  tabRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 10,
+  },
+  tab: {
+    alignItems: 'center',
+    marginHorizontal: 10,
+    paddingVertical: 40,
+    paddingHorizontal: 50,
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 10,
+    backgroundColor: 'beige', 
+  },
+  tabIcon: {
+    width: 50,
+    height: 50,
+    marginBottom: 5,
+  },
+  tabText: {
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  friendItem: {
+    fontSize: 18,
+    marginVertical: 5,
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+  },
+  modalButton: {
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+  },
+  input: {
+    width: '100%',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  saveButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  saveButtonText: {
+    color: '#FFF',
+    fontSize: 16,
   },
 });
 
