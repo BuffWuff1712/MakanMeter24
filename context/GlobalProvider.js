@@ -21,7 +21,9 @@ import { createContext, useContext, useState,
         age: '',
         height: '',
         weight: '',
+        activityLevel: 'Sedentary',
       });
+    
 
       useEffect(() => {
         const initializeUser = async () => {

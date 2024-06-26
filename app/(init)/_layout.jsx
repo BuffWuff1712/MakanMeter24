@@ -35,11 +35,26 @@ const InitLayout = () => {
         /> 
 
         <Stack.Screen 
+          name="setCalories"
+          options={{
+            headerShown: false
+          }}
+        /> 
+
+        <Stack.Screen 
+          name="setActiveLevel"
+          options={{
+            headerShown: false
+          }}
+        />     
+
+        <Stack.Screen 
           name="setGoals"
           options={{
             headerShown: false
           }}
         /> 
+
       </Stack>
 
       <StatusBar backgroundColor="#161622" style="dark" />

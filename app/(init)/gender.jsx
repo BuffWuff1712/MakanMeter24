@@ -10,7 +10,7 @@ const GenderScreen = () => {
   const [gender, setGender] = useState('');
 
   const handleNext = () => {
-    setUserInitData({...userInitData, gender})
+    setUserInitData(prev => ({...prev, gender: gender}))
     router.navigate('/age'); // Navigate to the AgeScreen
   };
 

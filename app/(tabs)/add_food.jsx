@@ -11,8 +11,8 @@ import {
 import React from 'react';
 import { useRouter } from 'expo-router';
 import { useGlobalContext } from '../../context/GlobalProvider';
-import { getDate } from '../../lib/supabase';
 import { icons } from '../../constants';
+import { getDate } from '../../lib/calculations/getDate';
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,8 +22,7 @@ const Add_Food = () => {
 
   const handleMealPress = (mealType) => {
     if (mealType === 'Set Goal') {
-      // router.navigate('set_goal_page'); // Navigate to the Set Goal page
-      Alert.alert("Navigate to Set Goal page");
+      router.navigate('setGoals'); // Navigate to the Set Goal page
     } else {
       router.navigate({
         pathname: 'log_page',

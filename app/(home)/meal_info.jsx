@@ -4,8 +4,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { PieChart } from 'react-native-chart-kit';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
-import { calculateTotals, deleteMealItem, getDate, getOrCreateAndFetchMeals} from '../../lib/supabase';
+import { deleteMealItem, getOrCreateAndFetchMeals} from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
+import { getDate } from '../../lib/calculations/getDate';
+import { calculateTotals } from '../../lib/calculations/calculateTotals';
 
 const MealInfoPage = () => {
     const { meal_type } = useLocalSearchParams();

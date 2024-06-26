@@ -42,6 +42,12 @@ import friends from "../assets/icons/friends.png";
 import photos from "../assets/icons/photos.png";
 import posts from "../assets/icons/posts.png";
 
+import sedentary from "../assets/icons/sedentary.png";
+import yoga from "../assets/icons/yoga.png";
+import training from "../assets/icons/training.png";
+import soccer_player from "../assets/icons/soccer-player.png";
+import cycling from "../assets/icons/cycling.png";
+
 export default {
   play,
   bookmark,
@@ -84,4 +90,9 @@ export default {
   friends,
   photos,
   posts,
+  sedentary,
+  yoga,
+  training,
+  soccer_player,
+  cycling,
 };

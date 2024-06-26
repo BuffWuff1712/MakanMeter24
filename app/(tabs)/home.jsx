@@ -15,8 +15,12 @@ const Home = () => {
   const { selectedDate, user, mealsData, setMealsData, refresh, setRefresh } = useGlobalContext();
 
   const fetchMeals = async (date) => {
-    const data = await getMealsForDate(user, date);
-    setMealsData(data);
+    try {
+      const data = await getMealsForDate(user, date);
+      setMealsData(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Use useCallback to create a memoized version of the debounced function
@@ -111,7 +115,6 @@ const Home = () => {
           ))}
         </View>
 
-        <Button title={'Go to setGoals'} onPress={() => router.navigate('setGoals')} />
       </ScrollView>
     </SafeAreaView>
   );
