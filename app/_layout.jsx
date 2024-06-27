@@ -111,7 +111,6 @@ const RootLayout = () => {
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="(scan)" options={{ headerShown: false }} />
             <Stack.Screen name="(home)" options={{ headerShown: false }} />
-            <Stack.Screen name="(test)" options={{ headerShown: false }} /> {/* Ensure this line is present */}
           </Stack>
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
