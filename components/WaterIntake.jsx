@@ -22,12 +22,12 @@ const WaterIntake = () => {
         const fetchedActiveDrink = Math.floor(fetchedVolume / volumePerCup) - 1;
         setActiveDrink(fetchedActiveDrink); // Update activeDrink state based on fetched volume
       } catch (error) {
-        console.error('Error fetching water intake data: ', error);
+        console.log('Error fetching water intake data: ', error);
       }
     };
 
     fetchData();
-  }, [selectedDate, user]); // Fetch data whenever the selectedDate or user changes
+  }, [selectedDate]); // Fetch data whenever the selectedDate or user changes
 
   const handleDrinkPress = async (index) => {
     try {
@@ -36,7 +36,7 @@ const WaterIntake = () => {
       await updateWaterIntake(user, getDate(selectedDate), newTotalVolumeConsumed);
       setRefresh((prev) => !prev);
     } catch (error) {
-      console.error('Error updating water intake: ', error);
+      console.log('Error updating water intake: ', error);
     }
   };
 

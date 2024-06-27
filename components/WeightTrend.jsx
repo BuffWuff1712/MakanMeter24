@@ -10,8 +10,6 @@ import TrendsDateRange from './TrendsDateRange';
 import { useGlobalContext } from '../context/GlobalProvider';
 
 
-const data = [];
-
 const WeightTrendsDashboard = ({data, goal }) => {
   const { period } = useGlobalContext();
   const font = useFont(poppins, 12);

@@ -14,17 +14,7 @@ import WaterIntake from '../../components/WaterIntake';
 
 const Home = () => {
   const { selectedDate, user, mealsData, setMealsData, refresh, setRefresh } = useGlobalContext();
-  const totalDrinks = 8; // Total number of drinks user can log
-  const volumePerCup = 0.25; // Volume per cup in liters (e.g., 0.25 L per cup)
-  const [activeDrink, setActiveDrink] = useState(-1); // Tracks the last active cup
   
-  // Calculate total volume consumed
-  const totalVolumeConsumed = (activeDrink + 1) * volumePerCup;
-  
-  const handleDrinkPress = (index) => {
-    setActiveDrink(index);
-  };
-
   const fetchMeals = async (date) => {
     try {
       const data = await getMealsForDate(user, date);

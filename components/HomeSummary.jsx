@@ -34,7 +34,6 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
           arcSweepAngle={210}
           tintColor="teal"
           tintColorSecondary='limegreen'
-          onAnimationComplete={() => console.log('onAnimationComplete')}
           backgroundColor="whitesmoke">
           {
             () => (
@@ -54,8 +53,8 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
 
       <View style={styles.nutrientsContainer}>
         {data.map((item, index) => (
+          <View key={index} className='items-center'>
           <AnimatedCircularProgress
-            key={index}
             size={100}
             width={5}
             lineCap='round'
@@ -64,7 +63,6 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
             rotation={365}
             tintColor={item.colorStart}
             tintColorSecondary={item.colorEnd}
-            onAnimationComplete={() => console.log('onAnimationComplete')}
             backgroundColor="whitesmoke">
             {
               () => (
@@ -80,7 +78,10 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
               )
             }
           </AnimatedCircularProgress>
+          <Text className='font-psemibold'>{item.label}</Text>
+          </View>
         ))}
+        
       </View>
       
     </View>
@@ -91,7 +92,7 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
 
 const styles = StyleSheet.create({
     container: {
-      height: 330,
+      height: 350,
       width: 350,
       borderRadius: 10,
       padding: 4,
