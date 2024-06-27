@@ -10,9 +10,20 @@ import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
 import { debounce } from 'lodash';
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
+import WaterIntake from '../../components/WaterIntake';
 
 const Home = () => {
   const { selectedDate, user, mealsData, setMealsData, refresh, setRefresh } = useGlobalContext();
+  const totalDrinks = 8; // Total number of drinks user can log
+  const volumePerCup = 0.25; // Volume per cup in liters (e.g., 0.25 L per cup)
+  const [activeDrink, setActiveDrink] = useState(-1); // Tracks the last active cup
+  
+  // Calculate total volume consumed
+  const totalVolumeConsumed = (activeDrink + 1) * volumePerCup;
+  
+  const handleDrinkPress = (index) => {
+    setActiveDrink(index);
+  };
 
   const fetchMeals = async (date) => {
     try {
@@ -115,6 +126,10 @@ const Home = () => {
           ))}
         </View>
 
+        <View className='px-2'>
+          {/* WaterIntake Component below */}
+          <WaterIntake/>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -128,6 +143,24 @@ const styles = StyleSheet.create({
   mealItem: {
     marginBottom: 10, // Add margin between items
   },
+  card: {
+    backgroundColor: 'white',
+    height: 150,
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  icon: {
+    height: 50,
+    width: 42,
+    marginHorizontal: 2, // Add space between icons
+  }
 });
 
 export default Home;

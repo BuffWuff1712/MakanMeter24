@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Dimensions, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { userMonthHistory, userWeekHistory } from '../lib/supabase';
+import { fetchGoal, userMonthHistory, userWeekHistory } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
 import WeightTrendsDashboard from './WeightTrend';
 import WaterTrendsDashboard from './WaterTrend';
@@ -11,22 +11,29 @@ const scrollableHeight = 550; // Adjust the height of the scrollable area
 
 
 const ProgressOverview = () => {
-  const { user, period } = useGlobalContext();
+  const { user, period, refresh } = useGlobalContext();
   const [index, setIndex] = useState(0);
+  const [ weightGoal, setWeightGoal ] = useState(0);
   const [testData, setTestData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      let result;
-      if (period === 0) {
-        result = await userWeekHistory(user);
-      } else {
-        result = await userMonthHistory(user);
-      }
-      setTestData([result, result]); // Assuming you want to display the same data for both dashboards
-    };
+      try {
+        let result;
+        const temp = await fetchGoal(user, 'weight');
+        if (period === 0) {
+          result = await userWeekHistory(user);
+        } else {
+          result = await userMonthHistory(user);
+        }
+        setWeightGoal(temp);
+        setTestData([result, result]); // Assuming you want to display the same data for both dashboards
+      } catch(error) {
+        console.error('Error in Progress Overview: ', error);
+      };
+    }
     fetchData();
-  }, [period, user]);
+  }, [period, user, refresh]);
 
 
   const renderDashboardItem = ({ item, index }) => {
@@ -39,7 +46,7 @@ const ProgressOverview = () => {
 
     return (
     <Animatable.View animation="fadeIn" duration={800} style={styles.carouselItem}>
-      <DashboardComponent data={item}/>
+      <DashboardComponent data={item} goal={weightGoal}/>
     </Animatable.View>
   )};
 

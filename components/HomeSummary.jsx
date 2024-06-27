@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { ProgressChart } from 'react-native-chart-kit';
-
+import * as Progress from 'react-native-progress';
 
 
 const screenWidth = Dimensions.get('window').width;
@@ -17,7 +17,18 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
   return (
     <View style={styles.container}>
       <View style={styles.progressContainer}>
-        <Text style={styles.label}>Daily intake</Text>
+        <Text style={styles.label}>Daily Intake</Text>
+        <Progress.Bar 
+          progress={calories.consumed/calories.total} 
+          height={20} 
+          width={350}
+          borderRadius={30}
+          color='limegreen'
+          unfilledColor='whitesmoke'
+          borderColor='whitesmoke' 
+        >
+
+        </Progress.Bar>
         <Text style={styles.calories}>{calories.consumed} / {calories.total} cal</Text>
       </View>
       <ProgressChart
@@ -59,7 +70,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     label: {
-      fontSize: 16,
+      fontSize: 20,
       fontWeight: 'bold',
     },
     calories: {

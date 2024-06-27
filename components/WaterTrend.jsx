@@ -49,7 +49,7 @@ const WaterTrendsDashboard = ({data, onPress }) => {
             Average per day: <Text className="text-xl color-black font-semibold">{averageWaterIntake.toFixed(2)} L</Text>
         </Text>
         <Text className="text-xl color-gray-500">
-            Goal: <Text className="text-xl color-sky font-semibold">2.25 L</Text>
+            Goal: <Text className="text-xl color-sky font-semibold">2.00 L</Text>
         </Text>
       </View>
       <View className="items-end">

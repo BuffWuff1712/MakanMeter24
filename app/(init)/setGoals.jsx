@@ -19,6 +19,7 @@ const goalTypes = [
 ];
 
 const SetGoal = () => {
+  const { refresh, setRefresh } = useGlobalContext();
   const [goalType, setGoalType] = useState('');
   const [goalValue, setGoalValue] = useState(0);
   const [targetValue, setTargetValue] = useState('');
@@ -46,7 +47,7 @@ const SetGoal = () => {
     }
 
     fetchData();
-  }, [goalType]);
+  }, [goalType, refresh]);
 
   const handleSubmit = async () => {
     // Validate input
@@ -63,6 +64,7 @@ const SetGoal = () => {
       Keyboard.dismiss();
       await submitNewTarget(user, goalType, targetValue, startDate, endDate);
       setTargetValue('');
+      setRefresh((prev) => !prev);
       Alert.alert('Changes Submitted!');
     } catch (error) {
       console.error('Error submitting new targets: ', error);
@@ -89,7 +91,7 @@ const SetGoal = () => {
         return (
           <View style={styles.value}>
               <Text className='flex-1 text-xl font-semibold'>Current Goal: </Text>
-              <Text className='flex-1 text-xl font-semibold text-right'>{goalValue} Kg</Text>
+              <Text className='flex-1 text-xl font-semibold text-right'>{goalValue.toFixed(1)} Kg</Text>
           </View>
           
         );

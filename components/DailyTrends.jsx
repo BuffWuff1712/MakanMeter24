@@ -117,8 +117,8 @@ const DailyTrendsDashboard = ({ data, onPress }) => {
         <View className="flex-row justify-between w-20 mx-5">
           <View className="items-center px-2">
             <Text className="text-base">Avg</Text>
-            <Text>{totalCalories}</Text>
-            <Text>{averageCalories}</Text>
+            <Text>{Math.round(totalCalories)}</Text>
+            <Text>{Math.round(averageCalories)}</Text>
           </View>
           <View className="items-center px-2">
             <Text className="text-base">Goal</Text>

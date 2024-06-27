@@ -42,7 +42,7 @@ const InitLayout = () => {
         /> 
 
         <Stack.Screen 
-          name="setActiveLevel"
+          name="setActivityLevel"
           options={{
             headerShown: false
           }}
