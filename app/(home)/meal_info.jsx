@@ -65,21 +65,21 @@ const MealInfoPage = () => {
                         {
                             name: 'Carbs',
                             population: parseFloat(roundToOneDecimal(macros?.totalCarbohydrates || 0)),
-                            color: '#f39c12',
+                            color: '#FFA07A',
                             legendFontColor: '#7F7F7F',
                             legendFontSize: 15,
                         },
                         {
                             name: 'Protein',
                             population: parseFloat(roundToOneDecimal(macros?.totalProtein || 0)),
-                            color: '#27ae60',
+                            color: '#9370DB',
                             legendFontColor: '#7F7F7F',
                             legendFontSize: 15,
                         },
                         {
                             name: 'Fat',
                             population: parseFloat(roundToOneDecimal(macros?.totalFats || 0)),
-                            color: '#c0392b',
+                            color: '#87CEFA',
                             legendFontColor: '#7F7F7F',
                             legendFontSize: 15,
                         },
@@ -131,9 +131,6 @@ const MealInfoPage = () => {
                         <TouchableOpacity onPress={() => alert('Share')} style={styles.iconButton}>
                             <Icon name="share-social" size={24} color="#000" style={styles.icon} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => alert('Like')} style={styles.iconButton}>
-                            <Icon name="heart" size={24} color="#000" />
-                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -156,7 +153,7 @@ const MealInfoPage = () => {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#f0f4f7',
+        backgroundColor: '#FFFBF2',
         marginTop: -58,
     },
     contentContainer: {
@@ -170,12 +167,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 30,
         paddingBottom: 35,
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 10,
-        elevation: 5,
+        backgroundColor: '#FFFBF2',
+        
     },
     header: {
         flexDirection: 'row',
@@ -224,11 +217,13 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     nutritionLabel: {
-        fontSize: 14,
+        fontSize: 16,
+        fontWeight: 'bold',
         color: '#333',
     },
     nutritionValue: {
-        fontSize: 14,
+        fontSize: 16,
+        fontWeight: '400',
         color: '#333',
     },
     addButton: {

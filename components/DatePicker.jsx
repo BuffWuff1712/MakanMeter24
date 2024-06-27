@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 18,
+    fontWeight: '600'
   },
   icon: {
     width: 30,

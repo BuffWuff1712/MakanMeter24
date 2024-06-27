@@ -136,6 +136,9 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
+  homeScreen: {
+    backgroundColor: '#FFF9E8',
+  },
   mealListContainer: {
     width: '100%',
     paddingHorizontal: 10,
