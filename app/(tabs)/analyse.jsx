@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
-import { View, Dimensions, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
+import React from 'react';
+import { View, Dimensions, StyleSheet, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import StreakBar from '../../components/StreakBar';
 import AnalysisOverview from '../../components/AnalysisOverview';
-import DailyTrendsDashboard from '../../components/DailyTrends';
-import WeightTrendsDashboard from '../../components/WeightTrend';
 import ProgressOverview from '../../components/ProgressOverview';
 
-const screenWidth = Dimensions.get('window').width;
 const scrollableHeight = 300; // Adjust the height of the scrollable area
 
 

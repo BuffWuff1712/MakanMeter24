@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
-import { Bar, CartesianChart, Line, Pie, PolarChart, useChartPressState } from 'victory-native';
-import { Circle, useFont, vec, LinearGradient, Text as SKText } from '@shopify/react-native-skia';
+import React from 'react';
+import { View, Text, StyleSheet,} from 'react-native';
+import { Area, CartesianChart, Line, useChartPressState } from 'victory-native';
+import { Circle, useFont, Text as SKText, LinearGradient, vec } from '@shopify/react-native-skia';
 import poppins from "../assets/fonts/Poppins-SemiBold.ttf"
 import { useDerivedValue } from 'react-native-reanimated';
 import TrendsDateRange from './TrendsDateRange';
-import { useGlobalContext } from '../context/GlobalProvider';
 
 
-const WaterTrendsDashboard = ({data, onPress }) => {
-  const { period } = useGlobalContext();
+const WaterTrendsDashboard = ({ data }) => {
   const font = useFont(poppins, 12);
   const toolTipFont = useFont(poppins, 14);
   const { state, isActive } = useChartPressState({
@@ -34,12 +32,13 @@ const WaterTrendsDashboard = ({data, onPress }) => {
     );
   }, [value, toolTipFont]);
 
-  const maxWaterIntake = Math.max(...data.map(item => item.water_intake));
-  const totalWaterIntake = data.reduce((sum, item) => sum + item.water_intake, 0);
-  const averageWaterIntake = totalWaterIntake / data.length;
+  const maxWaterIntake = data.length > 0 ? Math.max(...data.map(item => item.water_intake)) : 0;
+  const totalWaterIntake = data.length > 0 ? data.reduce((sum, item) => sum + item.water_intake, 0) : 0;
+  const averageWaterIntake = data.length > 0 ? (totalWaterIntake / data.length) : 0;
 
 
-  return (
+  return(
+    data.length > 0 ? 
     <View style={styles.container}>
       <View className="my-2 mx-3">
         <Text className="text-2xl font-semibold">Water Intake</Text>
@@ -66,7 +65,7 @@ const WaterTrendsDashboard = ({data, onPress }) => {
         // 👇 pass the font, opting in to axes.
         axisOptions={{ font }}
       >
-        {({ points }) => {
+        {({ points, chartBounds }) => {
             return (
               <>
 
@@ -76,6 +75,18 @@ const WaterTrendsDashboard = ({data, onPress }) => {
                   strokeWidth={3}
                   animate={{ type: "timing", duration: 1000 }}
                 />
+
+                <Area
+                  points={points.water_intake}
+                  y0={chartBounds.bottom}
+                  animate={{ type: "timing", duration: 1000 }}
+                >
+                  <LinearGradient
+                    start={vec(chartBounds.bottom, 200)}
+                    end={vec(chartBounds.bottom, chartBounds.bottom)}
+                    colors={['sky blue', '#87CEEB50']}
+                  />
+                </Area>
 
                 {isActive ? (
                   <>
@@ -90,7 +101,7 @@ const WaterTrendsDashboard = ({data, onPress }) => {
                       cx={state.x.position}
                       cy={state.y.water_intake.position}
                       r={8}
-                      color={"sky blue"}
+                      color={"#66B2FF"}
                       opacity={0.8}
                     />
                   </>
@@ -99,11 +110,29 @@ const WaterTrendsDashboard = ({data, onPress }) => {
             );
           }}
       </CartesianChart>
-  </View>
-    );
+    </View>
+    :
+    <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>No water intake data available.</Text>
+    </View>
+  ); 
 };
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    height: "85%",
+    width: "90%",
+    borderRadius: 10,
+    padding: 4,
+    backgroundColor: '#FFF',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     height: "85%", 
     width: "90%",
@@ -115,6 +144,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: 'gray',
   },
 });
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Dimensions, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { getDailyTrends, getWeeklyTrends } from '../lib/supabase';
+import { fetchGoal, getDailyTrends, getWeeklyTrends } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
-import DailyTrendsDashboard from './DailyTrends';
+import CaloriesTrendsDashboard from './CaloriesTrends';
 import MacroTrendsDashboard from './MacroTrends';
 
 const screenWidth = Dimensions.get('window').width;
@@ -13,17 +13,25 @@ const scrollableHeight = 550; // Adjust the height of the scrollable area
 const AnalysisOverview = () => {
   const { user, period } = useGlobalContext();
   const [index, setIndex] = useState(0);
-  const [testData, setTestData] = useState([]);
+  const [calorieGoal, setCalorieGoal] = useState([]);
+  const [testData, setTestData] = useState([[], []]);
 
   useEffect(() => {
     const fetchData = async () => {
-      let result;
-      if (period === 1) {
-        result = await getWeeklyTrends(user);
-      } else {
-        result = await getDailyTrends(user);
+      try {
+        let result;
+        const temp = await fetchGoal(user, 'caloric_intake');
+        if (period === 1) {
+          result = await getWeeklyTrends(user);
+        } else {
+          result = await getDailyTrends(user);
+        }
+        setCalorieGoal(temp ? temp : []);
+        setTestData(result ? [result, result]: [[], []]);
+      } catch (error) {
+        console.log('Error in AnalysisOverview; ',error);
+        setTestData([[], []]);
       }
-      setTestData([result, result]); // Assuming you want to display the same data for both dashboards
     };
     fetchData();
   }, [period, user]);
@@ -32,14 +40,14 @@ const AnalysisOverview = () => {
   const renderDashboardItem = ({ item, index }) => {
     let DashboardComponent;
     if (index === 0) {
-      DashboardComponent = DailyTrendsDashboard;
+      DashboardComponent = CaloriesTrendsDashboard;
     } else {
       DashboardComponent = MacroTrendsDashboard;
     }
 
     return (
     <Animatable.View animation="fadeIn" duration={800} style={styles.carouselItem}>
-      <DashboardComponent data={item}/>
+      <DashboardComponent data={item} goal={calorieGoal}/>
     </Animatable.View>
   )};
 

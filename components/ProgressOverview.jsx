@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Dimensions, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
+import { View, Dimensions, StyleSheet, FlatList } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { fetchGoal, userMonthHistory, userWeekHistory } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
@@ -9,12 +9,11 @@ import WaterTrendsDashboard from './WaterTrend';
 const screenWidth = Dimensions.get('window').width;
 const scrollableHeight = 550; // Adjust the height of the scrollable area
 
-
 const ProgressOverview = () => {
   const { user, period, refresh } = useGlobalContext();
   const [index, setIndex] = useState(0);
-  const [ weightGoal, setWeightGoal ] = useState(0);
-  const [testData, setTestData] = useState([]);
+  const [weightGoal, setWeightGoal] = useState([]);
+  const [displayData, setDisplayData] = useState([[], []]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,15 +25,15 @@ const ProgressOverview = () => {
         } else {
           result = await userMonthHistory(user);
         }
-        setWeightGoal(temp);
-        setTestData([result, result]); // Assuming you want to display the same data for both dashboards
-      } catch(error) {
-        console.error('Error in Progress Overview: ', error);
-      };
+        setWeightGoal(temp ? temp : []);
+        setDisplayData(result ? [result, result] : [[], []]); // Assuming you want to display the same data for both dashboards
+      } catch (error) {
+        console.log('Error in Progress Overview: ', error);
+        setDisplayData([[], []]); // Set empty data in case of error
+      }
     }
     fetchData();
   }, [period, user, refresh]);
-
 
   const renderDashboardItem = ({ item, index }) => {
     let DashboardComponent;
@@ -45,15 +44,16 @@ const ProgressOverview = () => {
     }
 
     return (
-    <Animatable.View animation="fadeIn" duration={800} style={styles.carouselItem}>
-      <DashboardComponent data={item} goal={weightGoal}/>
-    </Animatable.View>
-  )};
+      <Animatable.View animation="fadeIn" duration={800} style={styles.carouselItem}>
+        <DashboardComponent data={item} goal={weightGoal} />
+      </Animatable.View>
+    );
+  };
 
   const renderDotIndicator = () => {
     return (
       <View style={styles.dotContainer}>
-        {testData.map((_, idx) => (
+        {displayData.map((_, idx) => (
           <View
             key={idx}
             style={[
@@ -68,22 +68,22 @@ const ProgressOverview = () => {
 
   return (
     <View style={styles.scrollableArea}>
-        <FlatList
-            data={testData} // Array of data for each dashboard
-            renderItem={renderDashboardItem}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onScroll={event => {
-            const contentOffsetX = event.nativeEvent.contentOffset.x;
-            const newIndex = Math.floor(contentOffsetX / screenWidth);
-            if (newIndex !== index) {
-                setIndex(newIndex);
-            }
-            }}
-        />
-        {renderDotIndicator()}
+      <FlatList
+        data={displayData} // Array of data for each dashboard
+        renderItem={renderDashboardItem}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onScroll={event => {
+          const contentOffsetX = event.nativeEvent.contentOffset.x;
+          const newIndex = Math.floor(contentOffsetX / screenWidth);
+          if (newIndex !== index) {
+            setIndex(newIndex);
+          }
+        }}
+      />
+      {renderDotIndicator()}
     </View>
   );
 };

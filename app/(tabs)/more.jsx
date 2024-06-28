@@ -1224,7 +1224,7 @@ const Profile = () => {
       quality: 1,
     });
 
-    if (!pickerResult.cancelled) {
+    if (!pickerResult.canceled) {
       console.log('Selected image URI:', pickerResult.assets[0].uri);
       saveProfileImage(pickerResult.assets[0].uri); 
     }

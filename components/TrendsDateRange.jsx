@@ -8,8 +8,6 @@ import { useGlobalContext } from '../context/GlobalProvider';
   const data = [
     { label: 'Last 7 days', value: 0 },
     { label: 'Last 30 days', value: 1 },
-    { label: 'Last 6 months', value: 2 },
-    { label: 'Last year', value: 3 },
   ];
 
   const TrendsDateRange = () => {

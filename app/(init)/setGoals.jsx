@@ -36,6 +36,7 @@ const SetGoal = () => {
     const fetchData = async () => {
       try {
         const result = await fetchGoal(user, goalType);
+        console.log('result: ', result);
         if (result[0]) {
           setGoalValue(result[0].target_value);
         } else {
