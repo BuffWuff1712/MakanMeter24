@@ -22,7 +22,7 @@ const Add_Food = () => {
   const router = useRouter();
 
   const handleMealPress = (mealType) => {
-    if (mealType === 'Set Goal') {
+    if (mealType === 'Edit Goals') {
       router.navigate('setGoals'); // Navigate to the Set Goal page
     } else {
       router.navigate({
@@ -38,14 +38,14 @@ const Add_Food = () => {
     Lunch: icons.lunch,
     Dinner: icons.dinner,
     Snack: icons.snack,
-    'Set Goal': icons.target, // Ensure the correct key matches the mealType
+    'Edit Goals': icons.target, // Ensure the correct key matches the mealType
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.options}>
-          {['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Set Goal'].map((mealType) => (
+          {['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Edit Goals'].map((mealType) => (
             <TouchableOpacity
               key={mealType}
               style={styles.optionButton}
