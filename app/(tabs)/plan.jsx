@@ -1448,13 +1448,349 @@ const styles = StyleSheet.create({
 
 export default Plan;*/
 
+// //new draft here 
+// import React, { useState, useEffect } from 'react';
+// import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+// import { Button, Modal } from 'react-native-paper';
+// import PlanCard from '../../components/PlanCard';
+// import images from '../../constants/images';
+
+// const categories = [
+//   {
+//     id: '1',
+//     title: 'Weight Loss',
+//     data: [
+//       { id: 'w1', name: 'Keto Diet', description: 'Low carb, high fat', image: images.fruit_salad },
+//       { id: 'w2', name: 'Low Calorie', description: 'Reduce calorie intake', image: images.fruit_salad },
+//       { id: 'w3', name: 'Intermittent Fasting', description: 'Fasting and eating periods' },
+//     ],
+//   },
+//   {
+//     id: '2',
+//     title: 'Muscle Gain',
+//     data: [
+//       { id: 'm1', name: 'High Protein', description: 'Protein-rich meals' },
+//       { id: 'm2', name: 'Bodybuilding', description: 'Structured for muscle gain' },
+//       { id: 'm3', name: 'Paleo', description: 'Whole foods, lean proteins' },
+//     ],
+//   },
+//   {
+//     id: '3',
+//     title: 'Maintenance',
+//     data: [
+//       { id: 't1', name: 'Balanced Diet', description: 'Nutrient-rich balanced meals' },
+//       { id: 't2', name: 'Mediterranean', description: 'Heart-healthy foods' },
+//       { id: 't3', name: 'Whole30', description: 'Whole, unprocessed foods' },
+//     ],
+//   },
+//   {
+//     id: '4',
+//     title: 'Vegan',
+//     data: [
+//       { id: 'v1', name: 'Vegan Balanced', description: 'Complete vegan diet' },
+//       { id: 'v2', name: 'Raw Vegan', description: 'Unprocessed, raw foods' },
+//       { id: 'v3', name: 'High Protein Vegan', description: 'Protein-rich vegan meals' },
+//     ],
+//   },
+// ];
+
+// const Plan = () => {
+//   const [currentPlan, setCurrentPlan] = useState(null);
+//   const [categoryModalVisible, setCategoryModalVisible] = useState(false);
+//   const [descriptionModalVisible, setDescriptionModalVisible] = useState(false);
+//   const [selectedCategory, setSelectedCategory] = useState(null);
+//   const [selectedDescription, setSelectedDescription] = useState(null);
+
+//   useEffect(() => {
+//     // Fetch current plan from backend or local storage
+//     const fetchCurrentPlan = async () => {
+//       // Replace with your data fetching logic
+//       const plan = currentPlanFromLocalStorage(); // Example function to get plan from local storage
+//       setCurrentPlan(plan);
+//     };
+
+//     fetchCurrentPlan();
+//   }, []);
+
+//   // Example function to fetch current plan from local storage
+//   const currentPlanFromLocalStorage = () => {
+//     // Replace with your actual logic to fetch from local storage
+//     return null; // For demonstration, assuming no plan is set initially
+//   };
+
+//   // Function to render each plan card item
+//   const renderPlanCard = ({ item }) => (
+//     <PlanCard name={item.name} description={item.description} />
+//   );
+
+//   // Function to render each category with its list of plans
+//   const renderCategory = ({ item }) => (
+//     <View style={styles.categoryContainer}>
+//       <Text style={styles.categoryTitle}>{item.title}</Text>
+//       <FlatList
+//         data={item.data}
+//         horizontal
+//         renderItem={renderPlanCard}
+//         keyExtractor={(plan) => plan.id}
+//         contentContainerStyle={styles.planList}
+//         showsHorizontalScrollIndicator={false}
+//       />
+//     </View>
+//   );
+
+//   // Function to handle pressing "Take a Test" button
+//   const handleTakeTest = () => {
+//     setCurrentPlan(null); // Reset current plan
+//     setSelectedCategory(null); // Reset selected category
+//     setSelectedDescription(null); // Reset selected description
+//     setCategoryModalVisible(true); // Show category selection modal
+//   };
+
+//   // Function to handle category selection
+//   const handleCategorySelect = (category) => {
+//     setSelectedCategory(category);
+//     setCategoryModalVisible(false); // Hide category selection modal
+//     setDescriptionModalVisible(true); // Show description selection modal
+//   };
+
+//   // Function to handle description selection
+//   const handleDescriptionSelect = (description) => {
+//     setSelectedDescription(description);
+//     setDescriptionModalVisible(false); // Hide description selection modal
+
+//     // Set current plan based on selected category and description
+//     setCurrentPlan({
+//       name: description.name,
+//       description: description.description,
+//       // Add other properties as needed based on your data structure
+//     });
+//   };
+
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <View style={styles.headerContainer}>
+//         <Text style={styles.pageTitle}>Active Plan</Text>
+//       </View>
+
+//       <View style={styles.contentContainer}>
+//         <View style={styles.currentPlanContainer}>
+//           {currentPlan ? (
+//             <View style={styles.currentPlanCard}>
+//               <Text style={styles.currentPlanTitle}>Current Plan</Text>
+//               <Text style={styles.planTitle}>{currentPlan.name}</Text>
+//               <Text style={styles.planDescription}>{currentPlan.description}</Text>
+//               <Button
+//                 mode="contained"
+//                 style={styles.deleteButton}
+//                 labelStyle={{ fontSize: 15, fontWeight: 'bold' }}
+//                 onPress={() => setCurrentPlan(null)}
+//               >
+//                 DELETE PLAN
+//               </Button>
+//             </View>
+//           ) : (
+//             <View style={styles.noPlanCard}>
+//               <Text style={styles.noPlanText}>You are not on any plan now.</Text>
+//               <Text style={styles.noPlanPrompt}>Choose a plan below or create your own custom plan.</Text>
+//               <View style={styles.buttonContainer}>
+//                 <Button
+//                   mode="contained"
+//                   style={styles.customButton}
+//                   labelStyle={{ fontSize: 15, fontWeight: 'bold' }}
+//                   onPress={handleTakeTest}
+//                 >
+//                   TAKE A TEST
+//                 </Button>
+//                 <Button
+//                   mode="contained"
+//                   style={styles.customButton}
+//                   labelStyle={{ fontSize: 15, fontWeight: 'bold' }}
+//                   onPress={() => console.log('Pressed CUSTOMISE')}
+//                 >
+//                   CUSTOMISE
+//                 </Button>
+//               </View>
+//             </View>
+//           )}
+//         </View>
+
+//         <FlatList
+//           data={categories}
+//           renderItem={renderCategory}
+//           keyExtractor={(category) => category.id}
+//           contentContainerStyle={styles.categoryList}
+//         />
+//       </View>
+
+//       {/* Modal for category selection */}
+//       <Modal
+//         visible={categoryModalVisible}
+//         onDismiss={() => setCategoryModalVisible(false)}
+//         contentContainerStyle={styles.modalContent}
+//       >
+//         <View style={styles.modalContainer}>
+//           <Text style={styles.modalTitle}>Choose a Category</Text>
+//           {categories.map((category) => (
+//             <TouchableOpacity
+//               key={category.id}
+//               style={styles.categoryButton}
+//               onPress={() => handleCategorySelect(category)}
+//             >
+//               <Text style={styles.categoryButtonText}>{category.title}</Text>
+//             </TouchableOpacity>
+//           ))}
+//         </View>
+//       </Modal>
+
+//       {/* Modal for description selection */}
+//       <Modal
+//         visible={descriptionModalVisible}
+//         onDismiss={() => setDescriptionModalVisible(false)}
+//         contentContainerStyle={styles.modalContent}
+//       >
+//         <View style={styles.modalContainer}>
+//           <Text style={styles.modalTitle}>Choose an Option</Text>
+//           {selectedCategory &&
+//             selectedCategory.data.map((item) => (
+//               <TouchableOpacity
+//                 key={item.id}
+//                 style={styles.categoryButton}
+//                 onPress={() => handleDescriptionSelect(item)}
+//               >
+//                 <Text style={styles.categoryButtonText}>{item.description}</Text>
+//               </TouchableOpacity>
+//             ))}
+//         </View>
+//       </Modal>
+//     </SafeAreaView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//   },
+//   headerContainer: {
+//     backgroundColor: '#50C878',
+//     paddingHorizontal: 20,
+//     paddingVertical: 10,
+//     marginBottom: 10,
+//   },
+//   pageTitle: {
+//     fontSize: 28,
+//     fontWeight: 'bold',
+//     color: '#fff',
+//   },
+//   contentContainer: {
+//     flex: 1,
+//     paddingHorizontal: 20,
+//   },
+//   customButton: {
+//     marginHorizontal: 5,
+//     marginTop: 10,
+//   },
+//   deleteButton: {
+//     backgroundColor: '#FF6347',
+//     marginTop: 10,
+//   },
+//   currentPlanContainer: {
+//     marginBottom: 20,
+//   },
+//   currentPlanCard: {
+//     backgroundColor: '#d3f8e2',
+//     padding: 20,
+//     borderRadius: 10,
+//     alignItems: 'center',
+//     marginBottom: 10,
+//   },
+//   currentPlanTitle: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     marginBottom: 10,
+//   },
+//   planTitle: {
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//     marginBottom: 5,
+//   },
+//   planDescription: {
+//     fontSize: 16,
+//     textAlign: 'center',
+//   },
+//   noPlanCard: {
+//     backgroundColor: '#fff',
+//     padding: 20,
+//     borderRadius: 10,
+//     alignItems: 'center',
+//   },
+//   noPlanText: {
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//     color: '#721c24',
+//   },
+//   noPlanPrompt: {
+//     fontSize: 14,
+//     color: '#721c24',
+//     textAlign: 'center',
+//   },
+//   buttonContainer: {
+//     flexDirection: 'row',
+//     marginTop: 20,
+//   },
+//   categoryList: {
+//     flexGrow: 1,
+//   },
+//   categoryContainer: {
+//     marginVertical: 10,
+//   },
+//   categoryTitle: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     marginBottom: 5,
+//     paddingHorizontal: 20,
+//   },
+//   planList: {
+//     paddingHorizontal: 20,
+//     paddingVertical: 10,
+//   },
+//   modalContent: {
+//     backgroundColor: '#fff',
+//     padding: 20,
+//     margin: 50,
+//     borderRadius: 10,
+//   },
+//   modalContainer: {
+//     alignItems: 'center',
+//   },
+//   modalTitle: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     marginBottom: 10,
+//   },
+//   categoryButton: {
+//     backgroundColor: '#f0f0f0',
+//     paddingVertical: 10,
+//     paddingHorizontal: 20,
+//     marginVertical: 5,
+//     borderRadius: 5,
+//   },
+//   categoryButtonText: {
+//     fontSize: 16,
+//   },
+// });
+
+// export default Plan;
 //new draft here 
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Modal } from 'react-native-paper';
 import PlanCard from '../../components/PlanCard';
 import images from '../../constants/images';
+import { router } from 'expo-router';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 const categories = [
   {
@@ -1496,11 +1832,7 @@ const categories = [
 ];
 
 const Plan = () => {
-  const [currentPlan, setCurrentPlan] = useState(null);
-  const [categoryModalVisible, setCategoryModalVisible] = useState(false);
-  const [descriptionModalVisible, setDescriptionModalVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedDescription, setSelectedDescription] = useState(null);
+  const { currentPlan, setCurrentPlan } = useGlobalContext();
 
   useEffect(() => {
     // Fetch current plan from backend or local storage
@@ -1541,31 +1873,9 @@ const Plan = () => {
 
   // Function to handle pressing "Take a Test" button
   const handleTakeTest = () => {
-    setCurrentPlan(null); // Reset current plan
-    setSelectedCategory(null); // Reset selected category
-    setSelectedDescription(null); // Reset selected description
-    setCategoryModalVisible(true); // Show category selection modal
+    router.navigate({pathname:'category', params: {categoriesList: JSON.stringify(categories)}});
   };
 
-  // Function to handle category selection
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-    setCategoryModalVisible(false); // Hide category selection modal
-    setDescriptionModalVisible(true); // Show description selection modal
-  };
-
-  // Function to handle description selection
-  const handleDescriptionSelect = (description) => {
-    setSelectedDescription(description);
-    setDescriptionModalVisible(false); // Hide description selection modal
-
-    // Set current plan based on selected category and description
-    setCurrentPlan({
-      name: description.name,
-      description: description.description,
-      // Add other properties as needed based on your data structure
-    });
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -1623,46 +1933,6 @@ const Plan = () => {
         />
       </View>
 
-      {/* Modal for category selection */}
-      <Modal
-        visible={categoryModalVisible}
-        onDismiss={() => setCategoryModalVisible(false)}
-        contentContainerStyle={styles.modalContent}
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Choose a Category</Text>
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={styles.categoryButton}
-              onPress={() => handleCategorySelect(category)}
-            >
-              <Text style={styles.categoryButtonText}>{category.title}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </Modal>
-
-      {/* Modal for description selection */}
-      <Modal
-        visible={descriptionModalVisible}
-        onDismiss={() => setDescriptionModalVisible(false)}
-        contentContainerStyle={styles.modalContent}
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Choose an Option</Text>
-          {selectedCategory &&
-            selectedCategory.data.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                style={styles.categoryButton}
-                onPress={() => handleDescriptionSelect(item)}
-              >
-                <Text style={styles.categoryButtonText}>{item.description}</Text>
-              </TouchableOpacity>
-            ))}
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };

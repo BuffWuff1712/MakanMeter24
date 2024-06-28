@@ -1198,9 +1198,9 @@ const Profile = () => {
   };
 
   const logout = async () => {
+    setSettingsModalVisible(false);
     try {
       await signOut();
-      
       setIsLoggedIn(false);
       router.replace('/sign-in');
       setUser('');

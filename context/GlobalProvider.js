@@ -16,6 +16,7 @@ import { createContext, useContext, useState,
       const [period, setPeriod] = useState(0);
       const [macros, setMacros] = useState(null);
       const [isAsyncOperationsComplete, setIsAsyncOperationsComplete] = useState(true);
+      const [currentPlan, setCurrentPlan] = useState(null);
       const [userInitData, setUserInitData] = useState({
         gender: '',
         age: '',
@@ -23,6 +24,7 @@ import { createContext, useContext, useState,
         weight: '',
         activityLevel: 'Sedentary',
       });
+      
     
 
       useEffect(() => {
@@ -73,6 +75,8 @@ import { createContext, useContext, useState,
               setUserInitData,
               isAsyncOperationsComplete, 
               setIsAsyncOperationsComplete,
+              currentPlan,
+              setCurrentPlan,
             }}
           >
             {children}
