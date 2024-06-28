@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, Text, View, Image } from 'react-native';
-import { Redirect, router } from 'expo-router';
+import { Link, Redirect, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../constants';
 import Loader from '../components/Loader';
@@ -43,11 +43,20 @@ const Welcome = () => {
           </Text>
 
           <CustomButton 
-            title="Continue with Email"
+            title="Login"
             handlePress={() => router.push('/sign-in')}
-            containerStyles="w-full mt-7 bg-emerald"
+            containerStyles="w-full my-4 bg-emerald"
+
+          />
+
+          <CustomButton 
+            title="Sign Up"
+            handlePress={() => router.push('/sign-up')}
+            containerStyles="w-full bg-white-150 border"
+            textStyles='text-black'
           />
         </View>
+        {/* <Link href='/gender'>Press Here</Link> */}
       </ScrollView>
 
       <StatusBar backgroundColor='#161622' style='dark'/>

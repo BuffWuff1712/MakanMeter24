@@ -17,19 +17,15 @@ const generateList = (min, max, step = 1) => {
 
 const WeightScreen = () => {
   const { userInitData, setUserInitData } = useGlobalContext();
-  const [weight, setWeight] = useState('');
+  const [weight, setWeight] = useState('60');
   const [unit, setUnit] = useState('kg');
   const weightKG = generateList(20, 300, 1);
   const weightLBS = generateList(50, 200, 1);
 
-  const handleFinish = async () => {
-    setUserInitData({...userInitData, weight})
+  const handleNext = async () => {
+    setUserInitData(prev => ({...prev, weight: weight}))
     try {
-      console.log('init data: ', userInitData);
-      const user = await getCurrentUser();
-      console.log('user: ', user);
-      await updateUser(user, userInitData);
-      router.navigate('/home'); // Replace with your next screen
+      router.navigate('/setActivityLevel'); // Replace with your next screen
     } catch (error) {
       console.log("Error: ", error.message);
     }
@@ -60,7 +56,7 @@ const WeightScreen = () => {
         <CustomButton 
               title="Next"
               containerStyles="mt-7 bg-emerald"
-              handlePress={handleFinish}
+              handlePress={handleNext}
         />
       
     </SafeAreaView>

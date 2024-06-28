@@ -16,12 +16,12 @@ const generateList = (min, max, step = 1) => {
 
 const AgeScreen = () => {
   const { userInitData, setUserInitData } = useGlobalContext();
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState('30');
   const ageList= generateList(0, 140, 1);
 
 
   const handleFinish = () => {
-    setUserInitData({...userInitData, age})
+    setUserInitData(prev => ({...prev, age: age}))
     router.navigate('/height'); // Replace with your next screen
   };
 

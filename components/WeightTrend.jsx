@@ -10,9 +10,7 @@ import TrendsDateRange from './TrendsDateRange';
 import { useGlobalContext } from '../context/GlobalProvider';
 
 
-const data = [];
-
-const WeightTrendsDashboard = ({data, onPress }) => {
+const WeightTrendsDashboard = ({data, goal }) => {
   const { period } = useGlobalContext();
   const font = useFont(poppins, 12);
   const toolTipFont = useFont(poppins, 14);
@@ -50,7 +48,7 @@ const WeightTrendsDashboard = ({data, onPress }) => {
             Current Weight: <Text className="text-xl color-black font-semibold">{data.at(-1).weight.toFixed(1)} kg</Text>
         </Text>
         <Text className="text-xl color-gray-500">
-            Goal: <Text className="text-xl color-emerald font-semibold">50.0 kg</Text>
+            Goal: <Text className="text-xl color-emerald font-semibold">{goal[0].target_value.toFixed(1)} kg</Text>
         </Text>
       </View>
       <View className="items-end">

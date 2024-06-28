@@ -11,8 +11,9 @@ import {
 import React from 'react';
 import { useRouter } from 'expo-router';
 import { useGlobalContext } from '../../context/GlobalProvider';
-import { getDate } from '../../lib/supabase';
 import { icons } from '../../constants';
+import { getDate } from '../../lib/calculations/getDate';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,8 +23,7 @@ const Add_Food = () => {
 
   const handleMealPress = (mealType) => {
     if (mealType === 'Set Goal') {
-      // router.navigate('set_goal_page'); // Navigate to the Set Goal page
-      Alert.alert("Navigate to Set Goal page");
+      router.navigate('setGoals'); // Navigate to the Set Goal page
     } else {
       router.navigate({
         pathname: 'log_page',
@@ -46,16 +46,17 @@ const Add_Food = () => {
       <View style={styles.container}>
         <View style={styles.options}>
           {['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Set Goal'].map((mealType) => (
-            <Pressable
+            <TouchableOpacity
               key={mealType}
               style={styles.optionButton}
+              activeOpacity={0.7}
               onPress={() => handleMealPress(mealType)}
             >
               <View style={styles.optionContent}>
                 <Image source={mealIcons[mealType]} style={styles.icon} />
                 <Text style={styles.optionText}>{mealType}</Text>
               </View>
-            </Pressable>
+            </TouchableOpacity>
           ))}
         </View>
       </View>
@@ -66,7 +67,7 @@ const Add_Food = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#d1d5db',
+    backgroundColor: '#FFF9E8',
   },
   container: {
     flex: 1,
@@ -84,7 +85,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     margin: 10,
-    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
     width: width * 0.4, // Adjust width to ensure buttons are not too wide
     height: height * 0.2, // Adjust height to ensure buttons are not too tall
     justifyContent: 'center', // Center the text within the button

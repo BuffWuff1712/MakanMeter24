@@ -9,6 +9,7 @@ import DailyIntake from '../../components/DailyIntake';
 import FoodHistory from '../../components/FoodHistory.jsx';
 import AutoCompleteSearchBar from '../../components/AutoCompleteSearchBar.jsx';
 import FavouriteListItem from '../../components/FavouriteListItem.jsx';
+import { Feather } from '@expo/vector-icons';
 
 const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
@@ -124,15 +125,14 @@ const Log_Page = () => {
               keyExtractor={(item, index) => index.toString()}
               contentContainerStyle={{ gap: 5 }}
             />
-            ) : (
-              <ScrollView style={styles.content}>
+            ) : (                
                 <View style={styles.emptyState}>
+                  <Feather name="search" size={50} color="black" />
                   <Text style={styles.emptyText}>Start Logging your Food!</Text>
                   <Text style={styles.emptySubText}>
                     To begin, scan your meal or search it up
                   </Text>
                 </View>
-              </ScrollView>
             )}
           </View>
         )}

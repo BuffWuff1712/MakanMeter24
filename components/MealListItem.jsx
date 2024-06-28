@@ -3,7 +3,7 @@ import FilledBarSeparator from '../components/FilledBarSeparator';
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useGlobalContext } from '../context/GlobalProvider';
-import { getDate } from '../lib/supabase';
+import { getDate } from '../lib/calculations/getDate';
 
 const MealListItem = ({ item }) => {
   

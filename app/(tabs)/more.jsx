@@ -514,6 +514,8 @@ export default Profile;*/
 //new draft here 
 /*import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, FlatList, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, FlatList, TextInput, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -645,10 +647,10 @@ const Profile = () => {
   const logout = async () => {
     try {
       await signOut();
-      
+      setUser(null);
       setIsLoggedIn(false);
-      router.replace('/sign-in');
-      setUser('');
+      router.replace('sign-in');
+      
     } catch (error) {
       console.error('Error on logout:', error);
     }
@@ -713,6 +715,8 @@ const Profile = () => {
           <Text style={styles.tabText}>Settings</Text>
         </TouchableOpacity>
       </View>
+
+      <View><Button title='Exit' onPress={logout}></Button></View>
 
       <Modal
         animationType="slide"

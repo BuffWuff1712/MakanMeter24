@@ -10,13 +10,18 @@ import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
 import { debounce } from 'lodash';
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
+import WaterIntake from '../../components/WaterIntake';
 
 const Home = () => {
   const { selectedDate, user, mealsData, setMealsData, refresh, setRefresh } = useGlobalContext();
-
+  
   const fetchMeals = async (date) => {
-    const data = await getMealsForDate(user, date);
-    setMealsData(data);
+    try {
+      const data = await getMealsForDate(user, date);
+      setMealsData(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Use useCallback to create a memoized version of the debounced function
@@ -111,13 +116,19 @@ const Home = () => {
           ))}
         </View>
 
-        <Button title={'Go to setGoals'} onPress={() => router.navigate('setGoals')} />
+        <View className='px-2'>
+          {/* WaterIntake Component below */}
+          <WaterIntake/>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  homeScreen: {
+    backgroundColor: '#FFF9E8',
+  },
   mealListContainer: {
     width: '100%',
     paddingHorizontal: 10,
@@ -125,6 +136,24 @@ const styles = StyleSheet.create({
   mealItem: {
     marginBottom: 10, // Add margin between items
   },
+  card: {
+    backgroundColor: 'white',
+    height: 150,
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  icon: {
+    height: 50,
+    width: 42,
+    marginHorizontal: 2, // Add space between icons
+  }
 });
 
 export default Home;
