@@ -1783,7 +1783,7 @@ export default Plan;*/
 
 // export default Plan;
 //new draft here 
-import React, { useEffect } from 'react';
+/*import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Modal } from 'react-native-paper';
@@ -1827,6 +1827,42 @@ const categories = [
       { id: 'v1', name: 'Vegan Balanced', description: 'Complete vegan diet' },
       { id: 'v2', name: 'Raw Vegan', description: 'Unprocessed, raw foods' },
       { id: 'v3', name: 'High Protein Vegan', description: 'Protein-rich vegan meals' },
+    ],
+  },
+  {
+    id: '5',
+    title: 'Gluten-Free',
+    data: [
+      { id: 'g1', name: 'Gluten-Free Balanced', description: 'Balanced nutrition without gluten' },
+      { id: 'g2', name: 'Paleo Gluten-Free', description: 'Paleo principles, gluten-free' },
+      { id: 'g3', name: 'Low FODMAP', description: 'Low FODMAP foods to reduce digestive distress' },
+    ],
+  },
+  {
+    id: '6',
+    title: 'Diabetic-Friendly',
+    data: [
+      { id: 'd1', name: 'Low Glycemic Index', description: 'Foods with a low glycemic index' },
+      { id: 'd2', name: 'Mediterranean Diabetic', description: 'Mediterranean principles, diabetic-friendly' },
+      { id: 'd3', name: 'Carb Counting', description: 'Manage carbohydrate intake for better blood sugar control' },
+    ],
+  },
+  {
+    id: '7',
+    title: 'Heart-Healthy',
+    data: [
+      { id: 'h1', name: 'DASH Diet', description: 'Reduce sodium and increase nutrient-rich foods' },
+      { id: 'h2', name: 'Ornish Diet', description: 'Low-fat, vegetarian diet for cardiovascular health' },
+      { id: 'h3', name: 'TLC Diet', description: 'Therapeutic Lifestyle Changes to reduce cholesterol' },
+    ],
+  },
+  {
+    id: '8',
+    title: 'Pregnancy and Postpartum',
+    data: [
+      { id: 'p1', name: 'Prenatal Nutrition', description: 'Nutritional needs during pregnancy' },
+      { id: 'p2', name: 'Postpartum Recovery', description: 'Nutrient-dense foods for postpartum recovery' },
+      { id: 'p3', name: 'Breastfeeding Diet', description: 'Supports lactation with essential nutrients' },
     ],
   },
 ];
@@ -1933,6 +1969,331 @@ const Plan = () => {
         />
       </View>
 
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  headerContainer: {
+    backgroundColor: '#50C878',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginBottom: 10,
+  },
+  pageTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  customButton: {
+    marginHorizontal: 5,
+    marginTop: 10,
+  },
+  deleteButton: {
+    backgroundColor: '#FF6347',
+    marginTop: 10,
+  },
+  currentPlanContainer: {
+    marginBottom: 20,
+  },
+  currentPlanCard: {
+    backgroundColor: '#d3f8e2',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  currentPlanTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  planTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  planDescription: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  noPlanCard: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  noPlanText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#721c24',
+  },
+  noPlanPrompt: {
+    fontSize: 14,
+    color: '#721c24',
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+  categoryList: {
+    flexGrow: 1,
+  },
+  categoryContainer: {
+    marginVertical: 10,
+  },
+  categoryTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    paddingHorizontal: 20,
+  },
+  planList: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    margin: 50,
+    borderRadius: 10,
+  },
+  modalContainer: {
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  categoryButton: {
+    backgroundColor: '#f0f0f0',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 5,
+    borderRadius: 5,
+  },
+  categoryButtonText: {
+    fontSize: 16,
+  },
+});
+
+export default Plan;*/
+
+//new draft here 
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from 'react-native-paper';
+import PlanCard from '../../components/PlanCard';
+import images from '../../constants/images';
+import { router } from 'expo-router';
+import { useGlobalContext } from '../../context/GlobalProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const categories = [
+  {
+    id: '1',
+    title: 'Weight Loss',
+    data: [
+      { id: 'w1', name: 'Keto Diet', description: 'Low carb, high fat', image: images.fruit_salad },
+      { id: 'w2', name: 'Low Calorie', description: 'Reduce calorie intake', image: images.fruit_salad },
+      { id: 'w3', name: 'Intermittent Fasting', description: 'Fasting and eating periods' },
+    ],
+  },
+  {
+    id: '2',
+    title: 'Muscle Gain',
+    data: [
+      { id: 'm1', name: 'High Protein', description: 'Protein-rich meals' },
+      { id: 'm2', name: 'Bodybuilding', description: 'Structured for muscle gain' },
+      { id: 'm3', name: 'Paleo', description: 'Whole foods, lean proteins' },
+    ],
+  },
+  {
+    id: '3',
+    title: 'Maintenance',
+    data: [
+      { id: 't1', name: 'Balanced Diet', description: 'Nutrient-rich balanced meals' },
+      { id: 't2', name: 'Mediterranean', description: 'Heart-healthy foods' },
+      { id: 't3', name: 'Whole30', description: 'Whole, unprocessed foods' },
+    ],
+  },
+  {
+    id: '4',
+    title: 'Vegan',
+    data: [
+      { id: 'v1', name: 'Vegan Balanced', description: 'Complete vegan diet' },
+      { id: 'v2', name: 'Raw Vegan', description: 'Unprocessed, raw foods' },
+      { id: 'v3', name: 'High Protein Vegan', description: 'Protein-rich vegan meals' },
+    ],
+  },
+  {
+    id: '5',
+    title: 'Gluten-Free',
+    data: [
+      { id: 'g1', name: 'Gluten-Free Balanced', description: 'Balanced nutrition without gluten' },
+      { id: 'g2', name: 'Paleo Gluten-Free', description: 'Paleo principles, gluten-free' },
+      { id: 'g3', name: 'Low FODMAP', description: 'Low FODMAP foods to reduce digestive distress' },
+    ],
+  },
+  {
+    id: '6',
+    title: 'Diabetic-Friendly',
+    data: [
+      { id: 'd1', name: 'Low Glycemic Index', description: 'Foods with a low glycemic index' },
+      { id: 'd2', name: 'Mediterranean Diabetic', description: 'Mediterranean principles, diabetic-friendly' },
+      { id: 'd3', name: 'Carb Counting', description: 'Manage carbohydrate intake for better blood sugar control' },
+    ],
+  },
+  {
+    id: '7',
+    title: 'Heart-Healthy',
+    data: [
+      { id: 'h1', name: 'DASH Diet', description: 'Reduce sodium and increase nutrient-rich foods' },
+      { id: 'h2', name: 'Ornish Diet', description: 'Low-fat, vegetarian diet for cardiovascular health' },
+      { id: 'h3', name: 'TLC Diet', description: 'Therapeutic Lifestyle Changes to reduce cholesterol' },
+    ],
+  },
+  {
+    id: '8',
+    title: 'Pregnancy and Postpartum',
+    data: [
+      { id: 'p1', name: 'Prenatal Nutrition', description: 'Nutritional needs during pregnancy' },
+      { id: 'p2', name: 'Postpartum Recovery', description: 'Nutrient-dense foods for postpartum recovery' },
+      { id: 'p3', name: 'Breastfeeding Diet', description: 'Supports lactation with essential nutrients' },
+    ],
+  },
+];
+
+const Plan = () => {
+  const { currentPlan, setCurrentPlan } = useGlobalContext();
+
+  useEffect(() => {
+    // Fetch current plan from local storage
+    const fetchCurrentPlan = async () => {
+      try {
+        const plan = await AsyncStorage.getItem('currentPlan');
+        if (plan !== null) {
+          setCurrentPlan(JSON.parse(plan));
+        }
+      } catch (error) {
+        console.log('Failed to fetch plan from storage', error);
+      }
+    };
+
+    fetchCurrentPlan();
+  }, []);
+
+  // Save current plan to local storage
+  const saveCurrentPlanToStorage = async (plan) => {
+    try {
+      await AsyncStorage.setItem('currentPlan', JSON.stringify(plan));
+      setCurrentPlan(plan);
+    } catch (error) {
+      console.log('Failed to save plan to storage', error);
+    }
+  };
+
+  // Clear current plan from local storage
+  const clearCurrentPlanFromStorage = async () => {
+    try {
+      await AsyncStorage.removeItem('currentPlan');
+      setCurrentPlan(null);
+    } catch (error) {
+      console.log('Failed to clear plan from storage', error);
+    }
+  };
+
+  // Function to render each plan card item
+  const renderPlanCard = ({ item }) => (
+    <PlanCard name={item.name} description={item.description} />
+  );
+
+  // Function to render each category with its list of plans
+  const renderCategory = ({ item }) => (
+    <View style={styles.categoryContainer}>
+      <Text style={styles.categoryTitle}>{item.title}</Text>
+      <FlatList
+        data={item.data}
+        horizontal
+        renderItem={renderPlanCard}
+        keyExtractor={(plan) => plan.id}
+        contentContainerStyle={styles.planList}
+        showsHorizontalScrollIndicator={false}
+      />
+    </View>
+  );
+
+  // Function to handle pressing "Take a Test" button
+  const handleTakeTest = () => {
+    router.navigate({ pathname: 'category', params: { categoriesList: JSON.stringify(categories) } });
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.pageTitle}>Active Plan</Text>
+      </View>
+
+      <View style={styles.contentContainer}>
+        <View style={styles.currentPlanContainer}>
+          {currentPlan ? (
+            <View style={styles.currentPlanCard}>
+              <Text style={styles.currentPlanTitle}>Current Plan</Text>
+              <Text style={styles.planTitle}>{currentPlan.name}</Text>
+              <Text style={styles.planDescription}>{currentPlan.description}</Text>
+              <Button
+                mode="contained"
+                style={styles.deleteButton}
+                labelStyle={{ fontSize: 15, fontWeight: 'bold' }}
+                onPress={clearCurrentPlanFromStorage}
+              >
+                DELETE PLAN
+              </Button>
+            </View>
+          ) : (
+            <View style={styles.noPlanCard}>
+              <Text style={styles.noPlanText}>You are not on any plan now.</Text>
+              <Text style={styles.noPlanPrompt}>Choose a plan below or create your own custom plan.</Text>
+              <View style={styles.buttonContainer}>
+                <Button
+                  mode="contained"
+                  style={styles.customButton}
+                  labelStyle={{ fontSize: 15, fontWeight: 'bold' }}
+                  onPress={handleTakeTest}
+                >
+                  TAKE A TEST
+                </Button>
+                <Button
+                  mode="contained"
+                  style={styles.customButton}
+                  labelStyle={{ fontSize: 15, fontWeight: 'bold' }}
+                  onPress={() => console.log('Pressed CUSTOMISE')}
+                >
+                  CUSTOMISE
+                </Button>
+              </View>
+            </View>
+          )}
+        </View>
+
+        <FlatList
+          data={categories}
+          renderItem={renderCategory}
+          keyExtractor={(category) => category.id}
+          contentContainerStyle={styles.categoryList}
+        />
+      </View>
     </SafeAreaView>
   );
 };
