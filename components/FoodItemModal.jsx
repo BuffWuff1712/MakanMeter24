@@ -8,6 +8,7 @@ import CustomButton from './CustomButton';
 import { addFavouriteFood, checkIsFavouriteFood, removeFavouriteFood, updateMealItemQuantity } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
 import { AntDesign } from '@expo/vector-icons';
+import { getProductNutriScore } from '../lib/calculations/calculateNutriScore';
 
 const formatTo2DPOr2SF = (num) => {
   if (num >= 10000 || num <= 0.01) {
@@ -43,6 +44,7 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item, modeAdd, addPres
   const [quantity, setQuantity] = useState(item.quantity);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
+  const { nutri_score, description } = getProductNutriScore(item);
 
   const headerData = [
     { name: 'Calories', value: formatTo2DPOr2SF(item.calories * quantity) },
@@ -72,7 +74,7 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item, modeAdd, addPres
     { name: 'Magnesium', value: formatTo2DPOr2SF(item.magnesium * quantity), unit: nutrientUnits.magnesium }
   ];
 
-  console.log('item: ', item);
+
   // Check favorite status on component mount
   useEffect(() => {
     if (isAsyncOperationsComplete) {
@@ -191,12 +193,9 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item, modeAdd, addPres
         </View>
         <View className="p-7">
           <Text className="text-2xl font-bold mb-5">Nutrition Quality</Text>
-          <Text className="text-xl">Healthy if taken in moderation.</Text>
-          <Text className="text-xl">
-            Nutrient-packed but also contains trans fats, saturated fats, sugar, cholesterol, salt, etc.
-          </Text>
+          <Text className="text-xl">{description}</Text>
           <View className="w-full items-center justify-center my-10">
-            <GradeBar grade={'B'} />
+            <GradeBar grade={nutri_score} />
           </View>
         </View>
         <View className="p-7">

@@ -60,7 +60,7 @@ const MealListItem = ({ item }) => {
           {item.data.length > 0 ? (
             <View className='items-center'>
               <FilledBarSeparator/>
-              <Text>{item.calories} cal</Text>
+              <Text>{item.calories.toFixed(2)} cal</Text>
             </View>) : <></>}
           
         </TouchableOpacity>
