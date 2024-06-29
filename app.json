@@ -44,6 +44,12 @@
         {
           "cameraPermission": "$(MakanMeter) needs access to your Camera to take photos."
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "$(MakanMeter) needs access to your photo library."
+        }
       ]
     ],
     "extra": {
