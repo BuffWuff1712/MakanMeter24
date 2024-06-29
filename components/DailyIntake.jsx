@@ -57,9 +57,14 @@ const DailyIntake = ({ calories, carbs, protein, fat }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    marginVertical: 10,
     backgroundColor: '#FFF',
     borderRadius: 8,
     elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
 });
 

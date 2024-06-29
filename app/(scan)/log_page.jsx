@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import FoodLogListItem from '../../components/FoodLogListItem';
@@ -10,13 +10,15 @@ import FoodHistory from '../../components/FoodHistory.jsx';
 import AutoCompleteSearchBar from '../../components/AutoCompleteSearchBar.jsx';
 import FavouriteListItem from '../../components/FavouriteListItem.jsx';
 import { Feather } from '@expo/vector-icons';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
 const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
   const { trackedMeals, setTrackedMeals, isAsyncOperationsComplete, setIsAsyncOperationsComplete,
     selectedDate, user, refresh, setRefresh, mealsData } = useGlobalContext();
   const [favourites, setFavourites] = useState([]);
-  const [selectedTab, setSelectedTab] = useState('meals');
+  const [selectedTab, setSelectedTab] = useState(0);
+  const translateX = useSharedValue(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -63,9 +65,23 @@ const Log_Page = () => {
     }
   };
 
+  const handleSwitchTab = (index) => {
+    translateX.value = withSpring(index * 126, {
+      damping: 30, // Adjust this value to make the spring less bouncy
+      stiffness: 250, // Adjust this value to control the speed of the animation
+    });
+    setSelectedTab(index);
+  };
+
   const roundToOneDecimal = (value) => {
     return parseFloat(value).toFixed(1);
   };
+
+  const animatedIndicatorStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+    };
+  });
 
   return (
     <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); }}>
@@ -104,18 +120,19 @@ const Log_Page = () => {
         />
 
         <View style={styles.tabBar}>
-          <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('meals')}>
-            <MaterialIcons name="restaurant-menu" size={24} color={selectedTab === 'meals' ? '#36B37E' : 'gray'} />
+          <TouchableOpacity style={styles.tab} onPress={() => handleSwitchTab(0)}>
+            <MaterialIcons name="restaurant-menu" size={24} color={selectedTab === 0 ? '#36B37E' : 'gray'} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('favorites')}>
-            <MaterialIcons name="favorite" size={24} color={selectedTab === 'favorites' ? '#36B37E' : 'gray'} />
+          <TouchableOpacity style={styles.tab} onPress={() => handleSwitchTab(1)}>
+            <MaterialIcons name="favorite" size={24} color={selectedTab === 1 ? '#36B37E' : 'gray'} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tab} onPress={() => setSelectedTab('recent')}>
-            <MaterialIcons name="update" size={24} color={selectedTab === 'recent' ? '#36B37E' : 'gray'} />
+          <TouchableOpacity style={styles.tab} onPress={() => handleSwitchTab(2)}>
+            <MaterialIcons name="update" size={24} color={selectedTab === 2 ? '#36B37E' : 'gray'} />
           </TouchableOpacity>
+          <Animated.View style={[styles.indicator, animatedIndicatorStyle]} />
         </View>
 
-        {selectedTab === 'meals' && (
+        {selectedTab === 0 && (
           <View style={styles.content}>
             <Text className="text-xl my-3 mx-2 font-semibold color-gray-500">Tracking</Text>
             {trackedMeals.length > 0 ? (
@@ -136,7 +153,7 @@ const Log_Page = () => {
             )}
           </View>
         )}
-        {selectedTab === 'favorites' && (
+        {selectedTab === 1 && (
           <View style={styles.content}>
             {favourites.length > 0 ? (
             <FlatList
@@ -155,7 +172,7 @@ const Log_Page = () => {
             
           </View>
         )}
-        {selectedTab === 'recent' && (
+        {selectedTab === 2 && (
           <View style={styles.content}>
             <View style={styles.historyHeader}>
               <Text className="text-xl my-3 mx-2 font-semibold color-gray-500">History</Text>
@@ -238,8 +255,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    marginVertical: 10,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 30,
+    zIndex: -1,
   },
   tab: {
     alignItems: 'center',
@@ -263,6 +282,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 30,
     marginTop: 10,
+  },
+  indicator: {
+    position: 'absolute',
+    left: -5,
+    width: 130, // Adjust based on the width of each segment
+    height: 45,
+    backgroundColor: '#fff',
+    borderRadius: 30,
+    zIndex: -1,
   },
 });
 

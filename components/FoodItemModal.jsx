@@ -72,6 +72,7 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item, modeAdd, addPres
     { name: 'Magnesium', value: formatTo2DPOr2SF(item.magnesium * quantity), unit: nutrientUnits.magnesium }
   ];
 
+  console.log('item: ', item);
   // Check favorite status on component mount
   useEffect(() => {
     if (isAsyncOperationsComplete) {

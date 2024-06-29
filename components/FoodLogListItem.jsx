@@ -35,7 +35,7 @@ const FoodLogListItem = ({ item, onDelete }) => {
          
         </Text>
         <Text style={styles.foodDetails}>
-          🖊 {item.quantity} servings 
+          🖊 {item.quantity} {item.serving_unit}
         </Text>
       </View>
       <Pressable onPress={handlePress}>
