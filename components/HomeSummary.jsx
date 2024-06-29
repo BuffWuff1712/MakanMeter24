@@ -2,11 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
-
 const screenWidth = Dimensions.get('window').width;
 
 const HomeSummary = ({ calories, carbs, protein, fat }) => {
-  
+  // Function to sanitize the fill value
+  const getFillValue = (consumed, total) => {
+    const fillValue = (consumed / total) * 100;
+    if (!isFinite(fillValue) || fillValue < 0) {
+      return 0;
+    }
+    return fillValue;
+  };
 
   const data = [
     { label: "Carbs", consumed: carbs.consumed, total: carbs.total, 
@@ -16,7 +22,6 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
     { label: "Fats", consumed: fat.consumed, total: fat.total, 
      colorStart: '#87CEEB', colorEnd: '#0000FF'},
   ];
-
 
   return (
     <View style={styles.container}>
@@ -29,7 +34,7 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
           width={15}
           lineCap='round'
           style={styles.calorieProgress}
-          fill={(calories.consumed / calories.total) * 100}
+          fill={getFillValue(calories.consumed, calories.total)}
           rotation={255}
           arcSweepAngle={210}
           tintColor="teal"
@@ -59,7 +64,7 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
             width={5}
             lineCap='round'
             style={styles.nutrientProgress}
-            fill={(item.consumed / item.total) * 100}
+            fill={getFillValue(item.consumed, item.total)}
             rotation={365}
             tintColor={item.colorStart}
             tintColorSecondary={item.colorEnd}
@@ -87,8 +92,6 @@ const HomeSummary = ({ calories, carbs, protein, fat }) => {
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
     container: {

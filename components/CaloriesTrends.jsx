@@ -120,8 +120,8 @@ const CaloriesTrendsDashboard = ({ data, onPress, goal }) => {
           </View>
           <View className="items-center px-2">
             <Text className="text-base">Goal</Text>
-            <Text>{goal.length > 0 ? `${Math.round(goal[0].target_value * 7)}` : '-'}</Text>
-            <Text>{goal.length > 0 ? `${Math.round(goal[0].target_value)}` : '-'}</Text>
+            <Text>{goal >= 0 ? `${Math.round(goal * 7)}` : '-'}</Text>
+            <Text>{goal >= 0 ? `${Math.round(goal)}` : '-'}</Text>
           </View>
         </View>
       </View>

@@ -6,6 +6,7 @@ import CustomButton from '../../components/CustomButton';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { getCurrentUser, submitNewTarget, updateUser } from '../../lib/supabase';
+import { calculateMacronutrientNeeds } from '../../lib/calculations/calorieEstimator';
 
 
 const setCaloriesScreen = () => {
@@ -15,20 +16,33 @@ const setCaloriesScreen = () => {
 
   const handleFinish = async () => {
     try {
-      // Check if calorieGoal is not null, not an empty string, and is a number
-      if ( calorieGoal > 0 && !isNaN(calorieGoal)) {
+      // Check if calorieGoal is a valid positive number
+      if (calorieGoal > 0 && !isNaN(calorieGoal)) {
+        // Calculate macronutrient needs based on the calorie goal
+        const macroNeeds = calculateMacronutrientNeeds(calorieGoal);
+  
         const user = await getCurrentUser();
         await updateUser(user, userInitData);
+  
+        // Submit the new caloric intake target
         await submitNewTarget(user, 'caloric_intake', calorieGoal);
+  
+        // Submit macronutrient needs as new targets
+        await submitNewTarget(user, 'carbohydrates', macroNeeds.carbs);
+        await submitNewTarget(user, 'protein', macroNeeds.protein);
+        await submitNewTarget(user, 'fats', macroNeeds.fats);
+  
+        // Navigate to the home page
         router.navigate('/home');
       } else {
         alert('Please enter a valid number for your calorie goal.');
       }
     } catch (error) {
-      console.error('Error trying to set new target for new user ', error);
+      console.error('Error trying to set new target for new user: ', error);
+      alert('There was an error setting your new target. Please try again.');
     }
-    
   };
+  
 
   return (
       <SafeAreaView className='h-full justify-center p-5 bg-white'>

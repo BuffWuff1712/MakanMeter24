@@ -45,7 +45,7 @@ const WeightTrendsDashboard = ({ data, goal }) => {
         </Text>
         <Text className="text-xl color-gray-500">
           Goal: <Text className="text-xl color-emerald font-semibold">
-                  {goal.length > 0 ? `${goal[0].target_value.toFixed(1)} kg` : 'No goal set'}
+                  {goal >= 0 ? `${goal.toFixed(1)} kg` : 'No goal set'}
                 </Text>
         </Text>
       </View>

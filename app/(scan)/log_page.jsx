@@ -14,8 +14,8 @@ import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-na
 
 const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
-  const { trackedMeals, setTrackedMeals, isAsyncOperationsComplete, setIsAsyncOperationsComplete,
-    selectedDate, user, refresh, setRefresh, mealsData } = useGlobalContext();
+  const { trackedMeals, setTrackedMeals, setIsAsyncOperationsComplete,
+    selectedDate, user, refresh, setRefresh, mealsData, calorieGoals, macroGoals } = useGlobalContext();
   const [favourites, setFavourites] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
   const translateX = useSharedValue(0);
@@ -113,10 +113,10 @@ const Log_Page = () => {
         </View>
 
         <DailyIntake
-          calories={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalCalories || 0)), total: 3046 }}
-          carbs={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalCarbs || 0)), total: 381 }}
-          protein={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalProtein || 0)), total: 152 }}
-          fat={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalFats || 0)), total: 102 }}
+          calories={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalCalories || 0)), total: calorieGoals }}
+          carbs={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalCarbs || 0)), total: macroGoals?.carbohydrates || 0 }}
+          protein={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalProtein || 0)), total: macroGoals?.protein || 0 }}
+          fat={{ consumed: parseFloat(roundToOneDecimal(mealsData?.Summary?.totalFats || 0)), total: macroGoals?.fats || 0 }}
         />
 
         <View style={styles.tabBar}>

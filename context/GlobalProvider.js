@@ -15,6 +15,8 @@ import { createContext, useContext, useState,
       const [mealsData, setMealsData] = useState({});
       const [period, setPeriod] = useState(0);
       const [macros, setMacros] = useState(null);
+      const [calorieGoals, setCalorieGoals] = useState(null);
+      const [macroGoals, setMacroGoals] = useState(null);
       const [isAsyncOperationsComplete, setIsAsyncOperationsComplete] = useState(true);
       const [currentPlan, setCurrentPlan] = useState(null);
       const [userInitData, setUserInitData] = useState({
@@ -77,6 +79,10 @@ import { createContext, useContext, useState,
               setIsAsyncOperationsComplete,
               currentPlan,
               setCurrentPlan,
+              calorieGoals, 
+              setCalorieGoals,
+              macroGoals, 
+              setMacroGoals,
             }}
           >
             {children}

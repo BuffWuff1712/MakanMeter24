@@ -5,7 +5,7 @@ import { icons } from '../../constants';
 import DatePicker from '../../components/DatePicker';
 import HomeSummary from '../../components/HomeSummary';
 import MealListItem from '../../components/MealListItem';
-import { getMealsForDate } from '../../lib/supabase';
+import { fetchGoal, fetchMacroGoals, getMealsForDate } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
 import { debounce } from 'lodash';
@@ -13,11 +13,17 @@ import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
 import WaterIntake from '../../components/WaterIntake';
 
 const Home = () => {
-  const { selectedDate, user, mealsData, setMealsData, refresh, setRefresh } = useGlobalContext();
+  const { selectedDate, user, mealsData, setMealsData,
+     macroGoals, setMacroGoals, calorieGoals, setCalorieGoals, refresh } = useGlobalContext();
   
   const fetchMeals = async (date) => {
     try {
       const data = await getMealsForDate(user, date);
+      const tempCalorieGoal = await fetchGoal(user, 'caloric_intake');
+      const tempMacroGoals = await fetchMacroGoals(user);
+
+      setCalorieGoals(tempCalorieGoal);
+      setMacroGoals(tempMacroGoals);
       setMealsData(data);
     } catch (error) {
       console.log(error);
@@ -101,10 +107,10 @@ const Home = () => {
         
         <View className="w-full bg-white items-center mt-10 mb-10">
           <HomeSummary
-            calories={{ consumed: mealsData?.Summary?.totalCalories || 0, total: 3046 }}
-            carbs={{ consumed: mealsData?.Summary?.totalCarbs || 0, total: 381 }}
-            protein={{ consumed: mealsData?.Summary?.totalProtein || 0, total: 152 }}
-            fat={{ consumed: mealsData?.Summary?.totalFats || 0, total: 102 }}
+            calories={{ consumed: mealsData?.Summary?.totalCalories || 0, total: calorieGoals }}
+            carbs={{ consumed: mealsData?.Summary?.totalCarbs || 0, total: macroGoals?.carbohydrates || 0}}
+            protein={{ consumed: mealsData?.Summary?.totalProtein || 0, total: macroGoals?.protein || 0}}
+            fat={{ consumed: mealsData?.Summary?.totalFats || 0, total: macroGoals?.fats || 0}}
           />
         </View>
 
