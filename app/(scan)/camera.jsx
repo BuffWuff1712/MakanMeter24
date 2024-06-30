@@ -101,42 +101,15 @@ const CameraScreen = () => {
     };
 
     // TO USE ONLY AFTER WE HAVE FINALISED APP - analyse image of the food
-    // const analysePhoto = async (photo) => {
-    //     try {
-    //         setIsLoading(true); // Show loading screen
-    //         const jsonData = await analyse(photo);
-    //         console.log(jsonData);
-    //         // Navigate to results page with jsonData
-    //         router.push({
-    //             pathname: '/results',
-    //             params: { data: JSON.stringify(jsonData) }
-    //         });
-    //     } catch (error) {
-    //         console.log('Failed to analyze photo:', error);
-    //         setErrorMessage('Failed to analyze photo. Please try again.');
-    //     } finally {
-    //         setIsLoading(false); // Hide loading screen
-    //     }
-    // };
-
-    // TO DUMMY REQUEST API APP - analyse image of the food
-    const analysePhoto = (photo) => {
+    const analysePhoto = async (photo) => {
         try {
             setIsLoading(true); // Show loading screen
-            const jsonData = {"ingredients": 
-                ["noodles", "shrimp", 
-                "squid", "green onions", 
-                "bean sprouts", "lime", 
-                "chili paste", "garlic", 
-                "soy sauce", "oil"]
-            };
-
-            console.log(jsonData);
-            
+            const jsonData = await analyse(photo);
+            console.log('(From camera.jsx) Returned json: ', jsonData);
             // Navigate to results page with jsonData
             router.push({
                 pathname: '/results',
-                params: { data: JSON.stringify(jsonData), meal_type: meal_type}
+                params: { data: JSON.stringify(jsonData), meal_type: meal_type }
             });
         } catch (error) {
             console.log('Failed to analyze photo:', error);
@@ -145,6 +118,40 @@ const CameraScreen = () => {
             setIsLoading(false); // Hide loading screen
         }
     };
+
+    // TO DUMMY REQUEST API APP - analyse image of the food
+    // const analysePhoto = (photo) => {
+    //     try {
+    //         setIsLoading(true); // Show loading screen
+    //         const jsonData = {
+    //             "possible_dish_names": [
+    //               "grilled chicken wings",
+    //               "satay skewers",
+    //               "satay sauce",
+    //               "stir-fried oyster omelette",
+    //               "lime soda",
+    //               "iced tea",
+    //               "grilled meat skewers",
+    //               "white radish",
+    //               "cucumber slices",
+    //               "spicy dipping sauce"
+    //             ]
+    //         };
+
+    //         console.log(jsonData);
+            
+    //         // Navigate to results page with jsonData
+    //         router.push({
+    //             pathname: '/results',
+    //             params: { data: JSON.stringify(jsonData), meal_type: meal_type}
+    //         });
+    //     } catch (error) {
+    //         console.log('Failed to analyze photo:', error);
+    //         setErrorMessage('Failed to analyze photo. Please try again.');
+    //     } finally {
+    //         setIsLoading(false); // Hide loading screen
+    //     }
+    // };
 
     // returns user to home page
     const goBack = () => {

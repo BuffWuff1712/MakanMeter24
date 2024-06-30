@@ -26,14 +26,7 @@ const AutoCompleteSearchBar = ({ trackedMeals, meal_type }) => {
     };
 
     const handleSelectSuggestion = async (item) => {
-        if (item && item.title) {
-        // setQuery(item.title);
-        // setSuggestions([]);
-        // const detailedInfo = await fetchNutritionInfo(item.title);
-        // if (detailedInfo) {
-        //   setResults([detailedInfo]);
-        // }
-        }
+        //future code here
     };
 
     const handleCancelSearch = () => {
@@ -45,15 +38,17 @@ const AutoCompleteSearchBar = ({ trackedMeals, meal_type }) => {
 
     const handleAdd = async (food_item) => {
         try {
-        const nutriData = await fetchNutritionInfo(food_item);
-        await addMeal(nutriData, meal_type, selectedDate);
+            const tempArr = [];
+            const searchResult = await fetchNutritionInfo(food_item);
+            tempArr.push(searchResult[0]);
+            await addMeal(tempArr, meal_type, selectedDate);
 
-        // Trigger a refresh
-        setRefresh((prev) => !prev);
-        const updatedSuggestions = suggestions.filter(item => item.food_name !== food_item);
-        setSuggestions(updatedSuggestions);
+            // Trigger a refresh
+            setRefresh((prev) => !prev);
+            const updatedSuggestions = suggestions.filter(item => item.food_name !== food_item);
+            setSuggestions(updatedSuggestions);
         } catch (error) {
-        console.error('Error adding meal item:', error);
+            console.error('Error adding meal item:', error);
         }
     }
 
