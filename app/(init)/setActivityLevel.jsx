@@ -79,7 +79,7 @@ const setActivityLevelPage = () => {
         </View>
         
         <CustomButton 
-              title="Create My Plan"
+              title="Next"
               containerStyles="mt-7 bg-emerald"
               handlePress={handleNext}
         />
