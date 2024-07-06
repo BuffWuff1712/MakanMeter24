@@ -42,7 +42,7 @@ const AnalyticsPage = () => {
               <Text style={styles.title}>Streak Progress</Text>
           </View>
           <View className="items-center">
-            <StreakBar day={17} totalDays={30}/>
+            <StreakBar totalDays={30}/>
           </View>
 
         </View>

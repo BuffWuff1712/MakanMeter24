@@ -8,7 +8,7 @@ import { useGlobalContext } from '../context/GlobalProvider';
 
 const AutoCompleteSearchBar = ({ trackedMeals, meal_type }) => {
 
-    const { setRefresh, selectedDate } = useGlobalContext();
+    const { setRefresh, selectedDate, lastLoggedDate } = useGlobalContext();
     const [query, setQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [results, setResults] = useState([]);
@@ -41,7 +41,7 @@ const AutoCompleteSearchBar = ({ trackedMeals, meal_type }) => {
             const tempArr = [];
             const searchResult = await fetchNutritionInfo(food_item);
             tempArr.push(searchResult[0]);
-            await addMeal(tempArr, meal_type, selectedDate);
+            await addMeal(tempArr, meal_type, selectedDate, lastLoggedDate);
 
             // Trigger a refresh
             setRefresh((prev) => !prev);

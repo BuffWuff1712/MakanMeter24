@@ -19,6 +19,13 @@ const CamLayout = () => {
         />
 
         <Stack.Screen 
+          name="barcodeScanner"
+          options={{
+            headerShown: false,
+          }}
+        />  
+
+        <Stack.Screen 
           name="results"
           options={{
             headerShown: false,

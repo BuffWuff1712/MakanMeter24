@@ -5,7 +5,7 @@ import { icons } from '../../constants';
 import DatePicker from '../../components/DatePicker';
 import HomeSummary from '../../components/HomeSummary';
 import MealListItem from '../../components/MealListItem';
-import { fetchGoal, fetchMacroGoals, getMealsForDate } from '../../lib/supabase';
+import { fetchGoal, fetchMacroGoals, fetchStreak, getMealsForDate } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
 import { debounce } from 'lodash';
@@ -14,7 +14,10 @@ import WaterIntake from '../../components/WaterIntake';
 
 const Home = () => {
   const { selectedDate, user, mealsData, setMealsData,
-     macroGoals, setMacroGoals, calorieGoals, setCalorieGoals, refresh } = useGlobalContext();
+     macroGoals, setMacroGoals, calorieGoals, setCalorieGoals, streak, setStreak, 
+     lastLoggedDate, setLastLoggedDate, refresh } = useGlobalContext();
+
+  const [hasLoggedMealToday, setHasLoggedMealToday] = useState(false);
   
   const fetchMeals = async (date) => {
     try {
@@ -43,6 +46,31 @@ const Home = () => {
       debouncedFetchMeals.cancel();
     };
   }, [selectedDate, refresh, debouncedFetchMeals]);
+
+
+  // Fetch streak data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchStreak(user); 
+        setStreak(data.current_streak);
+        setLastLoggedDate(new Date(data.last_logged_date));
+        console.log('streak set in home');
+
+        // Check if the last logged date is today or in the future
+        const today = new Date();
+        const lastLogged = new Date(data.last_logged_date);
+        setHasLoggedMealToday(lastLogged >= new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+
+      } catch (error) {
+        console.log('Error in fetching streak: ', error.message);
+        setLastLoggedDate(new Date());
+      }
+    };
+
+    fetchData();
+  }, [refresh, user]);
+
 
   const trackedMeals = [
     { 
@@ -92,9 +120,18 @@ const Home = () => {
       {/* Top layer icons */}
       <View className="flex-row justify-between items-center align-center mb-5 px-10">
         {/* <Image source={icons.fire} resizeMode="contain" className="w-[40px] h-[40px]" /> */}
-        <FontAwesome6 name="fire" size={32} color="#FF4500" />
+        <View className='flex-row align-center items-center'>
+          <FontAwesome6 name="fire" size={32} color={hasLoggedMealToday ? "#FF4500" : "#C0C0C0"} />
+          <Text 
+            className='text-base font-bold' 
+            style={{ 
+              color: hasLoggedMealToday ? "#FF4500" : "#C0C0C0",
+              width: 50,
+              textAlign: 'center'
+              }}>{streak}</Text>
+        </View>
         <Image source={icons.logoSmall} resizeMode="contain" className="w-[55px] h-[55px]" />
-        <TouchableOpacity onPress={toNotifs}>
+        <TouchableOpacity onPress={toNotifs} className='pl-12'>
           {/* <Image source={icons.bell} resizeMode="contain" className="w-[40px] h-[40px]" /> */}
           <Ionicons name="notifications-outline" size={34} color="black" />
         </TouchableOpacity>

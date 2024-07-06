@@ -13,7 +13,7 @@ import { Button } from 'react-native-paper';
 
 const Results = () => {
   const { meal_type } = useLocalSearchParams();
-  const { user, setTrackedMeals, setMealsData, selectedDate, setRefresh} = useGlobalContext();
+  const { user, setTrackedMeals, setMealsData, selectedDate, setRefresh, lastLoggedDate} = useGlobalContext();
   const [foodItems, setFoodItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -85,7 +85,7 @@ const Results = () => {
       setIsLoading(true);
       setLoadingContext('adding');
       try {
-        const meal_id = await addMeal(selectedItems, meal_type, selectedDate);
+        const meal_id = await addMeal(selectedItems, meal_type, selectedDate, lastLoggedDate);
         const updatedTrackedMeals = await getTrackedMeals(meal_id);
         const mealsData = await getMealsForDate(user, selectedDate);
   

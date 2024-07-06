@@ -19,6 +19,8 @@ import { createContext, useContext, useState,
       const [macroGoals, setMacroGoals] = useState(null);
       const [isAsyncOperationsComplete, setIsAsyncOperationsComplete] = useState(true);
       const [currentPlan, setCurrentPlan] = useState(null);
+      const [streak, setStreak] = useState(0);
+      const [lastLoggedDate, setLastLoggedDate] = useState(null);
       const [userInitData, setUserInitData] = useState({
         gender: '',
         age: '',
@@ -83,6 +85,10 @@ import { createContext, useContext, useState,
               setCalorieGoals,
               macroGoals, 
               setMacroGoals,
+              streak, 
+              setStreak, 
+              lastLoggedDate, 
+              setLastLoggedDate,
             }}
           >
             {children}
