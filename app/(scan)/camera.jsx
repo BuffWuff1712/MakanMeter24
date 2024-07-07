@@ -1,11 +1,11 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
 //import * as MediaLibrary from 'expo-media-library';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, 
     Image, ActivityIndicator, Modal, 
     Alert} from 'react-native';
 import ShutterButton from '../../components/ShutterButton';
-import { router, useLocalSearchParams } from 'expo-router'
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import FlipButton from '../../components/FlipButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { analyse } from '../../lib/openAI';
@@ -20,11 +20,23 @@ const CameraScreen = () => {
     const { meal_type } = useLocalSearchParams();
     const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
+    const [isCameraActive, setIsCameraActive] = useState(true);
     const [isCameraReady, setIsCameraReady] = useState(false);
     const [isLoading, setIsLoading] = useState(false); // Loading state
     const [errorMessage, setErrorMessage] = useState(''); // Error message state
     //const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
     const cameraRef = useRef(null);
+
+
+    useFocusEffect(
+        React.useCallback(() => {
+            setIsCameraActive(true);
+            return () => {
+                // Cleanup action when screen loses focus
+                setIsCameraActive(false);
+            };
+        }, [])
+    );
 
     if (!permission) {
         // Camera permissions are still loading.
@@ -173,13 +185,16 @@ const CameraScreen = () => {
                         </TouchableOpacity>
                     </View>
                     
-                    <CameraView
+                    { isCameraActive &&
+                        <CameraView
                         className="flex-1"
                         facing={facing}
                         ref={cameraRef}
                         onCameraReady={handleCameraReady}
                         onMountError={handleMountError}
-                    />
+                        />
+                    }
+                    
                     <View className="justify-center items-center flex-row">
                         <Text className="text-lg font-bold p-4">
                         Press the camera button to scan
