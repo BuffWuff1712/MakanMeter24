@@ -46,10 +46,12 @@ const CameraScreen = () => {
     if (!permission.granted) {
         // Camera permissions are not granted yet.
         return (
-        <View style={styles.container}>
-            <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-            <Button onPress={requestPermission} title="grant permission" />
-        </View>
+            <SafeAreaView className='h-full justify-center'>
+                <View style={styles.container}>
+                    <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
+                    <Button onPress={requestPermission} title="Grant Permission" />
+                </View>
+            </SafeAreaView>
         );
     }
 
