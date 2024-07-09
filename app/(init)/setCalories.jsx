@@ -12,10 +12,13 @@ import { calculateMacronutrientNeeds } from '../../lib/calculations/calorieEstim
 const setCaloriesScreen = () => {
   const { lowerCals, upperCals } = useLocalSearchParams();
   const { userInitData, setUserInitData } = useGlobalContext();
+  const [isSubmitting, setSubmitting] = useState(false);
   const [calorieGoal, setCalorieGoal] = useState(0);
 
   const handleFinish = async () => {
     try {
+
+      setSubmitting(true);
       // Check if calorieGoal is a valid positive number
       if (calorieGoal > 0 && !isNaN(calorieGoal)) {
         // Calculate macronutrient needs based on the calorie goal
@@ -32,6 +35,7 @@ const setCaloriesScreen = () => {
         await submitNewTarget(user, 'protein', macroNeeds.protein);
         await submitNewTarget(user, 'fats', macroNeeds.fats);
   
+        setSubmitting(false);
         // Navigate to the home page
         router.replace('/home');
       } else {
@@ -64,9 +68,10 @@ const setCaloriesScreen = () => {
             </View>
           </TouchableWithoutFeedback>
           <CustomButton 
-                title="Next"
+                title="Let's Go!"
                 containerStyles="mt-7 bg-emerald"
                 handlePress={handleFinish}
+                isLoading={isSubmitting}
           />        
       </SafeAreaView>
   );
