@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Dimensions, StyleSheet, FlatList } from 'react-native';
-import * as Animatable from 'react-native-animatable';
 import { fetchGoal, userMonthHistory, userWeekHistory } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
 import WeightTrendsDashboard from './WeightTrend';
@@ -44,9 +43,9 @@ const ProgressOverview = () => {
     }
 
     return (
-      <Animatable.View animation="fadeIn" duration={800} style={styles.carouselItem}>
+      <View style={styles.carouselItem}>
         <DashboardComponent data={item} goal={weightGoal} />
-      </Animatable.View>
+      </View>
     );
   };
 

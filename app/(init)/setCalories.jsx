@@ -33,7 +33,7 @@ const setCaloriesScreen = () => {
         await submitNewTarget(user, 'fats', macroNeeds.fats);
   
         // Navigate to the home page
-        router.navigate('/home');
+        router.replace('/home');
       } else {
         alert('Please enter a valid number for your calorie goal.');
       }
@@ -42,7 +42,6 @@ const setCaloriesScreen = () => {
       alert('There was an error setting your new target. Please try again.');
     }
   };
-  
 
   return (
       <SafeAreaView className='h-full justify-center p-5 bg-white'>

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Alert, AppState} from 'react-native';
+import { View, Text, ScrollView, Image, Alert, AppState, TouchableOpacity} from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
@@ -34,7 +34,7 @@ const SignIn = () => {
       Alert.alert("Success", "User signed in successfully");
       router.replace("/home");
     } catch (error) {
-      console.log("Error", error.message);
+      Alert.alert("Error: ", error.message);
     } finally {
       setSubmitting(false);
     }
@@ -70,11 +70,18 @@ const SignIn = () => {
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
-          />    
+          /> 
+
+          <View className='px-2 items-end my-5'>
+            <TouchableOpacity onPress={() => {router.navigate('forget_password')}}>
+              <Text className='text-emerald font-semibold'>Forgot Password?</Text>
+            </TouchableOpacity>
+            
+          </View>
 
           <CustomButton 
             title="Login"
-            containerStyles="mt-7 bg-emerald"
+            containerStyles="bg-emerald"
             handlePress={submit}
             isLoading={isSubmitting}
           />
