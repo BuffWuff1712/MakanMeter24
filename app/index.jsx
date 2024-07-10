@@ -59,7 +59,7 @@ const Welcome = () => {
         {/* <Link href='/gender'>Press Here</Link> */}
       </ScrollView>
 
-      <StatusBar backgroundColor='#161622' style='dark'/>
+      <StatusBar backgroundColor='#161622' style='auto'/>
     </SafeAreaView>
   );
 }

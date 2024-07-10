@@ -1,5 +1,7 @@
-import { Stack } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
+import { router, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { TouchableOpacity } from 'react-native'
 
 const PlanLayout = () => {
   return (
@@ -18,6 +20,13 @@ const PlanLayout = () => {
             headerShown: false
           }}
         /> 
+
+        <Stack.Screen 
+          name="plan_info"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor="#161622" style="dark" />
