@@ -14,7 +14,13 @@
         "commitment": "Daily",
         "aims": ["Reduce body fat", "Increase energy levels"],
         "objectives": ["Maintain ketosis", "Limit carb intake to 20-50 grams per day", "Increase healthy fat consumption"],
-        "guideline": "Ensure you monitor your macronutrient intake closely and stay hydrated. Consult a healthcare provider before starting the Keto Diet."
+        "guideline": "Ensure you monitor your macronutrient intake closely and stay hydrated. Consult a healthcare provider before starting the Keto Diet.",
+        "schedule": [
+          "Achieve ketosis and maintain it",
+          "Adjust to low carb intake",
+          "Stabilize energy levels",
+          "Monitor progress and adjust diet"
+        ]
       },
       {
         "id": "w2",
@@ -27,7 +33,17 @@
         "commitment": "Daily",
         "aims": ["Weight loss", "Improved metabolism"],
         "objectives": ["Consume 1200-1500 calories per day", "Include nutrient-dense foods", "Avoid high-calorie snacks"],
-        "guideline": "Track your caloric intake using a food diary or app. Ensure you're meeting your nutritional needs despite the calorie reduction."
+        "guideline": "Track your caloric intake using a food diary or app. Ensure you're meeting your nutritional needs despite the calorie reduction.",
+        "schedule": [
+          "Reduce daily calorie intake to target range",
+          "Identify and eliminate high-calorie snacks",
+          "Increase nutrient-dense foods",
+          "Monitor weight loss and adjust intake",
+          "Improve metabolism through balanced nutrition",
+          "Stabilize weight loss progress",
+          "Maintain reduced calorie intake",
+          "Evaluate overall progress and health"
+        ]
       },
       {
         "id": "w3",
@@ -40,7 +56,13 @@
         "commitment": "Daily",
         "aims": ["Weight management", "Improve metabolic health"],
         "objectives": ["Fast for 16 hours, eat within an 8-hour window", "Consume balanced meals during eating periods", "Stay hydrated during fasting"],
-        "guideline": "Start with shorter fasting periods and gradually increase. Listen to your body and avoid over-eating during eating periods."
+        "guideline": "Start with shorter fasting periods and gradually increase. Listen to your body and avoid over-eating during eating periods.",
+        "schedule": [
+          "Adapt to fasting periods",
+          "Optimize meal planning within eating window",
+          "Improve metabolic flexibility",
+          "Evaluate fasting benefits and adjust routine"
+        ]
       }
     ]
   },
@@ -59,7 +81,17 @@
         "commitment": "Daily",
         "aims": ["Muscle growth", "Enhanced recovery"],
         "objectives": ["Consume 1.5-2 grams of protein per kilogram of body weight", "Include protein in every meal", "Focus on lean protein sources"],
-        "guideline": "Spread protein intake throughout the day. Combine with strength training exercises for optimal results."
+        "guideline": "Spread protein intake throughout the day. Combine with strength training exercises for optimal results.",
+        "schedule": [
+          "Increase daily protein intake",
+          "Incorporate protein into every meal",
+          "Enhance muscle recovery",
+          "Monitor muscle growth progress",
+          "Optimize protein sources",
+          "Evaluate strength gains",
+          "Maintain consistent protein intake",
+          "Review overall muscle gain progress"
+        ]
       },
       {
         "id": "m2",
@@ -72,7 +104,22 @@
         "commitment": "Daily",
         "aims": ["Maximize muscle mass", "Improve strength"],
         "objectives": ["Follow a structured workout plan", "Consume a calorie surplus with high protein intake", "Rest and recover adequately"],
-        "guideline": "Ensure you follow a balanced diet with enough calories to support muscle growth. Include rest days to allow muscles to recover."
+        "guideline": "Ensure you follow a balanced diet with enough calories to support muscle growth. Include rest days to allow muscles to recover.",
+        "schedule": [
+          "Begin structured workout plan",
+          "Increase calorie intake for muscle growth",
+          "Enhance protein consumption",
+          "Monitor muscle and strength gains",
+          "Adjust workout intensity",
+          "Ensure adequate rest and recovery",
+          "Optimize diet for muscle gain",
+          "Review progress and set new goals",
+          "Evaluate overall muscle growth",
+          "Fine-tune workout and diet plan",
+          "Maintain high protein and calorie intake",
+          "Assess muscle definition",
+          "Achieve target muscle mass"
+        ]
       },
       {
         "id": "m3",
@@ -85,7 +132,13 @@
         "commitment": "Daily",
         "aims": ["Improve overall health", "Support muscle growth"],
         "objectives": ["Avoid processed foods", "Include lean meats, fruits, vegetables, nuts, and seeds", "Stay hydrated"],
-        "guideline": "Focus on whole, unprocessed foods. Avoid dairy, grains, and processed sugar."
+        "guideline": "Focus on whole, unprocessed foods. Avoid dairy, grains, and processed sugar.",
+        "schedule": [
+          "Eliminate processed foods",
+          "Increase intake of lean proteins",
+          "Incorporate more fruits and vegetables",
+          "Monitor health improvements and muscle growth"
+        ]
       }
     ]
   },
@@ -104,7 +157,13 @@
         "commitment": "Daily",
         "aims": ["Maintain weight", "Boost energy levels"],
         "objectives": ["Eat a variety of foods from all food groups", "Include fruits, vegetables, grains, proteins, and dairy", "Stay within your daily calorie needs"],
-        "guideline": "Follow the dietary guidelines for balanced meals. Ensure you have a mix of macronutrients in each meal."
+        "guideline": "Follow the dietary guidelines for balanced meals. Ensure you have a mix of macronutrients in each meal.",
+        "schedule": [
+          "Adopt a balanced meal plan",
+          "Incorporate diverse food groups",
+          "Monitor energy levels",
+          "Evaluate and adjust meal balance"
+        ]
       },
       {
         "id": "t2",
@@ -117,7 +176,17 @@
         "commitment": "Daily",
         "aims": ["Improve heart health", "Maintain weight"],
         "objectives": ["Include olive oil as a primary fat source", "Eat plenty of fruits and vegetables", "Include fish and poultry"],
-        "guideline": "Adopt Mediterranean eating patterns, focusing on fresh, whole foods and reducing red meat and processed foods."
+        "guideline": "Adopt Mediterranean eating patterns, focusing on fresh, whole foods and reducing red meat and processed foods.",
+        "schedule": [
+          "Integrate Mediterranean meal principles",
+          "Increase healthy fat intake",
+          "Incorporate more fruits and vegetables",
+          "Monitor heart health benefits",
+          "Enhance fish and poultry consumption",
+          "Evaluate weight maintenance",
+          "Adopt Mediterranean lifestyle habits",
+          "Review overall health improvements"
+        ]
       },
       {
         "id": "t3",
@@ -130,7 +199,13 @@
         "commitment": "Daily",
         "aims": ["Reset your diet", "Identify food sensitivities"],
         "objectives": ["Eliminate processed foods", "Focus on whole foods like vegetables, fruits, and lean proteins", "Avoid added sugars and artificial ingredients"],
-        "guideline": "Strictly follow the elimination guidelines for 30 days. Reintroduce foods gradually to identify any adverse reactions."
+        "guideline": "Strictly follow the elimination guidelines for 30 days. Reintroduce foods gradually to identify any adverse reactions.",
+        "schedule": [
+          "Eliminate processed and sugary foods",
+          "Focus on whole, nutrient-dense foods",
+          "Adapt to dietary changes",
+          "Monitor for any food sensitivities"
+        ]
       }
     ]
   },
@@ -149,7 +224,13 @@
         "commitment": "Daily",
         "aims": ["Promote overall health", "Increase plant-based nutrient intake"],
         "objectives": ["Include a variety of fruits, vegetables, grains, and legumes", "Ensure adequate protein intake from plant sources", "Monitor B12 and iron levels"],
-        "guideline": "Ensure a diverse diet to cover all nutritional bases. Consider supplements for nutrients like B12."
+        "guideline": "Ensure a diverse diet to cover all nutritional bases. Consider supplements for nutrients like B12.",
+        "schedule": [
+          "Adopt a balanced vegan meal plan",
+          "Ensure diverse food group intake",
+          "Monitor protein and nutrient levels",
+          "Evaluate health improvements"
+        ]
       },
       {
         "id": "v2",
@@ -162,7 +243,13 @@
         "commitment": "Daily",
         "aims": ["Detoxify the body", "Improve digestion"],
         "objectives": ["Consume fruits, vegetables, nuts, seeds, and sprouted grains", "Avoid all processed and cooked foods", "Stay hydrated"],
-        "guideline": "Focus on fresh, raw ingredients. Ensure you're meeting your nutritional needs, especially for protein and fat."
+        "guideline": "Focus on fresh, raw ingredients. Ensure you're meeting your nutritional needs, especially for protein and fat.",
+        "schedule": [
+          "Begin raw food consumption",
+          "Increase intake of fresh, raw ingredients",
+          "Monitor digestion and energy levels",
+          "Evaluate overall health and detox benefits"
+        ]
       },
       {
         "id": "v3",
@@ -175,7 +262,17 @@
         "commitment": "Daily",
         "aims": ["Support muscle growth", "Maintain energy levels"],
         "objectives": ["Include beans, lentils, tofu, tempeh, and seitan", "Incorporate nuts and seeds", "Monitor protein intake to meet daily requirements"],
-        "guideline": "Balance your diet with a variety of high-protein plant foods. Consider protein supplements if needed."
+        "guideline": "Balance your diet with a variety of high-protein plant foods. Consider protein supplements if needed.",
+        "schedule": [
+          "Increase plant-based protein sources",
+          "Monitor muscle growth and recovery",
+          "Optimize vegan protein intake",
+          "Evaluate energy levels and performance",
+          "Incorporate diverse protein-rich foods",
+          "Maintain consistent protein consumption",
+          "Monitor overall muscle maintenance",
+          "Review progress and adjust diet"
+        ]
       }
     ]
   },
@@ -194,7 +291,17 @@
         "commitment": "Daily",
         "aims": ["Manage celiac disease or gluten sensitivity", "Maintain balanced nutrition"],
         "objectives": ["Avoid wheat, barley, rye, and other gluten-containing grains", "Include gluten-free grains like rice, quinoa, and millet", "Ensure adequate fiber intake"],
-        "guideline": "Read labels carefully to avoid gluten. Focus on naturally gluten-free foods and a balanced diet."
+        "guideline": "Read labels carefully to avoid gluten. Focus on naturally gluten-free foods and a balanced diet.",
+        "schedule": [
+          "Eliminate gluten from your diet",
+          "Increase gluten-free grain consumption",
+          "Monitor fiber intake",
+          "Evaluate gluten sensitivity management",
+          "Optimize balanced nutrition",
+          "Monitor overall health improvements",
+          "Maintain gluten-free lifestyle",
+          "Review diet and health progress"
+        ]
       },
       {
         "id": "g2",
@@ -207,7 +314,13 @@
         "commitment": "Daily",
         "aims": ["Improve overall health", "Manage gluten sensitivity"],
         "objectives": ["Avoid processed foods and grains", "Focus on lean meats, fruits, vegetables, nuts, and seeds", "Avoid dairy and gluten"],
-        "guideline": "Ensure a diverse intake of whole foods. Avoid any processed or packaged foods that may contain gluten."
+        "guideline": "Ensure a diverse intake of whole foods. Avoid any processed or packaged foods that may contain gluten.",
+        "schedule": [
+          "Eliminate gluten and processed foods",
+          "Increase intake of lean meats and vegetables",
+          "Monitor health improvements",
+          "Evaluate gluten sensitivity management"
+        ]
       },
       {
         "id": "g3",
@@ -220,7 +333,13 @@
         "commitment": "Daily",
         "aims": ["Reduce digestive symptoms", "Identify food triggers"],
         "objectives": ["Eliminate high FODMAP foods", "Gradually reintroduce foods to identify triggers", "Maintain balanced nutrition despite restrictions"],
-        "guideline": "Follow the elimination phase strictly. Reintroduce foods one at a time to identify any intolerances."
+        "guideline": "Follow the elimination phase strictly. Reintroduce foods one at a time to identify any intolerances.",
+        "schedule": [
+          "Eliminate high FODMAP foods",
+          "Monitor digestive symptoms",
+          "Gradually reintroduce foods",
+          "Identify food triggers"
+        ]
       }
     ]
   },
@@ -239,7 +358,13 @@
         "commitment": "Daily",
         "aims": ["Manage blood sugar levels", "Prevent blood sugar spikes"],
         "objectives": ["Include whole grains, legumes, and non-starchy vegetables", "Avoid high glycemic index foods", "Monitor blood sugar levels regularly"],
-        "guideline": "Choose foods with a low glycemic index. Combine carbohydrates with proteins and fats to slow digestion."
+        "guideline": "Choose foods with a low glycemic index. Combine carbohydrates with proteins and fats to slow digestion.",
+        "schedule": [
+          "Identify low glycemic index foods",
+          "Monitor blood sugar levels",
+          "Optimize carbohydrate intake",
+          "Evaluate blood sugar management"
+        ]
       },
       {
         "id": "d2",
@@ -252,7 +377,17 @@
         "commitment": "Daily",
         "aims": ["Improve heart health", "Manage diabetes"],
         "objectives": ["Focus on whole grains, fruits, vegetables, and healthy fats", "Include lean proteins and fish", "Limit added sugars and refined carbs"],
-        "guideline": "Adopt a Mediterranean eating pattern while focusing on blood sugar management. Avoid processed foods."
+        "guideline": "Adopt a Mediterranean eating pattern while focusing on blood sugar management. Avoid processed foods.",
+        "schedule": [
+          "Adopt Mediterranean meal principles",
+          "Monitor blood sugar levels",
+          "Increase healthy fat intake",
+          "Evaluate heart health benefits",
+          "Optimize carbohydrate intake",
+          "Monitor diabetes management",
+          "Maintain Mediterranean eating habits",
+          "Review overall health improvements"
+        ]
       },
       {
         "id": "d3",
@@ -265,7 +400,13 @@
         "commitment": "Daily",
         "aims": ["Manage diabetes", "Prevent blood sugar spikes"],
         "objectives": ["Count carbohydrates at each meal and snack", "Distribute carbohydrate intake evenly throughout the day", "Monitor blood sugar levels"],
-        "guideline": "Work with a dietitian to determine your carbohydrate needs. Use carb counting tools and apps for accurate tracking."
+        "guideline": "Work with a dietitian to determine your carbohydrate needs. Use carb counting tools and apps for accurate tracking.",
+        "schedule": [
+          "Begin tracking carbohydrate intake",
+          "Monitor blood sugar levels",
+          "Optimize carbohydrate distribution",
+          "Evaluate diabetes management"
+        ]
       }
     ]
   },
@@ -284,7 +425,17 @@
         "commitment": "Daily",
         "aims": ["Lower blood pressure", "Improve heart health"],
         "objectives": ["Reduce sodium intake to less than 2300 mg per day", "Include fruits, vegetables, whole grains, and lean proteins", "Avoid processed and high-sodium foods"],
-        "guideline": "Follow the DASH diet principles. Monitor your sodium intake and choose fresh, whole foods."
+        "guideline": "Follow the DASH diet principles. Monitor your sodium intake and choose fresh, whole foods.",
+        "schedule": [
+          "Reduce daily sodium intake",
+          "Increase intake of fruits and vegetables",
+          "Monitor blood pressure levels",
+          "Evaluate heart health improvements",
+          "Optimize nutrient-rich food intake",
+          "Reduce processed food consumption",
+          "Maintain DASH diet principles",
+          "Review overall health improvements"
+        ]
       },
       {
         "id": "h2",
@@ -297,7 +448,22 @@
         "commitment": "Daily",
         "aims": ["Improve cardiovascular health", "Reverse heart disease"],
         "objectives": ["Adopt a plant-based diet with minimal animal products", "Reduce fat intake to 10% of total calories", "Include whole grains, fruits, vegetables, and legumes"],
-        "guideline": "Follow a strict low-fat, vegetarian diet. Avoid added oils and high-fat foods."
+        "guideline": "Follow a strict low-fat, vegetarian diet. Avoid added oils and high-fat foods.",
+        "schedule": [
+          "Adopt low-fat, plant-based diet",
+          "Increase intake of whole grains and legumes",
+          "Monitor cardiovascular health",
+          "Evaluate heart disease reversal progress",
+          "Optimize low-fat food choices",
+          "Maintain strict vegetarian diet",
+          "Monitor overall health improvements",
+          "Review cardiovascular health benefits",
+          "Evaluate diet adherence",
+          "Fine-tune low-fat diet plan",
+          "Maintain heart-healthy eating habits",
+          "Assess cardiovascular improvements",
+          "Achieve target heart health goals"
+        ]
       },
       {
         "id": "h3",
@@ -310,7 +476,17 @@
         "commitment": "Daily",
         "aims": ["Reduce cholesterol levels", "Improve heart health"],
         "objectives": ["Limit saturated fat to less than 7% of total calories", "Include soluble fiber-rich foods", "Avoid trans fats"],
-        "guideline": "Adopt a diet low in saturated fat and cholesterol. Increase intake of fruits, vegetables, and whole grains."
+        "guideline": "Adopt a diet low in saturated fat and cholesterol. Increase intake of fruits, vegetables, and whole grains.",
+        "schedule": [
+          "Reduce saturated fat intake",
+          "Increase soluble fiber consumption",
+          "Monitor cholesterol levels",
+          "Evaluate heart health improvements",
+          "Avoid trans fats and processed foods",
+          "Optimize nutrient-rich food intake",
+          "Maintain low-fat, high-fiber diet",
+          "Review overall health improvements"
+        ]
       }
     ]
   },
@@ -329,7 +505,41 @@
         "commitment": "Daily",
         "aims": ["Support fetal development", "Maintain maternal health"],
         "objectives": ["Include a variety of nutrient-dense foods", "Ensure adequate intake of folic acid, iron, and calcium", "Stay hydrated"],
-        "guideline": "Follow dietary guidelines for pregnancy. Consult with a healthcare provider to ensure nutritional needs are met."
+        "guideline": "Follow dietary guidelines for pregnancy. Consult with a healthcare provider to ensure nutritional needs are met.",
+        "schedule": [
+          "Increase intake of folic acid and iron",
+          "Monitor fetal development",
+          "Ensure adequate hydration",
+          "Optimize nutrient-dense food consumption",
+          "Monitor maternal health",
+          "Increase calcium intake",
+          "Evaluate overall health improvements",
+          "Review prenatal nutrition plan",
+          "Maintain balanced diet for pregnancy",
+          "Monitor baby growth and development",
+          "Increase nutrient variety",
+          "Optimize pregnancy health",
+          "Evaluate diet adherence",
+          "Maintain hydration levels",
+          "Assess maternal health progress",
+          "Review pregnancy nutrition plan",
+          "Ensure optimal fetal development",
+          "Monitor overall pregnancy health",
+          "Increase intake of essential nutrients",
+          "Evaluate health improvements",
+          "Maintain balanced diet and hydration",
+          "Review overall health and nutrition",
+          "Monitor baby and mother health",
+          "Optimize prenatal nutrition",
+          "Assess fetal development progress",
+          "Maintain dietary adherence",
+          "Evaluate overall health improvements",
+          "Review prenatal health and nutrition",
+          "Ensure balanced diet for mother and baby",
+          "Monitor overall pregnancy progress",
+          "Maintain prenatal nutrition plan",
+          "Evaluate overall health and development"
+        ]
       },
       {
         "id": "p2",
@@ -342,7 +552,17 @@
         "commitment": "Daily",
         "aims": ["Promote healing", "Support energy levels"],
         "objectives": ["Include protein-rich foods for tissue repair", "Ensure adequate hydration", "Include iron-rich foods to replenish stores"],
-        "guideline": "Focus on nutrient-dense, healing foods. Rest and gradually return to normal activities as energy levels allow."
+        "guideline": "Focus on nutrient-dense, healing foods. Rest and gradually return to normal activities as energy levels allow.",
+        "schedule": [
+          "Increase intake of protein-rich foods",
+          "Monitor tissue healing and recovery",
+          "Ensure adequate hydration",
+          "Evaluate energy levels and recovery",
+          "Increase iron-rich food consumption",
+          "Monitor overall healing progress",
+          "Optimize nutrient intake",
+          "Review postpartum recovery plan"
+        ]
       },
       {
         "id": "p3",
@@ -355,7 +575,36 @@
         "commitment": "Daily",
         "aims": ["Support lactation", "Maintain maternal health"],
         "objectives": ["Include a variety of nutrient-dense foods", "Ensure adequate calorie and fluid intake", "Avoid alcohol and limit caffeine"],
-        "guideline": "Focus on a balanced diet with sufficient calories and nutrients. Stay hydrated and avoid substances that can affect milk supply."
+        "guideline": "Focus on a balanced diet with sufficient calories and nutrients. Stay hydrated and avoid substances that can affect milk supply.",
+        "schedule": [
+          "Increase intake of lactation-supporting foods",
+          "Monitor milk production and quality",
+          "Ensure adequate hydration",
+          "Evaluate energy levels and health",
+          "Increase calorie intake for lactation",
+          "Monitor maternal and baby health",
+          "Optimize nutrient intake for lactation",
+          "Review breastfeeding diet plan",
+          "Increase intake of essential nutrients",
+          "Monitor overall health and lactation",
+          "Ensure balanced diet for mother and baby",
+          "Evaluate breastfeeding success",
+          "Maintain dietary adherence",
+          "Monitor overall health improvements",
+          "Review breastfeeding diet and nutrition",
+          "Increase nutrient variety",
+          "Monitor baby growth and development",
+          "Ensure adequate calorie intake",
+          "Evaluate overall health and lactation",
+          "Maintain balanced diet and hydration",
+          "Monitor maternal and baby health",
+          "Optimize breastfeeding diet",
+          "Assess overall health improvements",
+          "Review diet adherence",
+          "Ensure optimal lactation and nutrition",
+          "Monitor baby growth and health",
+          "Evaluate overall breastfeeding success"
+        ]
       }
     ]
   }

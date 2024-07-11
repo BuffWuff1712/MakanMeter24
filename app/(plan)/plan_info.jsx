@@ -108,22 +108,12 @@ const PlanInfoPage = () => {
 
           {selectedTab === 1 && (
             <>
-              <View className='my-2'>
-                <Text className='font-bold'>Week 1</Text>
-                <Text>Slowly cut down on added sugar in your diet</Text>
-              </View>
-              <View className='my-2'>
-                <Text className='font-bold'>Week 2</Text>
-                <Text>Slowly cut down on added sugar in your diet</Text>
-              </View>
-              <View className='my-2'>
-                <Text className='font-bold'>Week 3</Text>
-                <Text>Slowly cut down on added sugar in your diet</Text>
-              </View>
-              <View className='my-2'>
-                <Text className='font-bold'>Week 4</Text>
-                <Text>Slowly cut down on added sugar in your diet</Text>
-              </View>
+              {plan.schedule.map((item, index) => (
+                <View key={index} className='my-3'>
+                  <Text className='font-bold'>Week {index + 1}</Text>
+                  <Text>{item}</Text>
+                </View>
+              ))} 
             </>
           )}
         </View>
