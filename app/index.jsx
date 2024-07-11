@@ -56,7 +56,6 @@ const Welcome = () => {
             textStyles='text-black'
           />
         </View>
-        {/* <Link href='/gender'>Press Here</Link> */}
       </ScrollView>
 
       <StatusBar backgroundColor='#161622' style='auto'/>
