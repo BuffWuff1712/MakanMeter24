@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { icons } from '../constants';
 import * as Progress from 'react-native-progress';
 import { useGlobalContext } from '../context/GlobalProvider';
-import { fetchStreak } from '../lib/supabase';
 
 const StreakBar = ({ totalDays }) => {
   const { streak } = useGlobalContext();

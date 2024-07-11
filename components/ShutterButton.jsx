@@ -1,21 +1,21 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Image, TouchableOpacity } from 'react-native';
+import React from 'react';
 import { icons } from '../constants';
 
-const ShutterButton = ({handlePress}) => {
+const ShutterButton = ({ handlePress }) => {
   return (
     <TouchableOpacity
-        onPress={handlePress}
-        activeOpacity={0.7}
+      onPress={handlePress}
+      activeOpacity={0.7}
+      testID="shutterButton"
     >
-        <Image 
-            source={icons.shutter}
-            resizeMode='contain'
-            className="w-[90px] h-[90px]"
-        />
-
+      <Image 
+        source={icons.shutter}
+        resizeMode="contain"
+        testID="shutterImage"
+      />
     </TouchableOpacity>
-  )
+  );
 }
 
-export default ShutterButton
+export default ShutterButton;

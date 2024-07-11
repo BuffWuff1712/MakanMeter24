@@ -11,9 +11,9 @@ const CustomButton = ({ title, handlePress, containerStyles, textStyles, isLoadi
       disabled={isLoading}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" color="#fff" />
+        <ActivityIndicator testID="activityIndicator" size="small" color="#fff" />
       ) : (
-        <Text className={`text-white font-psemibold text-lg ${textStyles}`}>
+        <Text testID="buttonText" className={`text-white font-psemibold text-lg ${textStyles}`}>
           {title}
         </Text>
       )}

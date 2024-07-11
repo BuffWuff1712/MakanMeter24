@@ -10,11 +10,6 @@ jest.mock('../../context/AddFoodButtonContext', () => ({
   useAddFoodButton: jest.fn(),
 }));
 
-// Mock the expo vector icons hook
-jest.mock('@expo/vector-icons', () => ({
-    FontAwesome5: '',
-  }));
-
 describe('AddFoodButton Component', () => {
   let handlePress1Mock, buttonSizeMock, rotationMock, onPressMock;
 

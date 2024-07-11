@@ -1,0 +1,7 @@
+{
+    "jest.pathToConfig": "./jest.config.js",
+    "jest.runAllTestsFirst": true,
+    "jest.enableSnapshotPreviews": true,
+    "jest.showCoverageOnLoad": true
+  }
+  

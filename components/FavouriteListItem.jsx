@@ -12,41 +12,42 @@ const FavouriteListItem = ({ item, onAdd }) => {
 
   const handleAddPress = async () => {
     setIsLoading(true);
-    // Set a delay before calling the deletion function
     setTimeout(async () => {
       await onAdd(item);
       setIsLoading(false);
-    }, 1000); // 1000 milliseconds (1 second) delay
+    }, 1000);
   };
-  
 
   return (
     <>
-    <TouchableOpacity
-      style={[styles.button, { borderColor }]}
-      activeOpacity={0.7}
-      onPress={() => {bottomSheetModalRef.current?.present();}}
-    >
-      <View style={{ flex: 1, gap: 5 }}>
-        <Text style={styles.foodName}>{item.food_name}</Text>
-        <Text style={styles.foodDetails}>
-          {item.calories} cal per serving
-        </Text>
-      </View>
-      <Pressable onPress={handleAddPress}>
-        {isLoading ? (
-          <ActivityIndicator size="small" color="#000000" />
-        ) : (
-          <AntDesign name="pluscircleo" size={30} color="#000000" />
-        )}
-      </Pressable>
-    </TouchableOpacity>
-    <FoodItemModal 
-      bottomSheetModalRef={bottomSheetModalRef} 
-      snapPoints={snapPoints} 
-      item={item}
-      modeAdd={true}
-      addPress={handleAddPress} />
+      <TouchableOpacity
+        style={[styles.button, { borderColor }]}
+        activeOpacity={0.7}
+        onPress={() => { bottomSheetModalRef.current?.present(); }}
+        testID="item-button"
+      >
+        <View style={{ flex: 1, gap: 5 }}>
+          <Text style={styles.foodName}>{item.food_name}</Text>
+          <Text style={styles.foodDetails}>
+            {item.calories} cal per serving
+          </Text>
+        </View>
+        <Pressable onPress={handleAddPress} testID="add-button">
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#000000" testID="activity-indicator" />
+          ) : (
+            <AntDesign name="pluscircleo" size={30} color="#000000" />
+          )}
+        </Pressable>
+      </TouchableOpacity>
+      <FoodItemModal
+        bottomSheetModalRef={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        item={item}
+        modeAdd={true}
+        addPress={handleAddPress}
+        testID="food-item-modal"
+      />
     </>
   );
 };

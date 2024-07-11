@@ -161,7 +161,7 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item, modeAdd, addPres
         <View className="flex-col bg-emerald py-10 w-full justify-center px-3">
           <View className='flex-row items-center justify-between px-5'>
             <Text className="text-4xl font-bold color-white">{item.food_name}</Text>
-            <TouchableOpacity onPress={toggleFavorite}>
+            <TouchableOpacity onPress={toggleFavorite} testID="favourite-button">
               <AntDesign name={isFavorite ? "heart" : "hearto"} size={30} color="white"/>
             </TouchableOpacity>
           </View>
@@ -187,6 +187,9 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item, modeAdd, addPres
               textAlign="center"
               onChangeText={(text) => setQuantity(text)}
               onBlur={() => changeQuantity(quantity)}
+              placeholder="Enter quantity"
+              placeholderTextColor="#666"
+              testID="quantity-input"
             />
             <ServingTypes />
           </View>
@@ -237,11 +240,13 @@ const FoodItemModal = ({ bottomSheetModalRef, snapPoints, item, modeAdd, addPres
               containerStyles={'bg-emerald'}
               handlePress={handleAddButton}
               isLoading={isSubmitting}
+              testID="add-button"
             />
         </View>)}
     </BottomSheetModal>
   );
 };
+
 
 export default FoodItemModal;
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native'
+import React from 'react'
 
 const grades = ['A', 'B', 'C', 'D', 'E'];
 const gradeColors = {
@@ -12,15 +12,15 @@ const gradeColors = {
 
 const GradeBar = ({ grade }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="gradeBarContainer">
       {grades.map((g, index) => (
-        <View key={index} style={styles.gradeWrapper}>
-          <View style={styles.gradeContainer}>
-            <Text style={styles.gradeText}>{g}</Text>
+        <View key={index} style={styles.gradeWrapper} testID={`gradeWrapper-${g}`}>
+          <View style={styles.gradeContainer} testID={`gradeContainer-${g}`}>
+            <Text style={styles.gradeText} testID={`gradeText-${g}`}>{g}</Text>
           </View>
           {g === grade && (
-            <View style={[styles.selectedGrade, { backgroundColor: gradeColors[g] }]}>
-              <Text style={styles.highlightText}>{g}</Text>
+            <View style={[styles.selectedGrade, { backgroundColor: gradeColors[g] }]} testID={`selectedGrade-${g}`}>
+              <Text style={styles.highlightText} testID={`highlightText-${g}`}>{g}</Text>
             </View>
           )}
         </View>
