@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import { Picker } from 'react-native-wheel-pick';
+import { WheelPicker } from 'react-native-ui-lib'
 import CustomButton from '../../components/CustomButton';
 import { useGlobalContext } from '../../context/GlobalProvider';
 
-const generateList = (min, max, step = 1) => {
+const generateList = (min, max, platform) => {
   const list = [];
-  for (let i = min; i <= max; i += step) {
-    list.push(i.toString()); // Convert to string for Picker items
+
+  if (platform === 'ios') {
+    for (let i = min; i <= max; i ++) {
+      list.push(i.toString()); // Convert to string for Picker items
+    }
+  } else if (platform === 'android') {
+    for (let i = min; i <= max; i++) {
+      list.push({ label: i.toString(), value: i });
+    }
   }
   return list;
 };
@@ -17,7 +25,8 @@ const generateList = (min, max, step = 1) => {
 const AgeScreen = () => {
   const { userInitData, setUserInitData } = useGlobalContext();
   const [age, setAge] = useState('30');
-  const ageList= generateList(0, 140, 1);
+  const ageListIOS= generateList(0, 140, 'ios');
+  const ageListAndroid = generateList(0, 140, 'android');
 
 
   const handleFinish = () => {
@@ -33,13 +42,23 @@ const AgeScreen = () => {
           <Text style={styles.title}>How old are you?</Text>
           <Text className='text-center text-base text-gray-500'>We will use it to calculate your required calories and macros</Text>
           <View className='flex-row items-center'>
-            <Picker
+            {Platform.OS === 'ios' && (
+              <Picker
               style={{ backgroundColor: 'white', width: 200, height: 215, }}
               selectedValue='30'
-              pickerData={ageList}
+              pickerData={ageListIOS}
               onValueChange={value => { setAge(value) }}
-            />
-            <Text className='text-base'>years</Text>
+              />
+            )}
+            {Platform.OS === 'android' && (
+              <WheelPicker
+                style={{ backgroundColor: 'white', width: 200, height: 215, }}
+                items={ageListAndroid}
+                initialValue={30}
+                onChange={value => { setAge(value) }}
+              />
+            )}            
+          <Text className='text-base'>years</Text>
           </View>
         </View>
         

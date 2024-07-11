@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Picker } from 'react-native-wheel-pick';
 import CustomButton from '../../components/CustomButton';
 import { useGlobalContext } from '../../context/GlobalProvider';
+import { WheelPicker } from 'react-native-ui-lib';
 
-const generateList = (min, max, step = 1) => {
+const generateList = (min, max, platform) => {
   const list = [];
-  for (let i = min; i <= max; i += step) {
-    list.push(i.toString()); // Convert to string for Picker items
+
+  if (platform === 'ios') {
+    for (let i = min; i <= max; i++) {
+      list.push(i.toString()); // Convert to string for Picker items
+    }
+  } else if (platform === 'android') {
+    for (let i = min; i <= max; i++) {
+      list.push({ label: i.toString(), value: i });
+    }
   }
   return list;
 };
@@ -18,8 +26,8 @@ const HeightScreen = () => {
   const { userInitData, setUserInitData } = useGlobalContext();
   const [height, setHeight] = useState('170');
   const [unit, setUnit] = useState('cm');
-  const heightCM = generateList(20, 300, 1);
-  const heightFT = generateList(1, 10, 1);
+  const heightCMIOS = generateList(20, 300, 'ios');
+  const heightCMAndroid = generateList(20, 300, 'android');
 
   const handleFinish = () => {
     setUserInitData(prev => ({...prev, height: height}));
@@ -34,18 +42,25 @@ const HeightScreen = () => {
           <Text style={styles.title}>How tall are you?</Text>
           <Text className='text-center text-base text-gray-500'>We will use it to calculate your required calories and macros</Text>
           <View className='flex-row items-center'>
-            <Picker
-              style={{ backgroundColor: 'white', width: 200, height: 215, }}
-              selectedValue={unit === 'cm' ? '170': '5'}
-              pickerData={unit === 'cm' ? heightCM: heightFT}
-              onValueChange={value => { setHeight(value) }}
-            />
-            <Picker
-              style={{ backgroundColor: 'white', width: 100, height: 215,}}
-              selectedValue='cm'
-              pickerData={['cm', 'ft']}
-              onValueChange={value => { setUnit(value) }}
-            />
+            {Platform.OS === 'ios' && (
+              <Picker
+                style={{ backgroundColor: 'white', width: 200, height: 215, }}
+                selectedValue='170'
+                pickerData={heightCMIOS}
+                onValueChange={value => { setHeight(value) }}
+              />
+            )}
+
+            {Platform.OS === 'android' && (
+              <WheelPicker
+                style={{ backgroundColor: 'white', width: 200, height: 215, }}
+                initialValue={170}
+                items={heightCMAndroid}
+                onChange={value => { setHeight(value) }}
+              />
+            )}
+            
+            <Text className='text-base'>cm</Text>
           </View>
         </View>
         

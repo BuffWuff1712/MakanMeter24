@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
-import NutrientsProgressBar from '../../components/NutrientsProgressBar';
 import { useGlobalContext } from '../../context/GlobalProvider';
+import CustomButton from '../../components/CustomButton';
 
 const GenderScreen = () => {
   const { userInitData, setUserInitData } = useGlobalContext();
   const [gender, setGender] = useState('');
 
   const handleNext = () => {
+    if (gender === '') {
+      Alert.alert("Error", "Please select an option");
+      return;
+    }
+
     setUserInitData(prev => ({...prev, gender: gender}))
     router.navigate('/age'); // Navigate to the AgeScreen
   };
@@ -34,9 +39,11 @@ const GenderScreen = () => {
           <View style={gender === 'default' ? styles.selectedCircle : styles.circle} />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleNext}>
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableOpacity>
+      <CustomButton 
+          title="Next"
+          containerStyles="bg-emerald"
+          handlePress={handleNext}
+      />
     </SafeAreaView>
   );
 };
