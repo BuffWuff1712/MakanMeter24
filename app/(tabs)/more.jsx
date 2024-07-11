@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, FlatList, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
-import { Picker } from '@react-native-picker/picker';
+import { Picker } from 'react-native-wheel-pick';
 import { icons } from '../../constants';
 import { signOut, changePassword, getUserDetails, updateUser, updateProfilePic } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
+import borderRadiusesInstance from 'react-native-ui-lib/src/style/borderRadiuses';
 
 const Profile = () => {
   const { user, setUser, setIsLoggedIn, refresh, setRefresh } = useGlobalContext();
@@ -23,7 +24,7 @@ const Profile = () => {
   const [tempUsername, setTempUsername] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState('Male');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
@@ -355,15 +356,11 @@ const Profile = () => {
 
               />
               <Picker
+                pickerData={['Male', 'Female', 'Others']}
                 selectedValue={gender}
-                style={styles.input}
+                style={styles.pickerStyle}
                 onValueChange={(itemValue) => setGender(itemValue)}
-              >
-                <Picker.Item label="Select Gender" value="" />
-                <Picker.Item label="Male" value="Male" />
-                <Picker.Item label="Female" value="Female" />
-                <Picker.Item label="Other" value="Other" />
-              </Picker>
+              />
               <TouchableOpacity
                 style={styles.saveButton}
                 onPress={() => {
@@ -564,6 +561,15 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: '#FFF',
     fontSize: 16,
+  },
+  pickerStyle: {
+    backgroundColor: 'white', 
+    height: 200, 
+    width: 275, 
+    borderWidth: 1, 
+    borderColor:'#DDD',
+    paddingHorizontal: 10, 
+    borderRadius: 10
   },
 });
 

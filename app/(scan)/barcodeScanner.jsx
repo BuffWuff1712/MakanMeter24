@@ -1,5 +1,4 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
-//import * as MediaLibrary from 'expo-media-library';
 import React, { useRef, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, 
     Image, ActivityIndicator, Modal, 

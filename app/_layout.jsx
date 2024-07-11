@@ -5,8 +5,6 @@ import { useEffect } from 'react';
 import GlobalProvider from '../context/GlobalProvider';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { NavigationContainer } from '@react-navigation/native';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
 SplashScreen.preventAutoHideAsync();
 
