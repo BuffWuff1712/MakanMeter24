@@ -1,12 +1,11 @@
 import React from 'react';
-import { View, Text,  StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Bar, CartesianChart, useChartPressState } from 'victory-native';
 import { Circle, useFont, vec, LinearGradient, Text as SKText } from '@shopify/react-native-skia';
-import poppins from "../assets/fonts/Poppins-SemiBold.ttf"
+import poppins from "../assets/fonts/Poppins-SemiBold.ttf";
 import { useDerivedValue } from 'react-native-reanimated';
 import TrendsDateRange from './TrendsDateRange';
 import { useGlobalContext } from '../context/GlobalProvider';
-
 
 const CaloriesTrendsDashboard = ({ data, onPress, goal }) => {
   const { period } = useGlobalContext();
@@ -114,14 +113,13 @@ const CaloriesTrendsDashboard = ({ data, onPress, goal }) => {
         </View>
         <View className="flex-row justify-between w-20 mx-5">
           <View className="items-center px-2">
-            <Text className="text-base">Avg</Text>
-            <Text>{Math.round(totalCalories)}</Text>
-            <Text>{Math.round(averageCalories)}</Text>
+            <Text className="text-base" testID="avg-total-calories">{Math.round(totalCalories)}</Text>
+            <Text className="text-base" testID="avg-calories">{Math.round(averageCalories)}</Text>
           </View>
           <View className="items-center px-2">
             <Text className="text-base">Goal</Text>
-            <Text>{goal >= 0 ? `${Math.round(goal * 7)}` : '-'}</Text>
-            <Text>{goal >= 0 ? `${Math.round(goal)}` : '-'}</Text>
+            <Text testID="goal-weekly">{goal >= 0 ? `${Math.round(goal * 7)}` : '-'}</Text>
+            <Text testID="goal-daily">{goal >= 0 ? `${Math.round(goal)}` : '-'}</Text>
           </View>
         </View>
       </View>

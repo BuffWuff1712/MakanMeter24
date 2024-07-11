@@ -7,7 +7,6 @@ import { useDerivedValue } from 'react-native-reanimated';
 import TrendsDateRange from './TrendsDateRange';
 import { useGlobalContext } from '../context/GlobalProvider';
 
-
 const MacroTrendsDashboard = ({ data, onPress }) => {
   const { period } = useGlobalContext();
   const font = useFont(poppins, 12);
@@ -104,6 +103,22 @@ const MacroTrendsDashboard = ({ data, onPress }) => {
           );
         }}
       </CartesianChart>
+      <View className="flex-row justify-between p-2 mx-1">
+        <View>
+          {/* Empty text supposed to be below for formatting */}
+          <Text></Text> 
+          <Text className="text-base font-semibold">Daily Carbohydrates</Text>
+          <Text className="text-base font-semibold">Daily Protein</Text>
+          <Text className="text-base font-semibold">Daily Fats</Text>
+        </View>
+        <View className="flex-row justify-between w-20 mx-5">
+          <View className="items-center px-2">
+            <Text className="text-base" testID="carbohydrates-value">{Math.round(data[0]?.total_carbohydrates || 0)}</Text>
+            <Text className="text-base" testID="protein-value">{Math.round(data[0]?.total_protein || 0)}</Text>
+            <Text className="text-base" testID="fats-value">{Math.round(data[0]?.total_fats || 0)}</Text>
+          </View>
+        </View>
+      </View>
     </View>
     :
     <View style={styles.emptyContainer}>

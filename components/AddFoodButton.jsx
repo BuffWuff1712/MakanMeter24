@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Animated, Modal, Pressable, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useGlobalContext } from '../context/GlobalProvider';
 import { useAddFoodButton } from '../context/AddFoodButtonContext';
-import { useRouter } from 'expo-router';
-import { getDate }  from '../lib/supabase'
 
 const AddFoodButton = ({ onPress }) => {
   const { handlePress1, buttonSize, rotation } = useAddFoodButton();
@@ -32,14 +29,17 @@ const AddFoodButton = ({ onPress }) => {
   return (
     <>
       <TouchableOpacity
+        testID='add-food-button'
         style={{ justifyContent: 'center', alignItems: 'center', top: -15 }}
         activeOpacity={0.9}
         onPress={combinedPressHandler}
       >
-        <View className="w-[70px] h-[70px] rounded-full shadow-lg justify-center items-center">
+        <View 
+          testID="add-food-button-inner" 
+          className="w-[70px] h-[70px] rounded-full shadow-lg justify-center items-center">
           <Animated.View style={[styles.button, sizeStyle]}>
             <Animated.View style={rotationStyle}>
-              <FontAwesome5 name="plus" size={24} color="#FFF" />
+              <FontAwesome5 testID='add-food-icon' name="plus" size={24} color="#FFF" />
             </Animated.View>
           </Animated.View>
         </View>

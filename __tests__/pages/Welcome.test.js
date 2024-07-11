@@ -1,12 +1,12 @@
 // __tests__/Welcome.test.js
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import Welcome from '../app/index'; // Adjust the import path as needed
-import { useGlobalContext } from '../context/GlobalProvider';
-import {router, Redirect} from '../__mocks__/expo-router'
+import Welcome from '../../app/index'; // Adjust the import path as needed
+import { useGlobalContext } from '../../context/GlobalProvider';
+import {router, Redirect} from '../../__mocks__/expo-router'
 
 // Mock the useGlobalContext hook
-jest.mock('../context/GlobalProvider', () => ({
+jest.mock('../../context/GlobalProvider', () => ({
   useGlobalContext: jest.fn(),
 }));
 
