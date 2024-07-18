@@ -23,9 +23,10 @@ describe('MacroTrendsDashboard Component', () => {
 
     const { getByTestId } = render(<MacroTrendsDashboard data={data} />);
 
-    expect(getByTestId('carbohydrates-value').props.children).toBe(150);
-    expect(getByTestId('protein-value').props.children).toBe(50);
-    expect(getByTestId('fats-value').props.children).toBe(20);
+    expect(getByTestId('carbohydrates-value')).toHaveTextContent('175.00g');
+    expect(getByTestId('protein-value')).toHaveTextContent('55.00g');
+    expect(getByTestId('fats-value')).toHaveTextContent('22.50g');
+
   });
 
   test('renders the empty state correctly', () => {

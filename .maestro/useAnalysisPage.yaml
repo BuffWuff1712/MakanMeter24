@@ -1,0 +1,35 @@
+appId: com.bingchillingz1712.MakanMeter
+---
+- openLink: exp://192.168.1.30:8081
+
+- tapOn: 
+    id: 'navigate-tab'
+    index: 1
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn: Last 7 days
+- tapOn: Last 30 days
+- waitForAnimationToEnd:
+     timeout: 5000
+- swipe:
+    start: 90%, 50%
+    end: 1%, 50%
+    from: 
+      id: "analysis-dashboard-item"
+      index: 0
+- waitForAnimationToEnd:
+     timeout: 5000
+- scrollUntilVisible:
+     element:
+        id: 'progressOverview'
+     visibilityPercentage: 100
+     centerElement: true
+- swipe:
+    start: 90%, 50% 
+    end: 1%, 50% 
+    from: 
+      id: "progress-dashboard-item"
+      index: 0
+- scrollUntilVisible:
+     element:
+        id: 'streakBar'

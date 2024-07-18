@@ -12,6 +12,7 @@ const ShutterButton = ({ handlePress }) => {
       <Image 
         source={icons.shutter}
         resizeMode="contain"
+        style={{ width: 80, height: 80 }}
         testID="shutterImage"
       />
     </TouchableOpacity>

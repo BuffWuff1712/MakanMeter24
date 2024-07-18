@@ -1,0 +1,32 @@
+appId: com.bingchillingz1712.MakanMeter
+---
+- openLink: exp://192.168.1.30:8081
+- tapOn: Sign Up
+- tapOn: 
+      id: 'username-input'
+- inputText: "test456"
+- tapOn: 
+      id: 'email-input'
+- inputText: "test456@gmail.com"
+- scrollUntilVisible:
+      element:
+          id: 'password-input'
+- tapOn: 
+      id: 'password-input'
+- inputText: "test456!"
+- pressKey: Enter
+- tapOn: Sign Up
+- tapOn: 
+      id: 'option-male'
+- tapOn: Next
+- tapOn: Next
+- tapOn: Next
+- tapOn: Next
+- tapOn: Next
+- tapOn: 
+      id: 'calorie-input'
+- inputText: "2000"
+- pressKey: Enter
+- tapOn: What is your goal daily caloric intake ?
+- tapOn:
+      id: 'customButton'

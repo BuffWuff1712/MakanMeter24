@@ -28,17 +28,17 @@ const DatePicker = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handlePreviousDay}>
+      <TouchableOpacity testID='previousDay' onPress={handlePreviousDay}>
         <Image 
           source={icons.back} 
           resizeMode='contain'
           style={styles.icon}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+      <TouchableOpacity testID='formattedDate' onPress={() => setShowDatePicker(true)}>
         <Text style={styles.dateText}>{formattedDate}</Text>
       </TouchableOpacity>     
-      <TouchableOpacity onPress={handleNextDay}>
+      <TouchableOpacity testID='nextDay' onPress={handleNextDay}>
         <Image 
           source={icons.forward} 
           resizeMode='contain'

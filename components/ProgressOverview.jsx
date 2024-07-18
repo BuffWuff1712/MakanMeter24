@@ -43,7 +43,7 @@ const ProgressOverview = () => {
     }
 
     return (
-      <View style={styles.carouselItem}>
+      <View testID='progress-dashboard-item' style={styles.carouselItem}>
         <DashboardComponent data={item} goal={weightGoal} />
       </View>
     );
@@ -66,7 +66,7 @@ const ProgressOverview = () => {
   };
 
   return (
-    <View style={styles.scrollableArea}>
+    <View testID='progressOverview' style={styles.scrollableArea}>
       <FlatList
         data={displayData} // Array of data for each dashboard
         renderItem={renderDashboardItem}

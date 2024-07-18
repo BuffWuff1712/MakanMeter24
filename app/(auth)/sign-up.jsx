@@ -56,6 +56,7 @@ const SignUp = () => {
             </Text>
 
             <FormField
+              testID= 'username-input'
               title="Username"
               value={form.username}
               handleChangeText={(e) => setForm({ ...form, username: e })}
@@ -63,6 +64,7 @@ const SignUp = () => {
             />
 
             <FormField
+              testID= 'email-input'
               title="Email"
               value={form.email}
               handleChangeText={(e) => setForm({ ...form, email: e })}
@@ -72,6 +74,7 @@ const SignUp = () => {
 
             <FormField
               title="Password"
+              testID= 'password-input'
               value={form.password}
               handleChangeText={(e) => setForm({ ...form, password: e })}
               otherStyles="mt-7"

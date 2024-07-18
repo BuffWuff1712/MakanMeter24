@@ -43,7 +43,7 @@ const AnalysisOverview = () => {
     }
 
     return (
-      <View testID="dashboard-item" style={styles.carouselItem}>
+      <View testID="analysis-dashboard-item" style={styles.carouselItem}>
         <DashboardComponent data={item} goal={calorieGoal} />
       </View>
     );

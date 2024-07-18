@@ -1,0 +1,18 @@
+appId: com.bingchillingz1712.MakanMeter
+---
+
+- scrollUntilVisible:
+      element:
+          id: 'waterIntakeCard'
+- tapOn: 
+    id: 'drinkButton-2'
+- assertVisible:
+    text: 0.75 / 2.00 L
+- tapOn: 
+    id: 'drinkButton-7'
+- assertVisible:
+    text: 2.00 / 2.00 L
+- tapOn: 
+    id: 'drinkButton-3'
+- assertVisible:
+    text: 1.00 / 2.00 L

@@ -30,7 +30,7 @@ const SignIn = () => {
       setUser(result);
       setIsLoggedIn(true);
 
-      Alert.alert("Success", "User signed in successfully");
+      // Alert.alert("Success", "User signed in successfully");
       router.replace("/home");
     } catch (error) {
       Alert.alert("Error: ", error.message);
@@ -40,7 +40,7 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView className="bg-gray h-full">
+    <SafeAreaView testID="sign-in-page" className="bg-gray h-full">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -57,6 +57,7 @@ const SignIn = () => {
             </Text>
 
             <FormField
+              testID="email-input"
               title="Email"
               value={form.email}
               handleChangeText={(e) => setForm({ ...form, email: e })}
@@ -65,6 +66,7 @@ const SignIn = () => {
             />
 
             <FormField
+              testID="password-input"
               title="Password"
               value={form.password}
               handleChangeText={(e) => setForm({ ...form, password: e })}
@@ -78,6 +80,7 @@ const SignIn = () => {
             </View>
 
             <CustomButton
+              testID="login-button"
               title="Login"
               containerStyles="bg-emerald"
               handlePress={submit}

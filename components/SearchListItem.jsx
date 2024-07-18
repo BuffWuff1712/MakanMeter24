@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, Text, Pressable, StyleSheet } from 'react-native'
+import { TouchableOpacity, View, Text, Pressable, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import React, { useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { ActivityIndicator } from 'react-native-paper';
@@ -28,13 +28,13 @@ const SearchListItem = ({ item, onAdd }) => {
           {item.serving_qty} {item.serving_unit}
         </Text>
       </View>
-      <Pressable onPress={handleAddPress} testID="add-button">
+      <TouchableWithoutFeedback  testID="add-button" onPress={handleAddPress} >
         {isLoading ? (
-          <ActivityIndicator size="small" color="#000000" testID="loading-indicator" />
+          <ActivityIndicator size="small" color="#000000"/>
         ) : (
-          <AntDesign name="pluscircleo" size={30} color="#000000" testID="plus-icon" />
+          <AntDesign name="pluscircleo" size={30} color="#000000"/>
         )}
-      </Pressable>
+      </TouchableWithoutFeedback>
     </TouchableOpacity>
   );
 };

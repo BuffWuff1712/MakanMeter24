@@ -1,0 +1,30 @@
+appId: com.bingchillingz1712.MakanMeter
+---
+
+- tapOn: 
+      id: 'add-food-button'
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn: Dinner
+- tapOn: Scan a Meal
+- tapOn: 
+      id: 'shutterButton'
+- waitForAnimationToEnd:
+    timeout: 7000
+- tapOn:
+      id: 'food-list-item'
+      index: 1
+- tapOn:
+      id: 'food-list-item'
+      index: 3
+- tapOn:
+      id: 'customButton'
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- assertVisible:
+              id: 'log-list-item'
+              index: 0 
+- assertVisible:
+              id: 'log-list-item'
+              index: 1 

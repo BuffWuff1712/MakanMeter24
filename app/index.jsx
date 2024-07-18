@@ -13,7 +13,7 @@ const Welcome = () => {
   if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
   return (
-    <SafeAreaView className="bg-white-150 h-full">
+    <SafeAreaView testID="welcome-page" className="bg-white-150 h-full">
 
       <Loader isLoading={isLoading} />
 

@@ -1,0 +1,15 @@
+appId: com.bingchillingz1712.MakanMeter
+---
+- openLink: exp://192.168.1.30:8081
+- tapOn:
+    id: 'previousDay'
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    id: 'nextDay'
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    id: 'formattedDate'
+- tapOn: '20'
+- tapOn: OK

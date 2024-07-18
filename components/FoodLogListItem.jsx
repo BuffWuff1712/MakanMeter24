@@ -24,6 +24,7 @@ const FoodLogListItem = ({ item, onDelete }) => {
   return (
     <>
     <TouchableOpacity
+      testID='log-list-item'
       style={[styles.button, { borderColor }]}
       activeOpacity={0.7}
       onPress={() => {bottomSheetModalRef.current?.present();}}
