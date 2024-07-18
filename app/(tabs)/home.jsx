@@ -55,7 +55,6 @@ const Home = () => {
         const data = await fetchStreak(user); 
         setStreak(data.current_streak);
         setLastLoggedDate(new Date(data.last_logged_date));
-        console.log('streak set in home');
 
         // Check if the last logged date is today or in the future
         const today = new Date();
@@ -112,7 +111,7 @@ const Home = () => {
   ];
 
   const toNotifs = () => {
-    router.navigate('notifications');
+    router.navigate('test_notifs');
   }
 
   return (
