@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Text, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
+import { View, FlatList, StyleSheet, Text, ActivityIndicator, TouchableOpacity, Image, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons'; 
 import NotificationItem from '../../components/NotificationItem';
-import { getNotifications } from '../../lib/supabase';
+import { deleteNotification, getNotifications } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
+import { ScrollView } from 'react-native';
 
 const NotificationPage = () => {
-  const { user, refresh } = useGlobalContext();
+  const { user, refresh, setRefresh } = useGlobalContext();
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
@@ -30,7 +31,14 @@ const NotificationPage = () => {
     fetchNotifications();
   }, [refresh]);
 
-  const renderItem = ({ item }) => <NotificationItem notification={item} />;
+  const deleteItem = async (id) => {
+    try {
+      await deleteNotification(id);
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      console.log("Error in notifications page: ", error);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -50,11 +58,14 @@ const NotificationPage = () => {
           <Text style={styles.noNotificationsSubText}>Clutter cleared! We'll notify you when there is something new.</Text>
         </View>
       ) : (
-        <FlatList
-          data={notifications}
-          renderItem={renderItem}
-          contentContainerStyle={styles.listContainer}
-        />
+        <ScrollView style={styles.listContainer}>
+          {notifications.map((item, index) => (
+            <View key={index}>
+              <NotificationItem item={JSON.stringify(item)} onDelete={deleteItem}/>
+            </View>
+          ))}
+          <View className='my-10'/>
+        </ScrollView>
       )}
     </SafeAreaView>
   );
@@ -63,7 +74,6 @@ const NotificationPage = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff',
     marginTop: -59,
     marginBottom: -40,
   },
@@ -88,9 +98,10 @@ const styles = StyleSheet.create({
     bottom: 28, 
   },
   listContainer: {
-    padding: 10,
+    paddingHorizontal: 10,
     backgroundColor: '#f5f5f5', 
     flex: 1,
+    paddingVertical: 10,
   },
   loadingContainer: {
     flex: 1,
