@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import { Picker } from 'react-native-wheel-pick';
 import CustomButton from '../../components/CustomButton';
 import { getCurrentUser, updateUser } from '../../lib/supabase';
 import { useGlobalContext } from '../../context/GlobalProvider';
+import { WheelPicker } from 'react-native-ui-lib';
 
-const generateList = (min, max, step = 1) => {
+const generateList = (min, max, platform) => {
   const list = [];
-  for (let i = min; i <= max; i += step) {
-    list.push(i.toString()); // Convert to string for Picker items
+
+  if (platform === 'ios') {
+    for (let i = min; i <= max; i ++) {
+      list.push(i.toString()); // Convert to string for Picker items
+    }
+  } else if (platform === 'android') {
+    for (let i = min; i <= max; i++) {
+      list.push({ label: i.toString(), value: i });
+    }
   }
   return list;
 };
@@ -18,9 +26,8 @@ const generateList = (min, max, step = 1) => {
 const WeightScreen = () => {
   const { userInitData, setUserInitData } = useGlobalContext();
   const [weight, setWeight] = useState('60');
-  const [unit, setUnit] = useState('kg');
-  const weightKG = generateList(20, 300, 1);
-  const weightLBS = generateList(50, 200, 1);
+  const weightKGIOS = generateList(20, 300, 'ios');
+  const weightKGAndroid = generateList(20, 300, 'android');
 
   const handleNext = async () => {
     setUserInitData(prev => ({...prev, weight: weight}))
@@ -38,18 +45,24 @@ const WeightScreen = () => {
           <Text style={styles.title}>What is your weight?</Text>
           <Text className='text-center text-base text-gray-500'>We will use it to calculate your required calories and macros</Text>
           <View className='flex-row items-center'>
-            <Picker
+            {Platform.OS === 'ios' && (
+              <Picker
               style={{ backgroundColor: 'white', width: 200, height: 215, }}
-              selectedValue={unit === 'kg' ? '60': '100'}
-              pickerData={unit === 'kg' ? weightKG: weightLBS}
-              onValueChange={value => { setWeight(value) }}
+              selectedValue='60'
+              pickerData={weightKGIOS}
+              onValueChange={value => { setWeight(value); }}
+              />
+            )}
+            {Platform.OS ==='android' && (
+              <WheelPicker
+                style={{ backgroundColor: 'white', width: 200, height: 215, }}
+                initialValue={60}
+                items={weightKGAndroid}
+                onChange={value => { setWeight(value) }}
             />
-            <Picker
-              style={{ backgroundColor: 'white', width: 100, height: 215,}}
-              selectedValue='kg'
-              pickerData={['kg', 'lbs']}
-              onValueChange={value => { setUnit(value) }}
-            />
+            )}
+            
+            <Text className='text-base'>Kg</Text>
           </View>
         </View>
         

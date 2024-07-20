@@ -62,7 +62,10 @@ const setActivityLevelPage = () => {
               style={styles.activityIcon}
             />
             <Text className='text-center text-xl font-bold'>{activityLevels[activityLvl].label}</Text>
-            <Text className='text-center text-base'>{activityLevels[activityLvl].description}</Text>
+            <View className='h-[48px] px-2'>
+              <Text className='flex-wrap text-center text-base'>{activityLevels[activityLvl].description}</Text>
+            </View>
+            
           </View>
           <View className='flex-row items-center my-5'>
             <Slider
@@ -79,7 +82,7 @@ const setActivityLevelPage = () => {
         </View>
         
         <CustomButton 
-              title="Create My Plan"
+              title="Next"
               containerStyles="mt-7 bg-emerald"
               handlePress={handleNext}
         />

@@ -1,20 +1,33 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import images from '../constants/images';
+import { router } from 'expo-router';
 
-const PlanCard = ({ name, description, image }) => {
+const PlanCard = ({ item, name, description }) => {
+
+  const plan = JSON.parse(item);
+
+  const handlePress = () => {
+    router.navigate({
+      pathname: 'plan_info',
+      params: { 
+        item: item,
+        name: name,
+      },
+  })};
   return (
-    <View style={styles.planCard}>
-      <View style={styles.textContainer}>
-        <Text style={styles.planSubtitle}>BE STRONG</Text>
-        <Text style={styles.planTitle}>{name}</Text>
-        <Text style={styles.planDescription}>{description}</Text>
+    <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
+      <View style={styles.planCard}>
+        <View style={styles.textContainer}>
+          <Text style={styles.planSubtitle}>BE STRONG</Text>
+          <Text style={styles.planTitle}>{name}</Text>
+          <Text style={styles.planDescription}>{description}</Text>
+        </View>
+        <View style={styles.imageBackground}>
+          <Image source={images[plan.image]} style={styles.image} />
+        </View>
       </View>
-      <View style={styles.imageBackground}>
-        <Image source={images.fruit_salad} style={styles.image} />
-      </View>
-      
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -60,9 +73,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    width: 130,
-    height: 130,
-    borderRadius: 65,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
   },
 });
 

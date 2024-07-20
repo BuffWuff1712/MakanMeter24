@@ -15,7 +15,8 @@ import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-na
 const Log_Page = () => {
   const { meal_type } = useLocalSearchParams();
   const { trackedMeals, setTrackedMeals, setIsAsyncOperationsComplete,
-    selectedDate, user, refresh, setRefresh, mealsData, calorieGoals, macroGoals } = useGlobalContext();
+    selectedDate, user, refresh, setRefresh, mealsData, calorieGoals, macroGoals, 
+    lastLoggedDate } = useGlobalContext();
   const [favourites, setFavourites] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
   const translateX = useSharedValue(0);
@@ -46,12 +47,19 @@ const Log_Page = () => {
     });
   };
 
+  const goToBarcodeScanner = () => {
+    router.push({
+      pathname: 'barcodeScanner',
+      params: { meal_type: meal_type },
+    });
+  };
+
   const goBack = () => {
     router.back();
   };
 
   const handleAdd = async (foodItem) => {
-    await addMeal([foodItem], meal_type, selectedDate);
+    await addMeal([foodItem], meal_type, selectedDate, lastLoggedDate);
     setRefresh((prev) => !prev);
     Alert.alert('item added to tracked');
   };
@@ -106,7 +114,7 @@ const Log_Page = () => {
             <FontAwesome5 name="camera" size={30} color="#36B37E" />
             <Text style={styles.scanButtonText}>Scan a Meal</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.scanButton} onPress={goToCamera}>
+          <TouchableOpacity style={styles.scanButton} onPress={goToBarcodeScanner}>
             <FontAwesome5 name="barcode" size={30} color="#36B37E" />
             <Text style={styles.scanButtonText}>Scan a Barcode</Text>
           </TouchableOpacity>

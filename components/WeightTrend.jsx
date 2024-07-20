@@ -33,6 +33,7 @@ const WeightTrendsDashboard = ({ data, goal }) => {
 
   const maxWeight = data.length > 0 ? Math.max(...data.map(item => item.weight)) : 0;
 
+  console.log(data);
   return (
     data.length > 0 ?  
     <View style={styles.container}>
