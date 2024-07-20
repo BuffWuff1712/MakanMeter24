@@ -3,5 +3,4 @@
     "jest.runAllTestsFirst": true,
     "jest.enableSnapshotPreviews": true,
     "jest.showCoverageOnLoad": true
-  }
-  
+}

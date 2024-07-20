@@ -16,12 +16,6 @@ const HomeLayout = () => {
               headerShown: false,
             }}
         />
-        <Stack.Screen 
-            name="test_notifs"
-            options={{
-              headerShown: false,
-            }}
-        />
       </Stack>
     </>
   )

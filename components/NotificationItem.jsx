@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import timeAgo from '../lib/calculations/timeAgo';
 
 const NotificationItem = ({ notification }) => {
   return (
     <View style={styles.notificationContainer}>
       <Text style={styles.title}>{notification.title}</Text>
       <Text style={styles.body}>{notification.body}</Text>
-      <Text style={styles.timestamp}>{notification.timestamp}</Text>
+      <Text style={styles.timestamp}>{timeAgo(notification.created_at)}</Text>
     </View>
   );
 };
