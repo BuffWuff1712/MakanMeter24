@@ -6,10 +6,10 @@ appId: com.bingchillingz1712.MakanMeter
       text: Log in to MakanMeter
 - tapOn: 
       id: 'email-input'
-- inputText: "freezeblade10@gmail.com"
+- inputText: "test456@gmail.com"
 - tapOn: 
       id: 'password-input'
-- inputText: "Littleking10!"
+- inputText: "test456!"
 - pressKey: Enter
 - tapOn: Login
 - assertVisible:
