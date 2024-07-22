@@ -1,24 +1,115 @@
-import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Button } from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+import { supabase } from '../../lib/supabase';
+import { useGlobalContext } from '../../context/GlobalProvider';
 import { icons } from '../../constants';
 import DatePicker from '../../components/DatePicker';
 import HomeSummary from '../../components/HomeSummary';
 import MealListItem from '../../components/MealListItem';
 import { fetchGoal, fetchMacroGoals, fetchStreak, getMealsForDate } from '../../lib/supabase';
-import { useGlobalContext } from '../../context/GlobalProvider';
 import { router } from 'expo-router';
 import { debounce } from 'lodash';
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
 import WaterIntake from '../../components/WaterIntake';
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+function handleRegistrationError(errorMessage) {
+  alert(errorMessage);
+  throw new Error(errorMessage);
+}
+
+async function registerForPushNotificationsAsync() {
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      handleRegistrationError('Permission not granted to get push token for push notification!');
+      return;
+    }
+    const projectId =
+      Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+    if (!projectId) {
+      handleRegistrationError('Project ID not found');
+    }
+    try {
+      const pushTokenString = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId,
+        })
+      ).data;
+      return pushTokenString;
+    } catch (e) {
+      handleRegistrationError(`${e}`);
+    }
+  } else {
+    handleRegistrationError('Must use physical device for push notifications');
+  }
+}
+
 const Home = () => {
   const { selectedDate, user, mealsData, setMealsData,
-     macroGoals, setMacroGoals, calorieGoals, setCalorieGoals, streak, setStreak, 
-     lastLoggedDate, setLastLoggedDate, refresh } = useGlobalContext();
+    macroGoals, setMacroGoals, calorieGoals, setCalorieGoals, streak, setStreak, 
+    lastLoggedDate, setLastLoggedDate, refresh } = useGlobalContext();
 
   const [hasLoggedMealToday, setHasLoggedMealToday] = useState(false);
-  
+  const [notification, setNotification] = useState(undefined);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then(async (token) => {
+        await supabase
+          .from('users')
+          .update({
+            expo_push_token: token,
+          })
+          .eq('user_id', user);
+      })
+      .catch((error) => console.log(error));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      if (notificationListener.current) {
+        Notifications.removeNotificationSubscription(notificationListener.current);
+      }
+      if (responseListener.current) {
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
+    };
+  }, [user]);
+
   const fetchMeals = async (date) => {
     try {
       const data = await getMealsForDate(user, date);
@@ -47,7 +138,6 @@ const Home = () => {
     };
   }, [selectedDate, refresh, debouncedFetchMeals]);
 
-
   // Fetch streak data
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +145,6 @@ const Home = () => {
         const data = await fetchStreak(user); 
         setStreak(data.current_streak);
         setLastLoggedDate(new Date(data.last_logged_date));
-        console.log('streak set in home');
 
         // Check if the last logged date is today or in the future
         const today = new Date();
@@ -70,7 +159,6 @@ const Home = () => {
 
     fetchData();
   }, [refresh, user]);
-
 
   const trackedMeals = [
     { 
@@ -113,13 +201,12 @@ const Home = () => {
 
   const toNotifs = () => {
     router.navigate('notifications');
-  }
+  };
 
   return (
     <SafeAreaView className="bg-white h-full">
       {/* Top layer icons */}
       <View className="flex-row justify-between items-center align-center mb-5 px-10">
-        {/* <Image source={icons.fire} resizeMode="contain" className="w-[40px] h-[40px]" /> */}
         <View className='flex-row align-center items-center'>
           <FontAwesome6 name="fire" size={32} color={hasLoggedMealToday ? "#FF4500" : "#C0C0C0"} />
           <Text 
@@ -132,7 +219,6 @@ const Home = () => {
         </View>
         <Image source={icons.logoSmall} resizeMode="contain" className="w-[55px] h-[55px]" />
         <TouchableOpacity onPress={toNotifs} className='pl-12'>
-          {/* <Image source={icons.bell} resizeMode="contain" className="w-[40px] h-[40px]" /> */}
           <Ionicons name="notifications-outline" size={34} color="black" />
         </TouchableOpacity>
       </View>
@@ -160,8 +246,7 @@ const Home = () => {
         </View>
 
         <View className='px-2'>
-          {/* WaterIntake Component below */}
-          <WaterIntake/>
+          <WaterIntake />
         </View>
       </ScrollView>
     </SafeAreaView>

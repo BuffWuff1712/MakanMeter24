@@ -1,12 +1,11 @@
 import React from 'react';
-import { View, Text,  StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Bar, CartesianChart, useChartPressState } from 'victory-native';
 import { Circle, useFont, vec, LinearGradient, Text as SKText } from '@shopify/react-native-skia';
-import poppins from "../assets/fonts/Poppins-SemiBold.ttf"
+import poppins from "../assets/fonts/Poppins-SemiBold.ttf";
 import { useDerivedValue } from 'react-native-reanimated';
 import TrendsDateRange from './TrendsDateRange';
 import { useGlobalContext } from '../context/GlobalProvider';
-
 
 const CaloriesTrendsDashboard = ({ data, onPress, goal }) => {
   const { period } = useGlobalContext();
@@ -38,8 +37,9 @@ const CaloriesTrendsDashboard = ({ data, onPress, goal }) => {
   const maxCalories = Math.max(...data.map(item => item.total_calories));
   
   // Calculate the average total_calories value
-  const totalCalories = data.length > 0 ? data.reduce((sum, item) => sum + item.total_calories, 0) : 0;
-  const averageCalories = data.length > 0 ? Math.round(totalCalories / data.length) : 0;
+  const totalCalories = data.filter(item => item.total_calories !== 0).reduce((sum, item) => sum + item.total_calories, 0);
+  const filteredData = data.filter(item => item.total_calories !== 0);
+  const averageCalories = filteredData.length > 0 ? Math.round(totalCalories / filteredData.length) : 0;
 
   return (
     data.length > 0 ?
@@ -112,16 +112,16 @@ const CaloriesTrendsDashboard = ({ data, onPress, goal }) => {
           <Text className="text-base font-semibold">Calories under weekly goal</Text>
           <Text className="text-base font-semibold">Daily Average</Text>
         </View>
-        <View className="flex-row justify-between w-20 mx-5">
+        <View className="flex-row justify-between ml-5">
           <View className="items-center px-2">
-            <Text className="text-base">Avg</Text>
-            <Text>{Math.round(totalCalories)}</Text>
-            <Text>{Math.round(averageCalories)}</Text>
+            <Text className="text-base">Total</Text>
+            <Text className="text-base" testID="avg-total-calories">{Math.round(totalCalories)}</Text>
+            <Text className="text-base" testID="avg-calories">{Math.round(averageCalories)}</Text>
           </View>
           <View className="items-center px-2">
             <Text className="text-base">Goal</Text>
-            <Text>{goal >= 0 ? `${Math.round(goal * 7)}` : '-'}</Text>
-            <Text>{goal >= 0 ? `${Math.round(goal)}` : '-'}</Text>
+            <Text className="text-base" testID="goal-weekly">{goal >= 0 ? `${Math.round(goal * 7)}` : '-'}</Text>
+            <Text className="text-base" testID="goal-daily">{goal >= 0 ? `${Math.round(goal)}` : '-'}</Text>
           </View>
         </View>
       </View>

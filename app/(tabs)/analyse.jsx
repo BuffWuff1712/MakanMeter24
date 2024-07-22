@@ -27,7 +27,7 @@ const AnalyticsPage = () => {
           <ProgressOverview/>
 
           <View className="items-center">
-            <View style={styles.tipsContainer}>
+            <View testID='tips-container' style={styles.tipsContainer}>
               <View style={styles.tipsHeader}>
                 <Text className="font-bold text-xl mr-3">Tips</Text>
                 <Icon name="lightbulb-o" size={30} color={"gold"}/>

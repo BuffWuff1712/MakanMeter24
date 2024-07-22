@@ -7,7 +7,6 @@ import { useDerivedValue } from 'react-native-reanimated';
 import TrendsDateRange from './TrendsDateRange';
 import { useGlobalContext } from '../context/GlobalProvider';
 
-
 const MacroTrendsDashboard = ({ data, onPress }) => {
   const { period } = useGlobalContext();
   const font = useFont(poppins, 12);
@@ -34,11 +33,31 @@ const MacroTrendsDashboard = ({ data, onPress }) => {
     );
   }, [value, toolTipFont]);
 
+  const calculateDailyAverage = (data, key) => {
+    if (data.length <= 0) {
+      return 0;
+    } else {
+      const filteredData = data.filter(item => item[key] !== 0);
+
+      if (filteredData.length === 0) {
+        return 0;
+      }
+
+      const total = filteredData.reduce((sum, item) => sum + (item[key] || 0), 0);
+
+      return total / filteredData.length;
+    };
+  }
+
   // Calculate the maximum value among all macros
   const maxMacroValue = data.length > 0 ? Math.max(
     ...data.flatMap(item => [item.total_carbohydrates, item.total_fats, item.total_protein])
   ) : 0;
 
+  const averageCarbs = calculateDailyAverage(data, 'total_carbohydrates');
+  const averageProtein = calculateDailyAverage(data, 'total_protein');
+  const averageFats = calculateDailyAverage(data, 'total_fats');
+  
   return (
     data.length > 0 ?
     <View style={styles.container}>
@@ -104,6 +123,23 @@ const MacroTrendsDashboard = ({ data, onPress }) => {
           );
         }}
       </CartesianChart>
+      <View className="flex-row justify-between p-2 mx-1">
+        <View>
+          {/* Empty text supposed to be below for formatting */}
+          <Text></Text> 
+          <Text className="text-base font-semibold">Daily Carbohydrates</Text>
+          <Text className="text-base font-semibold">Daily Protein</Text>
+          <Text className="text-base font-semibold">Daily Fats</Text>
+        </View>
+        <View className="flex-row justify-between ml-5">
+          <View className="items-center px-2">
+            <Text className="text-base">Average</Text> 
+            <Text className="text-base" testID="carbohydrates-value">{averageCarbs.toFixed(2)}g</Text>
+            <Text className="text-base" testID="protein-value">{averageProtein.toFixed(2)}g</Text>
+            <Text className="text-base" testID="fats-value">{averageFats.toFixed(2)}g</Text>
+          </View>
+        </View>
+      </View>
     </View>
     :
     <View style={styles.emptyContainer}>

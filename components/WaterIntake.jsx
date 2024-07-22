@@ -1,4 +1,3 @@
-// WaterIntake.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { icons } from '../constants';
@@ -41,26 +40,29 @@ const WaterIntake = () => {
   };
 
   return (
-    <View style={styles.card}>
+    <View style={styles.card} testID="waterIntakeCard">
       <View style={styles.flexRowBetween}>
-        <Text style={styles.textXLFontSemibold}>
+        <Text style={styles.textXLFontSemibold} testID="waterIntakeTitle">
           Water Intake
         </Text>
-        <Text style={styles.textLGFontSemibold}>
+        <Text style={styles.textLGFontSemibold} testID="waterIntakeVolume">
           {totalVolumeConsumed.toFixed(2)} / 2.00 L
         </Text>
       </View>
-      <View style={styles.flexRowCenter}>
+      <View style={styles.flexRowCenter} testID="waterIntakeIcons">
         {[...Array(totalDrinks)].map((_, index) => (
           <TouchableOpacity 
             key={index}
-            onPress={() => handleDrinkPress(index)}>
+            onPress={() => handleDrinkPress(index)}
+            testID={`drinkButton-${index}`}>
             <Image 
               source={icons.drink} 
               style={[
                 styles.icon,
                 { opacity: index <= activeDrink ? 1 : 0.3 } // Conditional styling based on the active drink
-              ]}/>
+              ]}
+              testID={`drinkIcon-${index}`}
+            />
           </TouchableOpacity>
         ))}
       </View>

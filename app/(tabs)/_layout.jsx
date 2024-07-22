@@ -63,6 +63,7 @@ const TabButton = (props) => {
 
   return (
     <TouchableOpacity
+      testID='navigate-tab'
       onPress={combinedPressHandler}
       activeOpacity={1}
       style={styles.container}>

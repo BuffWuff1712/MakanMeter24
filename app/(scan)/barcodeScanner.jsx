@@ -87,8 +87,8 @@ const barcodeScannerScreen = () => {
             setShowModal(false);
             // console.log('Search:', barcode);
             try {
-                // const data = await getBarcodeInfo(barcode);
-                const data = { nf_calories: 884, food_name: 'Oreo', nf_total_carbohydrate: 0, nf_total_fat: 100, nf_dietary_fiber: 0, nf_protein: 0, saturated_fat: 2.63, polyunsaturated_fat: 6.74, monounsaturated_fat: 8.82, cholesterol: 251.56, sodium: 1881.87, potassium: 1284.34, sugars: 25.59, vitamin_a: 170.93, vitamin_c: 77.91, vitamin_d: 3.43, calcium: 905.62, iron: 16.69, zinc: 1.88, vitamin_b12: 1.01, magnesium: 387.74, serving_qty: 1 };
+                const data = await getBarcodeInfo(barcode);
+                // const data = { nf_calories: 884, food_name: 'Oreo', nf_total_carbohydrate: 0, nf_total_fat: 100, nf_dietary_fiber: 0, nf_protein: 0, saturated_fat: 2.63, polyunsaturated_fat: 6.74, monounsaturated_fat: 8.82, cholesterol: 251.56, sodium: 1881.87, potassium: 1284.34, sugars: 25.59, vitamin_a: 170.93, vitamin_c: 77.91, vitamin_d: 3.43, calcium: 905.62, iron: 16.69, zinc: 1.88, vitamin_b12: 1.01, magnesium: 387.74, serving_qty: 1 };
                 // console.log(data);
 
                 router.navigate({

@@ -55,6 +55,7 @@ const AutoCompleteSearchBar = ({ trackedMeals, meal_type }) => {
     return (
         <View style={styles.searchContainer}>
             <TextInput
+                testID='search-bar'
                 style={styles.searchInput}
                 placeholder="Search for a food"
                 value={query}

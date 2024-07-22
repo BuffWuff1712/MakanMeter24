@@ -26,15 +26,15 @@ const GenderScreen = () => {
         To create your personalized plan, we need to take your age into account.
       </Text>
       <View style={styles.pickerContainer}>
-        <TouchableOpacity style={styles.option} onPress={() => setGender('female')}>
+        <TouchableOpacity testID='option-female' style={styles.option} onPress={() => setGender('female')}>
           <Text style={styles.optionText}>👩 Female</Text>
           <View style={gender === 'female' ? styles.selectedCircle : styles.circle} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.option} onPress={() => setGender('male')}>
+        <TouchableOpacity  testID='option-male' style={styles.option} onPress={() => setGender('male')}>
           <Text style={styles.optionText}>👨 Male</Text>
           <View style={gender === 'male' ? styles.selectedCircle : styles.circle} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.option} onPress={() => setGender('default')}>
+        <TouchableOpacity testID='option-none' style={styles.option} onPress={() => setGender('default')}>
           <Text style={styles.optionText}>Prefer not to say</Text>
           <View style={gender === 'default' ? styles.selectedCircle : styles.circle} />
         </TouchableOpacity>

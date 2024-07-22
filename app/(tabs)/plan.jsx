@@ -77,10 +77,7 @@ const Plan = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.pageTitle}>Active Plan</Text>
-      </View>
-
-      <View style={styles.contentContainer}>
+        <Text style={styles.pageTitle}>Plan your Diet</Text>
         <View style={styles.currentPlanContainer}>
           {currentPlan ? (
             <View style={styles.currentPlanCard}>
@@ -121,6 +118,10 @@ const Plan = () => {
             </View>
           )}
         </View>
+      </View>
+
+      <View style={styles.contentContainer}>
+        
 
         <FlatList
           data={categories}
@@ -137,17 +138,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    marginTop: 0,
   },
   headerContainer: {
     backgroundColor: '#50C878',
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingTop: 70,
     marginBottom: 10,
+    marginTop: -60,
   },
   pageTitle: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#fff',
+    marginVertical: 10,
   },
   contentContainer: {
     flex: 1,
@@ -162,7 +166,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   currentPlanContainer: {
-    marginBottom: 20,
+    marginVertical: 20,
   },
   currentPlanCard: {
     backgroundColor: '#d3f8e2',

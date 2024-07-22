@@ -13,7 +13,7 @@ const Welcome = () => {
   if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
   return (
-    <SafeAreaView className="bg-white-150 h-full">
+    <SafeAreaView testID="welcome-page" className="bg-white-150 h-full">
 
       <Loader isLoading={isLoading} />
 
@@ -56,7 +56,6 @@ const Welcome = () => {
             textStyles='text-black'
           />
         </View>
-        {/* <Link href='/gender'>Press Here</Link> */}
       </ScrollView>
 
       <StatusBar backgroundColor='#161622' style='auto'/>

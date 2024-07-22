@@ -54,6 +54,7 @@ const setCaloriesScreen = () => {
               <Text style={styles.title}>What is your goal daily caloric intake ?</Text>
               <View className='flex-row items-center my-5'>
                 <TextInput 
+                    testID='calorie-input'
                     className='flex-1 flex-row border h-[50px] 
                         rounded-lg px-5 text-xl font-semibold'
                     placeholder='Enter here'
@@ -67,7 +68,7 @@ const setCaloriesScreen = () => {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-          <CustomButton 
+          <CustomButton
                 title="Let's Go!"
                 containerStyles="mt-7 bg-emerald"
                 handlePress={handleFinish}

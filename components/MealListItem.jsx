@@ -54,7 +54,7 @@ const MealListItem = ({ item }) => {
                 onPress={() => handlePress(item.mealType)}
                 style={styles.iconContainer}
             >
-                <AntDesign name="pluscircleo" size={30} color="#000000" />
+                <AntDesign testID='add-button' name="pluscircleo" size={30} color="#000000" />
             </TouchableOpacity>
           </View>
           {item.data.length > 0 ? (

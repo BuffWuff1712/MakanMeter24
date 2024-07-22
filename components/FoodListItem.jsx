@@ -16,6 +16,7 @@ const FoodListItem = ({ item, onSelect }) => {
 
   return (
       <TouchableOpacity
+        testID='food-list-item'
         style={[styles.button, {borderColor}]}
         onPress={handlePress}
         activeOpacity={0.7}

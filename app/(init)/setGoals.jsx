@@ -24,7 +24,11 @@ const SetGoal = () => {
   const [goalValue, setGoalValue] = useState(0);
   const [targetValue, setTargetValue] = useState('');
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    return date;
+  });
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 

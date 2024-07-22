@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Dimensions, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
+import { View, Dimensions, StyleSheet, FlatList } from 'react-native';
 import { fetchGoal, getDailyTrends, getWeeklyTrends } from '../lib/supabase';
 import { useGlobalContext } from '../context/GlobalProvider';
 import CaloriesTrendsDashboard from './CaloriesTrends';
@@ -7,7 +7,6 @@ import MacroTrendsDashboard from './MacroTrends';
 
 const screenWidth = Dimensions.get('window').width;
 const scrollableHeight = 550; // Adjust the height of the scrollable area
-
 
 const AnalysisOverview = () => {
   const { user, period } = useGlobalContext();
@@ -26,15 +25,14 @@ const AnalysisOverview = () => {
           result = await getDailyTrends(user);
         }
         setCalorieGoal(temp ? temp : []);
-        setTestData(result ? [result, result]: [[], []]);
+        setTestData(result ? [result, result] : [[], []]);
       } catch (error) {
-        console.log('Error in AnalysisOverview; ',error);
+        console.log('Error in AnalysisOverview; ', error);
         setTestData([[], []]);
       }
     };
     fetchData();
   }, [period, user]);
-
 
   const renderDashboardItem = ({ item, index }) => {
     let DashboardComponent;
@@ -45,10 +43,11 @@ const AnalysisOverview = () => {
     }
 
     return (
-    <View style={styles.carouselItem}>
-      <DashboardComponent data={item} goal={calorieGoal}/>
-    </View>
-  )};
+      <View testID="analysis-dashboard-item" style={styles.carouselItem}>
+        <DashboardComponent data={item} goal={calorieGoal} />
+      </View>
+    );
+  };
 
   const renderDotIndicator = () => {
     return (
@@ -56,9 +55,10 @@ const AnalysisOverview = () => {
         {testData.map((_, idx) => (
           <View
             key={idx}
+            testID={`dot-${idx}`}
             style={[
               styles.dot,
-              { opacity: idx === index ? 1 : 0.3 }
+              { opacity: idx === index ? 1 : 0.3 },
             ]}
           />
         ))}
@@ -68,22 +68,23 @@ const AnalysisOverview = () => {
 
   return (
     <View style={styles.scrollableArea}>
-        <FlatList
-            data={testData} // Array of data for each dashboard
-            renderItem={renderDashboardItem}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onScroll={event => {
-            const contentOffsetX = event.nativeEvent.contentOffset.x;
-            const newIndex = Math.floor(contentOffsetX / screenWidth);
-            if (newIndex !== index) {
-                setIndex(newIndex);
-            }
-            }}
-        />
-        {renderDotIndicator()}
+      <FlatList
+        testID="flat-list"
+        data={testData} // Array of data for each dashboard
+        renderItem={renderDashboardItem}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onScroll={event => {
+          const contentOffsetX = event.nativeEvent.contentOffset.x;
+          const newIndex = Math.floor(contentOffsetX / screenWidth);
+          if (newIndex !== index) {
+            setIndex(newIndex);
+          }
+        }}
+      />
+      {renderDotIndicator()}
     </View>
   );
 };

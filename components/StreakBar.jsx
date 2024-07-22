@@ -3,48 +3,47 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { icons } from '../constants';
 import * as Progress from 'react-native-progress';
 import { useGlobalContext } from '../context/GlobalProvider';
-import { fetchStreak } from '../lib/supabase';
 
 const StreakBar = ({ totalDays }) => {
   const { streak } = useGlobalContext();
 
   return (
-      <View style={styles.container}>
-      <View style={styles.header}>
-          <Text style={styles.title}>30 Day Challenge</Text>
-          <Text style={styles.progressText}>Day {streak} of {totalDays}</Text>
-      </View>
-      <View style={styles.progressContainer}>
-          <Progress.Bar progress={streak/7} height={10} width={100} 
-          color={"orange"} unfilledColor='whitesmoke' 
-          borderColor='whitesmoke' borderRadius={30} 
-          animated={true} style={{position: "absolute"}}/>
-          <Progress.Bar progress={(streak-7)/7} height={10} width={100} 
-          color={"orange"} unfilledColor='whitesmoke' 
-          borderColor='whitesmoke' borderRadius={30} 
-          animated={true} style={{position: "absolute", left: 100}}/>
-          <Progress.Bar progress={(streak-14)/16} height={10} width={100} 
-          color={"orange"} unfilledColor='whitesmoke' 
-          borderColor='whitesmoke' borderRadius={30} 
-          animated={true} style={{position: "absolute", left: 200}}/>
-          <View style={styles.iconContainer}>
-              <View className="left-[80px]">
-                  <Image 
-                      source={streak >= 7 ? icons.seven : icons.seven_grayscale} 
-                      className="h-[30px] w-[30px]"/>
-              </View>
-              <View className="left-[28px]">
-                  <Image 
-                      source={streak >= 14 ? icons.fourteen : icons.fourteen_grayscale} 
-                      className="h-[30px] w-[30px]" />
-              </View>
-              <View>
-                  <Image 
-                      source={streak >= totalDays ? icons.thirty : icons.thirty_grayscale} 
-                      className="h-[30px] w-[30px]" />
-              </View>
-          </View>
-      </View>
+      <View testID='streakBar' style={styles.container}>
+        <View style={styles.header}>
+            <Text style={styles.title}>30 Day Challenge</Text>
+            <Text style={styles.progressText}>Day {streak} of {totalDays}</Text>
+        </View>
+        <View style={styles.progressContainer}>
+            <Progress.Bar progress={streak/7} height={10} width={100} 
+            color={"orange"} unfilledColor='whitesmoke' 
+            borderColor='whitesmoke' borderRadius={30} 
+            animated={true} style={{position: "absolute"}}/>
+            <Progress.Bar progress={(streak-7)/7} height={10} width={100} 
+            color={"orange"} unfilledColor='whitesmoke' 
+            borderColor='whitesmoke' borderRadius={30} 
+            animated={true} style={{position: "absolute", left: 100}}/>
+            <Progress.Bar progress={(streak-14)/16} height={10} width={100} 
+            color={"orange"} unfilledColor='whitesmoke' 
+            borderColor='whitesmoke' borderRadius={30} 
+            animated={true} style={{position: "absolute", left: 200}}/>
+            <View style={styles.iconContainer}>
+                <View className="left-[80px]">
+                    <Image 
+                        source={streak >= 7 ? icons.seven : icons.seven_grayscale} 
+                        className="h-[30px] w-[30px]"/>
+                </View>
+                <View className="left-[28px]">
+                    <Image 
+                        source={streak >= 14 ? icons.fourteen : icons.fourteen_grayscale} 
+                        className="h-[30px] w-[30px]" />
+                </View>
+                <View>
+                    <Image 
+                        source={streak >= totalDays ? icons.thirty : icons.thirty_grayscale} 
+                        className="h-[30px] w-[30px]" />
+                </View>
+            </View>
+        </View>
       </View>
   );
 };
