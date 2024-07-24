@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, FlatList, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from 'react-native-wheel-pick';
@@ -14,7 +14,6 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [emailHandle, setEmailHandle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [friendsModalVisible, setFriendsModalVisible] = useState(false);
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
   const [editUsernameModalVisible, setEditUsernameModalVisible] = useState(false);
   const [editDetailsModalVisible, setEditDetailsModalVisible] = useState(false);
@@ -173,6 +172,10 @@ const Profile = () => {
     router.navigate('setGoals');
   };
 
+  const handleFriendsPress = () => {
+    router.navigate('userFriendPage');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -228,7 +231,7 @@ const Profile = () => {
 
       <View style={styles.tabsContainer}>
         <View style={styles.tabRow}>
-          <TouchableOpacity style={styles.tab} onPress={() => setFriendsModalVisible(true)}>
+          <TouchableOpacity style={styles.tab} onPress={handleFriendsPress}>
             <Image source={icons.friends} style={styles.tabIcon} />
             <Text style={styles.tabText}>Friends</Text>
           </TouchableOpacity>
@@ -266,7 +269,7 @@ const Profile = () => {
         </View>
       </View>
 
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={friendsModalVisible}
@@ -290,7 +293,7 @@ const Profile = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       <Modal
         animationType="slide"

@@ -38,12 +38,11 @@ export default UserSearch;*/
 import React, { useState } from 'react';
 import { View, TextInput, FlatList, Text , TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { icons } from '../constants';
-import { Button } from 'react-native-paper';
 
 const UserSearch = ({ searchFunction, onUserClick }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
-  const [followStatus, setFollowStatus] = useState(false); 
+
 
   const handleSearch = async (text) => {
     setQuery(text);

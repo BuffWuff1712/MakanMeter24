@@ -24,6 +24,18 @@ const MoreLayout = () => {
               ),
             }}
         />
+        <Stack.Screen 
+            name="userFriendPage"
+            options={{
+              title: 'Friends',
+              headerShown: true,
+              headerLeft: () => (
+                <TouchableOpacity activeOpacity={0.7} onPress={() => router.back()}>
+                    <FontAwesome5 name="arrow-left" size={24} color="black" />
+                </TouchableOpacity>
+              ),
+            }}
+        />
       </Stack>
     </>
   )
