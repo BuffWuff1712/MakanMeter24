@@ -169,6 +169,10 @@ const Profile = () => {
     router.navigate('userSearchPage');
   };
 
+  const handleEditGoalsPress = () => {
+    router.navigate('setGoals');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -228,9 +232,9 @@ const Profile = () => {
             <Image source={icons.friends} style={styles.tabIcon} />
             <Text style={styles.tabText}>Friends</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tab}>
-            <Image source={icons.photos} style={styles.tabIcon} />
-            <Text style={styles.tabText}>Photos</Text>
+          <TouchableOpacity style={styles.tab} onPress={handleEditGoalsPress}>
+            <Image source={icons.target} style={styles.tabIcon} />
+            <Text style={styles.tabText}>Edit Goals</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.tabRow}> 

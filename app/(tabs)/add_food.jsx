@@ -3,10 +3,8 @@ import {
   StyleSheet,
   View,
   Text,
-  Pressable,
   Dimensions,
   Image,
-  Alert,
 } from 'react-native';
 import React from 'react';
 import { useRouter } from 'expo-router';
@@ -22,14 +20,10 @@ const Add_Food = () => {
   const router = useRouter();
 
   const handleMealPress = (mealType) => {
-    if (mealType === 'Edit Goals') {
-      router.navigate('setGoals'); // Navigate to the Set Goal page
-    } else {
-      router.navigate({
+    router.navigate({
         pathname: 'log_page',
         params: { meal_type: mealType, date: getDate(selectedDate) },
       });
-    }
   };
 
   // Mapping of meal types to their corresponding icons
@@ -38,14 +32,13 @@ const Add_Food = () => {
     Lunch: icons.lunch,
     Dinner: icons.dinner,
     Snack: icons.snack,
-    'Edit Goals': icons.target, // Ensure the correct key matches the mealType
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.options}>
-          {['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Edit Goals'].map((mealType) => (
+          {['Breakfast', 'Lunch', 'Dinner', 'Snack'].map((mealType) => (
             <TouchableOpacity
               key={mealType}
               style={styles.optionButton}

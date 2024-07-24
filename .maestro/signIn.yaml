@@ -12,5 +12,6 @@ appId: com.bingchillingz1712.MakanMeter
 - inputText: "test456!"
 - pressKey: Enter
 - tapOn: Login
+- tapOn: Ok
 - assertVisible:
       text: Home
