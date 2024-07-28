@@ -67,7 +67,7 @@ const userFriendPage = () => {
                   style={styles.listItemContent}
                 >
                   <Image 
-                    source={follower.profile_picture_url ? { uri: follower.profile_picture_url } : icons.eye}
+                    source={follower.profile_picture_url ? { uri: follower.profile_picture_url } : icons.profile}
                     style={styles.profilePic}
                     fadeDuration={0}
                   />
@@ -88,7 +88,7 @@ const userFriendPage = () => {
                   style={styles.listItemContent}
                 >
                   <Image 
-                    source={followed.profile_picture_url ? { uri: followed.profile_picture_url } : icons.eye}
+                    source={followed.profile_picture_url ? { uri: followed.profile_picture_url } : icons.profile}
                     style={styles.profilePic}
                     fadeDuration={0}
                   />

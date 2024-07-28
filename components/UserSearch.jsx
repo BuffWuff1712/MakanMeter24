@@ -1,48 +1,25 @@
-/*import React, { useState } from 'react';
-import { View, TextInput, FlatList, Text , TouchableOpacity, StyleSheet } from 'react-native';
-
-const UserSearch = ({ searchFunction, onUserClick }) => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-
-  const handleSearch = async (text) => {
-    setQuery(text);
-    if (text.length > 2) { 
-      const response = await searchFunction(text);
-      setResults(response);
-    } else {
-      setResults([]);
-    }
-  };
-
-  return (
-    <View>
-      <TextInput
-        placeholder="Search by username"
-        value={query}
-        onChangeText={handleSearch}
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, padding: 10 }}
-      />
-      <FlatList
-        data={results}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text>{item.username}</Text>}
-      />
-    </View>
-  );
-};
-
-export default UserSearch;*/
-
-//new draft here 
-import React, { useState } from 'react';
-import { View, TextInput, FlatList, Text , TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, TextInput, FlatList, Text , TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { icons } from '../constants';
+import { useGlobalContext } from '../context/GlobalProvider';
+import { getSuggestedUsersDetails } from '../lib/supabase';
 
 const UserSearch = ({ searchFunction, onUserClick }) => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
+  const { refresh } = useGlobalContext();
+  const [ query, setQuery ] = useState('');
+  const [ results, setResults ] = useState([]);
+  const [ suggestedUsers, setSuggestedUsers ] = useState([]);
+  const [ isInputActive, setIsInputActive ] = useState(false);
 
+  useEffect( () => {
+    const fetchInfo = async () => {
+        const data = await getSuggestedUsersDetails();
+        console.log('results of all users: ', data);
+        setSuggestedUsers(data);
+    }
+
+    fetchInfo();
+  }, [refresh]);
 
   const handleSearch = async (text) => {
     setQuery(text);
@@ -61,31 +38,35 @@ const UserSearch = ({ searchFunction, onUserClick }) => {
         placeholder="Search by username"
         value={query}
         onChangeText={handleSearch}
+        onFocus={() => setIsInputActive(true)}
+        onBlur={() => setIsInputActive(false)}
         style={styles.searchInput}
       />
-    
     </View>
-    {query.length > 2 && (
-          <FlatList
-          data={results}
-          keyExtractor={(item) => item.username}
-          renderItem={({ item }) => (
-            <View className='flex-row my-2 justify-between'>
-              <TouchableOpacity 
-                activeOpacity={0.7}
-                onPress={() => onUserClick(item.user_id)}
-                className='flex-row items-center'
-              >
-                <Image 
-                  source={item.profile_picture_url ? {uri: item.profile_picture_url} : icons.eye}
-                  style={styles.profilePic}
-                />
-                <Text style={styles.usernameText}>{item.username}</Text>
-              </TouchableOpacity>
-            </View>
-
-          )}/>
+    {query.length <= 2 && (
+      <View className='my-2'>
+        <Text className='text-xl font-semibold'>Suggested</Text>
+      </View>
+    )}
+    <FlatList
+      data={isInputActive && query.length > 2 ? results : suggestedUsers}
+      keyExtractor={(item) => item.username}
+      renderItem={({ item }) => (
+        <View className='flex-row my-2 justify-between'>
+          <TouchableOpacity 
+            activeOpacity={0.7}
+            onPress={() => onUserClick(item.user_id)}
+            className='flex-row items-center'
+          >
+            <Image 
+              source={item.profile_picture_url ? {uri: item.profile_picture_url} : icons.profile}
+              style={styles.profilePic}
+            />
+            <Text style={styles.usernameText}>{item.username}</Text>
+          </TouchableOpacity>
+        </View>
       )}
+    />
     </>
   );
 };

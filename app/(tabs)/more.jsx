@@ -187,7 +187,7 @@ const Profile = () => {
           )
           : (
           <Image
-            source={profileImage ? { uri: profileImage } : icons.eye}
+            source={profileImage ? { uri: profileImage } : icons.profile}
             style={styles.avatar}
           />)}
         </TouchableOpacity>

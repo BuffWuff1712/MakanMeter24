@@ -23,7 +23,7 @@ const userProfile = () => {
         }
 
         fetchInfo();
-    }, [refresh])
+    }, [refresh]);
 
     const handleFollowTap = async () => {
         try {
@@ -43,7 +43,7 @@ const userProfile = () => {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Image
-                    source={profile.profile_picture_url ? { uri: profile.profile_picture_url } : icons.eye}
+                    source={profile.profile_picture_url ? { uri: profile.profile_picture_url } : icons.profile}
                     style={styles.profilePic}
                     />
                     <Text style={styles.username}>{profile.username}</Text>
