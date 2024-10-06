@@ -72,6 +72,6 @@ Whether you’re looking to lose weight, gain muscle, or maintain a balanced die
 
 ---
 
-## Project Log
+## Project Report
 
-For a detailed development timeline, feature breakdowns, and testing results, please refer to the full project log [here](https://docs.google.com/spreadsheets/d/1wz6pyeir4WdYZYRkoLkfXnUhUa9-zY7lYLPIjOZPEv0/edit#gid=0).
+For a detailed development timeline, feature breakdowns, and testing results, please refer to the full project report [here](https://docs.google.com/document/d/1YU5b168TGUmyyqrXZMGuJ5_R62FFju61csKV_JSUGqc/edit?usp=drive_link).
